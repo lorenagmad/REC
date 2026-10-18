@@ -368,7 +368,7 @@ es:{ madeWith:'Hecho con REC', loading:'Cargando concursos…', howTitle:'Cómo 
   videoNote:'Algunas preguntas tienen vídeo. El tiempo empieza a contar cuando pulsas «Responder», así que míralo con calma (y con sonido).',
   watch:'Mira el vídeo. El tiempo empieza al pulsar «Responder».', answerBtn:'Responder', confirm:'Confirmar respuesta',
   statHits:'aciertos', statAvg:'tiempo medio en aciertos', statMax:'puntuación máxima posible', sendTicket:'Envía este resguardo a tu profesor o profesora', sendTicket2:'tal como aparece, con el código incluido.',
-  dlFile:'Descargar resguardo (archivo)', copy:'Copiar resguardo', fileNote1:'Este concurso incluye análisis de respuestas.', fileNote2:'Descarga el archivo del resguardo y súbelo donde te indiquen. Contiene tus respuestas para ver qué conviene repasar.',
+  dlFile:'Descargar resguardo (archivo xAPI)', copy:'Copiar resguardo', fileNote1:'Este concurso incluye análisis de respuestas.', fileNote2:'Descarga el archivo del resguardo y súbelo donde te indiquen. Está en formato xAPI y contiene tus respuestas para ver qué conviene repasar.',
   byQuestion:'Ver pregunta a pregunta', pracAgain:'Repetir la práctica', verifyTitle:'Comprobar resguardos', verifyNote:'Elige el concurso, escribe su contraseña y pega uno o varios resguardos. Se comprueba que los datos coinciden con el código.',
   contest:'Concurso', password:'Contraseña', check:'Comprobar', back:'Volver', cancel:'Cancelar', a11y:'Accesibilidad', textSize:'Tamaño del texto', sizeN:'Normal', sizeL:'Grande', sizeXL:'Muy grande',
   contrast:'Alto contraste', motion:'Reducir animaciones', close:'Cerrar', soundOn:'Sonido activado', soundOff:'Sonido desactivado',
@@ -410,7 +410,7 @@ en:{ madeWith:'Made with REC', loading:'Loading contests…', howTitle:'How to p
   videoNote:'Some questions include a video. The clock starts when you press “Answer”, so take your time to watch it (with sound).',
   watch:'Watch the video. The clock starts when you press “Answer”.', answerBtn:'Answer', confirm:'Confirm answer',
   statHits:'correct answers', statAvg:'average time on correct answers', statMax:'maximum possible score', sendTicket:'Send this ticket to your teacher', sendTicket2:'exactly as it appears, including the code.',
-  dlFile:'Download ticket (file)', copy:'Copy ticket', fileNote1:'This contest includes answer analysis.', fileNote2:'Download the ticket file and upload it where you are told. It contains your answers so your teacher can see what to review.',
+  dlFile:'Download ticket (xAPI file)', copy:'Copy ticket', fileNote1:'This contest includes answer analysis.', fileNote2:'Download the ticket file and upload it where you are told. It is in xAPI format and contains your answers so your teacher can see what to review.',
   byQuestion:'See question by question', pracAgain:'Practise again', verifyTitle:'Check tickets', verifyNote:'Choose the contest, type its password and paste one or more tickets. The data are checked against the code.',
   contest:'Contest', password:'Password', check:'Check', back:'Back', cancel:'Cancel', a11y:'Accessibility', textSize:'Text size', sizeN:'Normal', sizeL:'Large', sizeXL:'Extra large',
   contrast:'High contrast', motion:'Reduce motion', close:'Close', soundOn:'Sound on', soundOff:'Sound off',
@@ -543,6 +543,60 @@ $('a11yClose').onclick=()=>{ togglePanel(false); $('a11yBtn').focus(); };
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('a11yPanel').classList.contains('hidden')){ togglePanel(false); $('a11yBtn').focus(); } });
 applyA11y();
 
+/* ---- xAPI (Experience API 1.0.3): una declaración por interacción ---- */
+function buildXapi(o){
+  // o: {base, lang, platform, quiz:{id,title}, actor:{name,id}, log, start, end, total, max, maxQ, extra, record}
+  const hid = s => 'r' + cyrb53(String(s)).toString(36).slice(0,9);
+  const L = t => ({[o.lang]: String(t)});
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{ const r=Math.random()*16|0; return (c==='x'?r:(r&3|8)).toString(16); }));
+  const dur = s => 'PT' + (Math.round((s||0)*10)/10) + 'S';
+  const actor = {objectType:'Agent', name:o.actor.name, account:{homePage:o.base, name:o.actor.id}};
+  const contest = {objectType:'Activity', id:`${o.base}contests/${encodeURIComponent(o.quiz.id)}`, definition:{type:'http://adlnet.gov/expapi/activities/assessment', name:L(o.quiz.title)}};
+  const ctx = (extra) => ({platform:o.platform, language:o.lang, contextActivities:{parent:[{objectType:'Activity', id:contest.id}]},
+    extensions:{[`${o.base}xapi/extra-time`]: o.extra||0, ...(extra||{})}});
+  const verb = (v, es, en) => ({id:`http://adlnet.gov/expapi/verbs/${v}`, display:{'es-ES':es, 'en-US':en}});
+  const st = [{id:uuid(), actor, verb:verb('attempted','intentó','attempted'), object:contest, context:{platform:o.platform, language:o.lang, extensions:{[`${o.base}xapi/extra-time`]: o.extra||0}}, timestamp:o.start}];
+  o.log.forEach((l,i)=>{
+    const def = {type:'http://adlnet.gov/expapi/activities/cmi.interaction', name:L(l.name), description:L(l.q||l.name)};
+    let resp = '';
+    const sel = l.sel||[], good = l.good||[];
+    if(l.tipo==='mc' || l.tipo==='mm'){ def.interactionType='choice'; def.choices=(l.opciones||[]).map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[good.map(hid).join('[,]')]; resp = sel.map(hid).join('[,]'); }
+    else if(l.tipo==='tf'){ const tv = x => /^(verdadero|true)/i.test(String(x).trim()) ? 'true' : 'false'; def.interactionType='true-false'; def.correctResponsesPattern=[good[0]?tv(good[0]):'true']; resp = sel[0]?tv(sel[0]):''; }
+    else if(l.tipo==='match'){ const sp = x => String(x).split(' → '); const src=[...new Set(good.map(g=>sp(g)[0]))], tgt=[...new Set([...good, ...sel].map(g=>sp(g)[1]).filter(Boolean))];
+      def.interactionType='matching'; def.source=src.map(x=>({id:hid(x), description:L(x)})); def.target=tgt.map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[good.map(g=>hid(sp(g)[0])+'[.]'+hid(sp(g)[1])).join('[,]')]; resp = sel.map(g=>hid(sp(g)[0])+'[.]'+hid(sp(g)[1]||'')).join('[,]'); }
+    else if(l.tipo==='order'){ const items=(good[0]||'').split(' → '); def.interactionType='sequencing'; def.choices=items.map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[items.map(hid).join('[,]')]; resp = sel[0] ? sel[0].split(' → ').map(hid).join('[,]') : ''; }
+    else if(l.tipo==='short'){ def.interactionType='fill-in'; def.correctResponsesPattern=good.slice(); resp = sel[0]||''; }
+    else { def.interactionType='other'; resp = sel[0]||''; }
+    const res = {success: !!l.ok, response: resp, score:{raw:l.pts||0, min:0, max:o.maxQ, scaled:+((l.pts||0)/o.maxQ).toFixed(4)},
+      extensions:{[`${o.base}xapi/result`]: l.res, [`${o.base}xapi/time-limit`]: l.limite??null}};
+    if(l.t!=null) res.duration = dur(l.t);
+    st.push({id:uuid(), actor, verb:verb('answered','respondió','answered'), object:{objectType:'Activity', id:`${contest.id}/questions/${encodeURIComponent(l.name)}`, definition:def},
+      result:res, context:ctx({[`${o.base}xapi/topic`]: l.tema||'', [`${o.base}xapi/position`]: i+1}), timestamp:l.at||o.end});
+  });
+  const secs = Math.max(0,(Date.parse(o.end)-Date.parse(o.start))/1000);
+  st.push({id:uuid(), actor, verb:verb('completed','completó','completed'), object:contest,
+    result:{completion:true, duration:dur(secs), score:{raw:o.total, min:0, max:o.max, scaled:+(o.total/o.max).toFixed(4)}, extensions:{[`${o.base}xapi/record`]: o.record}},
+    context:ctx(), timestamp:o.end});
+  return st;
+}
+/* lee un archivo de resguardo: formato propio o xAPI (lista de declaraciones con el registro en «completed») */
+function recordFromFile(o){
+  if(!Array.isArray(o)) return {record:o, statements:null};
+  for(const s of o){ const ex = s && s.result && s.result.extensions; if(!ex) continue;
+    const k = Object.keys(ex).find(k=>/\/xapi\/record$/.test(k)); if(k) return {record:ex[k], statements:o}; }
+  return {record:null, statements:o};
+}
+/* anonimiza una lista de declaraciones (para exportar a un LRS o a un estudio) */
+function anonStatements(list, anonOf){
+  return list.map(s=>{ const c = structuredClone(s); const id = c.actor && c.actor.account ? c.actor.account.name : '';
+    const a = anonOf(id); c.actor = {objectType:'Agent', account:{homePage:c.actor.account.homePage, name:a}};
+    const ex = c.result && c.result.extensions; if(ex){ const k = Object.keys(ex).find(k=>/\/xapi\/record$/.test(k)); if(k) delete ex[k]; }
+    return c; });
+}
+
 /* ============ juego ============ */
 const DEF = {tiempos:{opcion_multiple:20, verdadero_falso:15, emparejar:45, ordenar:45, respuesta_corta:30, imagen:25}, puntos_max:1000, puntos_min:500};
 const TKEY = {mc:'opcion_multiple', mm:'opcion_multiple', tf:'verdadero_falso', match:'emparejar', order:'ordenar', short:'respuesta_corta', hot:'imagen'};
@@ -583,7 +637,7 @@ function parseExtra(code, id){ const c=(code||'').toUpperCase().replace(/\s+/g,'
 const anonId = id => 'A' + cyrb53(`${QUIZ.adapt}|anon|${normId(id)}`).toString(36).toUpperCase().padStart(7,'0').slice(0,6);
 
 function newRun(name, id, pct){
-  S = { name, id, i:0, score:0, hits:0, log:[], streak:0, factor:1+(pct||0)/100, extra:pct||0,
+  S = { start:new Date().toISOString(), name, id, i:0, score:0, hits:0, log:[], streak:0, factor:1+(pct||0)/100, extra:pct||0,
         qs: shuffle(QUIZ.questions).map(q => ({...q, answers: q.shuffle ? [...shuffle((q.answers||[]).filter(a=>!a.pin)), ...(q.answers||[]).filter(a=>a.pin)] : q.answers})) };
   $('prog').innerHTML = S.qs.map(()=>'<i></i>').join(''); $('streak').classList.add('hidden');
 }
@@ -747,7 +801,7 @@ function finish(chosen){
   const frac = Math.max(0, Math.min(1, g.frac));
   const pts = (!PRACTICE && frac>0) ? Math.round((MAXP - (MAXP-MINP)*(t/T)) * frac) : 0, full = frac >= 0.999;
   S.score += pts; if(full) S.hits++;
-  S.log.push({name:q.name, pts, ok:full, t: answered ? +t.toFixed(1) : null, q: strip(q.h).slice(0,220),
+  S.log.push({name:q.name, pts, ok:full, t: answered ? +t.toFixed(1) : null, at:new Date().toISOString(), q: strip(q.h).slice(0,220),
     res: !answered ? 'timeout' : full ? 'correct' : frac>0 ? 'partial' : 'wrong', sel: g.sel, good: ui.good(q), tema: q.tema||'', tipo: q.type, opciones: ui.options(q), limite: +T.toFixed(1)});
   const A = $('qAns'); A.classList.add('locked'); ui.reveal(q, answered ? chosen : null, A); $('btnConfirm').classList.add('hidden');
   const v = $('verdict'); v.className = 'verdict ' + (frac>0 ? 'ok' : 'ko');
@@ -771,7 +825,7 @@ function next(){
   S.i++; if(S.i < S.qs.length) return renderQ();
   if(PRACTICE) return renderPracticeEnd();
   const okT = S.log.filter(l=>l.ok && l.t!=null).map(l=>l.t);
-  const r = { name:S.name, id:normId(S.id), score:S.score, hits:S.hits, n:S.qs.length, max:S.qs.length*MAXP, extra:S.extra,
+  const r = { start:S.start, end:new Date().toISOString(), name:S.name, id:normId(S.id), score:S.score, hits:S.hits, n:S.qs.length, max:S.qs.length*MAXP, extra:S.extra,
     avg: okT.length ? (okT.reduce((a,b)=>a+b,0)/okT.length).toFixed(1) : '–', date: new Date().toLocaleString(LANG==='es'?'es-ES':'en-GB',{dateStyle:'short',timeStyle:'short'}), log:S.log };
   r.code = makeCode(r.id, r.score, r.hits, QUIZ, r.max); r.analysis = ANALISIS;
   store.set(`rec:${QUIZ.id}:${r.id}`, r); renderFinal(r, false);
@@ -805,8 +859,10 @@ function renderFinal(r, again){
     const check = cyrb53(`${QUIZ.salt}|${QUIZ.id}|${r.id}|${JSON.stringify(detail)}`).toString(36).toUpperCase();
     const file = {format:'rec-result-1', contest:QUIZ.title, contest_id:QUIZ.id, name:r.name, student_id:r.id, anon_id:anonId(r.id), points:r.score, correct:r.hits, questions:r.n, max, extra_time:r.extra||0,
                   date:r.date, code:r.code, ticket:ticketText(r), detail, check};
-    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(file,null,1)],{type:'application/json'}));
-    a.download=`rec-${QUIZ.id}-${r.id}.json`; document.body.appendChild(a); a.click(); a.remove(); $('copyMsg').textContent=T.fileDone; };
+    const statements = buildXapi({base: location.origin + location.pathname.replace(/[^/]*$/,''), lang: LANG==='es'?'es-ES':'en-GB', platform:'REC', quiz:{id:QUIZ.id, title:QUIZ.title},
+      actor:{name:r.name, id:r.id}, log:r.log, start:r.start||new Date().toISOString(), end:r.end||new Date().toISOString(), total:r.score, max, maxQ:Math.round(max/r.n), extra:r.extra||0, record:file});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(statements,null,1)],{type:'application/json'}));
+    a.download=`rec-${QUIZ.id}-${r.id}.xapi.json`; document.body.appendChild(a); a.click(); a.remove(); $('copyMsg').textContent=T.fileDone; };
   $('btnCopy').onclick = async () => { try{ await navigator.clipboard.writeText(ticketText(r)); $('copyMsg').textContent=T.copied; }
     catch(e){ const sel=window.getSelection(), rg=document.createRange(); rg.selectNodeContents($('fTicket')); sel.removeAllRanges(); sel.addRange(rg); $('copyMsg').textContent=T.selected; } };
   window.scrollTo({top:0});
