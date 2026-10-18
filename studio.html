@@ -216,7 +216,7 @@ es:{ studio:'Estudio', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave:'Guardar proy
   cWarnTitle:'Importante', cWarn:'El archivo del proyecto contiene las preguntas, las respuestas y las contraseñas sin cifrar. Guárdalo solo en tu ordenador y nunca lo subas a GitHub.',
   cStats:(q,c)=>`${q} preguntas en el banco y ${c} concursos.`, cNext:'Siguiente paso: añade preguntas al banco.',
   bTitle:'Banco de preguntas', bLead:'Importa tus preguntas de Moodle (formato Moodle XML) o créalas aquí. Asigna un tema a cada pregunta: lo usarán el análisis por temas y las evaluaciones globales automáticas.',
-  bImport:'Importar Moodle XML', bImportEA:'Importar de ¡En el aire!', bNew:'Nueva pregunta', bFilterTopic:'Tema', bFilterSource:'Origen', bFilterType:'Tipo', bSearch:'Buscar', all:'Todos', noTopic:'(sin tema)',
+  bImport:'Importar Moodle XML', bNew:'Nueva pregunta', bFilterTopic:'Tema', bFilterSource:'Origen', bFilterType:'Tipo', bSearch:'Buscar', all:'Todos', noTopic:'(sin tema)',
   bSelected:n=>`${n} seleccionadas`, bSetTopic:'Asignar tema', bDelete:'Borrar', bTopicPrompt:'Tema para las preguntas seleccionadas:', bDelConfirm:n=>`¿Borrar ${n} preguntas del banco? También se quitarán de los concursos.`,
   bEmpty:'El banco está vacío. Importa un archivo de Moodle o crea una pregunta.', colType:'Tipo', colName:'Pregunta', colTopic:'Tema', colSource:'Origen', colActions:'',
   edit:'Editar', dup:'Duplicar', del:'Borrar', copySuffix:' (copia)',
@@ -296,7 +296,7 @@ en:{ studio:'Studio', pNew:'New', pOpen:'Open project', pSave:'Save project', ta
   cWarnTitle:'Important', cWarn:'The project file contains the questions, the answers and the passwords unencrypted. Keep it on your computer only and never upload it to GitHub.',
   cStats:(q,c)=>`${q} questions in the bank and ${c} contests.`, cNext:'Next step: add questions to the bank.',
   bTitle:'Question bank', bLead:'Import your Moodle questions (Moodle XML format) or create them here. Give each question a topic: topic analysis and automatic global tests rely on it.',
-  bImport:'Import Moodle XML', bImportEA:'Import from ¡En el aire!', bNew:'New question', bFilterTopic:'Topic', bFilterSource:'Source', bFilterType:'Type', bSearch:'Search', all:'All', noTopic:'(no topic)',
+  bImport:'Import Moodle XML', bNew:'New question', bFilterTopic:'Topic', bFilterSource:'Source', bFilterType:'Type', bSearch:'Search', all:'All', noTopic:'(no topic)',
   bSelected:n=>`${n} selected`, bSetTopic:'Set topic', bDelete:'Delete', bTopicPrompt:'Topic for the selected questions:', bDelConfirm:n=>`Delete ${n} questions from the bank? They will also be removed from contests.`,
   bEmpty:'The bank is empty. Import a Moodle file or create a question.', colType:'Type', colName:'Question', colTopic:'Topic', colSource:'Source', colActions:'',
   edit:'Edit', dup:'Duplicate', del:'Delete', copySuffix:' (copy)',
@@ -436,7 +436,6 @@ function renderBank(){
   $('tab-bank').innerHTML = `<h1>${t('bTitle')}</h1><p class="lead">${t('bLead')}</p>
   <div class="box"><div class="row">
       <label class="btn rec" style="display:inline-flex;cursor:pointer">${t('bImport')}<input type="file" id="impXml" accept=".xml" multiple class="hidden"></label>
-      <label class="btn alt" style="display:inline-flex;cursor:pointer">${t('bImportEA')}<input type="file" id="impEA" accept=".json" multiple class="hidden"></label>
       <select id="newType" style="width:auto"><option value="">${t('bNew')}…</option>${Object.entries(t('types')).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
     </div>${IMPMSG?`<p class="msg info">${esc(IMPMSG)}</p>`:''}</div>
   ${P.questions.length ? `<div class="box">
@@ -458,7 +457,7 @@ function renderBank(){
   on('fTopic','onchange',e=>{BF.topic=e.target.value; renderBank();}); on('fSource','onchange',e=>{BF.source=e.target.value; renderBank();}); on('fType','onchange',e=>{BF.type=e.target.value; renderBank();});
   on('fQ','onchange',e=>{BF.q=e.target.value; renderBank();});
   on('newType','onchange',e=>{ if(e.target.value) openEditor(null, e.target.value); });
-  on('impXml','onchange',e=>importFiles([...e.target.files],'xml')); on('impEA','onchange',e=>importFiles([...e.target.files],'ea'));
+  on('impXml','onchange',e=>importFiles([...e.target.files]));
   on('selAll','onchange',e=>{ list.forEach(q=>e.target.checked?BSEL.add(q.uid):BSEL.delete(q.uid)); renderBank(); });
   document.querySelectorAll('[data-sel]').forEach(c=>c.onchange=()=>{ c.checked?BSEL.add(c.dataset.sel):BSEL.delete(c.dataset.sel); renderBank(); });
   document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>openEditor(P.questions.find(q=>q.uid===b.dataset.ed)));
@@ -468,15 +467,15 @@ function renderBank(){
 }
 function gcMedia(){ const used = new Set(P.questions.flatMap(q=>q.media.filter(m=>m.blob).map(m=>m.blob))); Object.keys(P.media).forEach(k=>{ if(!used.has(k)) delete P.media[k]; }); }
 
-/* importación: Moodle XML y originales de ¡En el aire! */
+/* importación desde Moodle XML */
 const tfLabel = v => v ? (P.course.language==='en'?'True':'Verdadero') : (P.course.language==='en'?'False':'Falso');
 const cleanH = h => (h||'').replace(/<p>\s*(&nbsp;|\s)*<\/p>/g,'').trim();
-async function importFiles(files, kind){
+async function importFiles(files){
   let n=0, skipped=0, ext=0, bigv=0; const errs=[];
   for(const f of files){
     try{
       const text = await f.text();
-      const qs = kind==='xml' ? parseMoodle(text, f.name.replace(/\.xml$/i,'')) : parseEA(JSON.parse(text));
+      const qs = parseMoodle(text, f.name.replace(/\.xml$/i,''));
       for(const q of qs){
         if(P.questions.some(x=>x.name===q.name && strip(x.h)===strip(q.h) && x.type===q.type)){ skipped++; continue; }
         q.media.forEach(m=>{ if(m.url && m.kind==='image') ext++; if(m.kind==='video' && b64size(P.media[m.blob]?.b64||'')>8e6) bigv++; });
@@ -529,16 +528,6 @@ function parseMoodle(text, sourceName){
     out.push(item);
   }
   return out;
-}
-function parseEA(pack){
-  if(!pack.quiz || !pack.quiz.questions) throw new Error('ea');
-  const map = {}; Object.entries(pack.blobs||{}).forEach(([k,v])=>{ const id=uid('m'); P.media[id]={mime:v.mime, b64:v.b64}; map[k]=id; });
-  const qs = pack.quiz.questions.map(q=>{ const x = structuredClone(q); x.uid=uid(); x.source=pack.quiz.title; x.media=(x.media||[]).map(m=>m.blob?{...m, blob:map[m.blob]}:m); x.answers=x.answers||[]; return x; });
-  // conserva el concurso con su identificador y su clave, para que los resguardos antiguos sigan siendo válidos
-  if(!P.contests.some(c=>c.id===pack.quiz.id)) P.contests.push({uid:uid('c'), id:pack.quiz.id, title:pack.quiz.title, section:'', name:(pack.quiz.theme&&pack.quiz.theme.subtitle)||pack.quiz.title, description:'',
-    salt:pack.quiz.salt, password:'', qids:qs.map(q=>q.uid), global:/global/i.test(pack.quiz.title), active:true, analysis:false, practice:false,
-    settings:{times:{...DEFTIMES}, points_max:1000, points_min:500}, intro:(pack.quiz.theme&&pack.quiz.theme.intro)||'', ok:[], ko:[], timeout:[], legacy:'ANTP'});
-  return qs;
 }
 
 /* ---------- editor de preguntas ---------- */
@@ -683,7 +672,7 @@ function renderContests(){
     : `<p class="note">${t('kEmpty')}</p>`}`;
   $('kNew').onclick = () => openContest(null);
   document.querySelectorAll('[data-ced]').forEach(b=>b.onclick=()=>openContest(P.contests.find(c=>c.uid===b.dataset.ced)));
-  document.querySelectorAll('[data-cdup]').forEach(b=>b.onclick=()=>{ const c=structuredClone(P.contests.find(x=>x.uid===b.dataset.cdup)); Object.assign(c,{uid:uid('c'), id:'', title:c.title+t('copySuffix'), salt:randHex(10), password:genPass()}); delete c.legacy; P.contests.push(c); touch(); renderContests(); });
+  document.querySelectorAll('[data-cdup]').forEach(b=>b.onclick=()=>{ const c=structuredClone(P.contests.find(x=>x.uid===b.dataset.cdup)); Object.assign(c,{uid:uid('c'), id:'', title:c.title+t('copySuffix'), salt:randHex(10), password:genPass()}); P.contests.push(c); touch(); renderContests(); });
   document.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=()=>{ if(!confirm(t('kDelConfirm'))) return; P.contests=P.contests.filter(c=>c.uid!==b.dataset.cdel); touch(); renderContests(); });
 }
 let C = null, CMODE = 'manual', CFILT = {topic:'', q:''}, CMSG = '';
@@ -827,9 +816,9 @@ function renderResults(){
 /* ranking por secciones */
 let RK = {sec:null, text:'', mode:'abs', levels:5, thr:[75,60,45,30,15], name:'', names:true}, RKLAST = null;
 function parseTickets(text){
-  return text.split(/(?=(?:REC|ANTP)\s*\|)/).map(s=>s.trim()).filter(s=>/^(REC|ANTP)\s*\|/.test(s)).map(b=>{ const g = re => ((b.match(re)||[])[1]||'').trim();
+  return text.split(/(?=REC\s*\|)/).map(s=>s.trim()).filter(s=>/^REC\s*\|/.test(s)).map(b=>{ const g = re => ((b.match(re)||[])[1]||'').trim();
     const hits = b.match(/(?:Aciertos|Correct):\s*(\d+)\s*\/\s*(\d+)/);
-    return {title:g(/^(?:REC|ANTP)\s*\|\s*(.+)/m), name:g(/(?:Nombre|Name):\s*(.+)/), id:normId(g(/(?:ID|DNI):\s*(.+)/)), pts:+g(/(?:Puntos|Points):\s*(\d+)/),
+    return {title:g(/^REC\s*\|\s*(.+)/m), name:g(/(?:Nombre|Name):\s*(.+)/), id:normId(g(/(?:ID|DNI):\s*(.+)/)), pts:+g(/(?:Puntos|Points):\s*(\d+)/),
       hits: hits?+hits[1]:NaN, n: hits?+hits[2]:0, max:+(g(/(?:M[aá]ximo posible|Maximum):\s*(\d+)/)||0), code:g(/(?:C[oó]digo|Code):\s*([A-Z0-9-]+)/i).toUpperCase()}; });
 }
 const maskId = d => { d=normId(d); if(/^\d{8}[A-Z]$/.test(d)) return '***'+d.slice(3,7)+'**'; if(/^[XYZ]\d{7}[A-Z]$/.test(d)) return '****'+d.slice(4,8)+'*'; return d.length>4 ? '*'.repeat(d.length-4)+d.slice(-4) : '****'; };
@@ -928,8 +917,6 @@ async function anLoad(list){
     let r;
     if(o.format==='rec-result-1') r = {cid:o.contest_id, name:o.name, sid:o.student_id, anon:o.anon_id, points:o.points, correct:o.correct, questions:o.questions, max:o.max, extra:o.extra_time, code:o.code, raw:o.detail, check:o.check,
       detail:(o.detail||[]).map(d=>({id:d.id, topic:d.topic, type:d.type, question:d.question, result:RES[d.result], chosen:d.chosen||[], answer:d.answer||[], options:d.options||[], seconds:d.seconds, limit:d.limit}))};
-    else if(/^antp-resguardo-[12]$/.test(o.format||'')) r = {cid:o.id, name:o.nombre, sid:o.dni, anon:null, points:o.puntos, correct:o.aciertos, questions:o.preguntas, max:o.maximo, extra:o.tiempo_extra, code:o.codigo, raw:o.detalle, check:o.verificacion,
-      detail:(o.detalle||[]).map(d=>({id:d.id, topic:d.tema, type:d.tipo, question:d.pregunta, result:RES[d.resultado], chosen:d.elegidas||[], answer:d.correctas||[], options:d.opciones||[], seconds:d.segundos, limit:d.limite}))};
     else { AN.issues.push(['ko',t('anBad',f.name)]); continue; }
     const c = P.contests.find(x=>x.id===r.cid); if(!c){ AN.issues.push(['ko',t('anUnknown',f.name)]); continue; }
     const okCode = makeCode(c, r.sid, r.points, r.correct, r.max, r.questions) === r.code;
