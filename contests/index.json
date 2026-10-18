@@ -1,0 +1,35 @@
+{
+  "course": {
+    "title": "Curso de demostración",
+    "subtitle": "REC, concursos en directo",
+    "language": "es"
+  },
+  "contests": [
+    {
+      "file": "demo.bin",
+      "id": "demo",
+      "title": "Demo REC",
+      "section": "Ejemplos",
+      "name": "Demostración",
+      "description": "Un ejemplo de cada tipo de pregunta. Contraseña: rec demo",
+      "questions": 6,
+      "video": false,
+      "global": false,
+      "active": true,
+      "analysis": true,
+      "practice": true,
+      "settings": {
+        "times": {
+          "opcion_multiple": 20,
+          "verdadero_falso": 15,
+          "emparejar": 45,
+          "ordenar": 45,
+          "respuesta_corta": 30,
+          "imagen": 25
+        },
+        "points_max": 1000,
+        "points_min": 500
+      }
+    }
+  ]
+}
