@@ -41,8 +41,6 @@ Avisos que puede darte el estudio:
 - **Vídeos que pesan mucho:** cada alumno los descargará enteros. Valora recortarlos o subirlos a YouTube y añadir el enlace.
 - **Preguntas omitidas:** de tipos no compatibles o repetidas.
 
-Si exportas desde ¡En el aire!, usa **Importar de ¡En el aire!** con los archivos de la carpeta `originales`: se conservan los concursos y sus códigos.
-
 ### Temas
 
 Asigna un tema a cada pregunta (filtra, marca varias y pulsa **Asignar tema**). Los temas se anuncian antes de cada pregunta, alimentan el análisis por temas y la retención, y permiten repartir las evaluaciones globales automáticas.
