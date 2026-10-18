@@ -182,6 +182,7 @@ code{background:#ECE9E1;border-radius:5px;padding:1px 6px;font-family:var(--mono
     <div class="brand"><span class="dot" aria-hidden="true"></span>REC <small data-t="studio"></small></div>
     <div class="hact">
       <span class="saved" id="saved"></span>
+      <a class="hbtn" id="helpLink" href="https://github.com/lorenagmad/REC/blob/main/docs/GUIA.md" target="_blank" rel="noopener" style="text-decoration:none" data-t="help"></a>
       <button class="hbtn" id="pNew" data-t="pNew"></button>
       <label class="hbtn" style="display:inline-flex;cursor:pointer"><span data-t="pOpen"></span><input type="file" id="pOpenFile" accept=".json" class="hidden"></label>
       <button class="hbtn" id="pSave" data-t="pSave"></button>
@@ -208,7 +209,7 @@ code{background:#ECE9E1;border-radius:5px;padding:1px 6px;font-family:var(--mono
 <script>
 /* ============ REC Estudio ============ */
 const TX = {
-es:{ studio:'Estudio', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave:'Guardar proyecto', tabCourse:'Curso', tabBank:'Banco de preguntas', tabContests:'Concursos', tabPublish:'Publicar', tabResults:'Resultados',
+es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave:'Guardar proyecto', tabCourse:'Curso', tabBank:'Banco de preguntas', tabContests:'Concursos', tabPublish:'Publicar', tabResults:'Resultados',
   savedAt:t=>`Guardado en este navegador ${t}`, confirmNew:'¿Empezar un proyecto nuevo? Se borrará el actual de este navegador (guárdalo antes si lo necesitas).',
   badProject:'Ese archivo no es un proyecto de REC.', projLoaded:'Proyecto cargado.',
   cTitle:'Tu curso', cLead:'Estos datos aparecen en la portada del concurso. Todo lo que hagas en el estudio se guarda automáticamente en este navegador; usa «Guardar proyecto» para tener una copia en tu ordenador.',
@@ -288,7 +289,7 @@ es:{ studio:'Estudio', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave:'Guardar proy
   exTitle:'Códigos de tiempo extra', exLead:'Para el alumnado con una adaptación de tiempo reconocida. Cada código va ligado a su identificador y sirve para todos los concursos de este proyecto. Su puntuación se calcula sobre el tiempo ampliado.',
   exIds:'Identificadores (uno por línea)', exPct:'Tiempo extra', exGo:'Generar códigos', exNote:'Entrega cada código de forma privada. El alumno lo escribe antes de empezar, en «¿Tienes reconocida una adaptación de tiempo?».', exCode:'Código',
   needContests:'Primero crea algún concurso.', contest:'Concurso', sec:'(sin sección)' },
-en:{ studio:'Studio', pNew:'New', pOpen:'Open project', pSave:'Save project', tabCourse:'Course', tabBank:'Question bank', tabContests:'Contests', tabPublish:'Publish', tabResults:'Results',
+en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save project', tabCourse:'Course', tabBank:'Question bank', tabContests:'Contests', tabPublish:'Publish', tabResults:'Results',
   savedAt:t=>`Saved in this browser ${t}`, confirmNew:'Start a new project? The current one will be removed from this browser (save it first if you need it).',
   badProject:'That file is not a REC project.', projLoaded:'Project loaded.',
   cTitle:'Your course', cLead:'These details appear on the contest home page. Everything you do in the studio is saved automatically in this browser; use “Save project” to keep a copy on your computer.',
@@ -407,6 +408,7 @@ function renderAll(){
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-t]').forEach(el=>{ el.textContent = t(el.dataset.t); });
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.lang===LANG)));
+  $('helpLink').href = `https://github.com/lorenagmad/REC/blob/main/docs/${LANG==='es'?'GUIA':'GUIDE'}.md`;
   document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===TAB)));
   document.querySelectorAll('.tabp').forEach(s=>s.classList.toggle('hidden', s.id!=='tab-'+TAB));
   ({course:renderCourse, bank:renderBank, contests:renderContests, publish:renderPublish, results:renderResults})[TAB]();
