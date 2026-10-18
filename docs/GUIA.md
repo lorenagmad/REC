@@ -92,7 +92,7 @@ Un concurso es un conjunto de preguntas del banco con su propia contraseña. Pul
 - **Sección:** por ejemplo, «Tema 1» o «Bloque 1». Los concursos de una misma sección se suman en el ranking.
 - **Nombre visible y descripción:** lo que verá el alumnado en la portada.
 - **Contraseña:** pulsa **Generar** para obtener una fácil de dictar. Las mayúsculas y las tildes no cuentan.
-- **Visible en la portada**, **análisis de respuestas** (el alumnado descarga un archivo con sus respuestas) y **modo práctica** (sin puntos, sin reloj y con soluciones; usa la misma contraseña).
+- **Visible en la portada**, **análisis de respuestas** (el alumnado descarga un archivo xAPI con sus respuestas) y **modo práctica** (sin puntos, sin reloj y con soluciones; usa la misma contraseña).
 - **Tiempo y puntuación:** segundos por tipo de pregunta y puntos de un acierto instantáneo y de uno en el último segundo (por defecto, 1000 y 500).
 - **Presentación:** el mensaje de bienvenida de Cam y, si quieres, tus propias frases tras un acierto, un fallo o cuando se acaba el tiempo.
 
@@ -142,6 +142,8 @@ Carga los archivos `.json` de los concursos con análisis (por ejemplo, todas la
 
 - **Un concurso:** resumen, ideas para la próxima clase, mapa de rapidez y acierto (domina, sabe pero duda, se precipita y necesita repaso), análisis pregunta a pregunta (dificultad, error más frecuente y si la pregunta distingue a quien sabe) y alumno a alumno.
 - **Todo lo cargado:** dominio por tema y retención entre los concursos de una sección y su evaluación global.
+
+**El archivo xAPI.** El archivo que descarga el alumnado está en formato **xAPI** (Experience API), el estándar para registrar actividades de aprendizaje: contiene una declaración por cada pregunta (qué respondió, si acertó y cuánto tardó) y, dentro, el resguardo verificable que usan el ranking y el análisis. Es un solo archivo por alumno y concurso. El botón **Descargar todas las interacciones en xAPI** junta las declaraciones de todos los archivos cargados en uno, listo para importar en un LRS (el almacén de datos de aprendizaje de tu centro, si lo tiene); con «Anonimizar» marcado, sale sin nombres ni identificadores.
 
 **Repaso en clase** proyecta a pantalla completa las preguntas más falladas con el reparto de respuestas del grupo; la solución aparece al pulsar (también con las flechas y la barra espaciadora). **Anonimizar** sustituye nombre e identificador por un código genérico, el mismo para cada alumno en todos los concursos, también en las exportaciones CSV.
 

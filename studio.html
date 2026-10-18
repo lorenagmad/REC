@@ -265,7 +265,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   rkGala:s=>`Gala de premios: ${s}`, rkSub:(n,m,d)=>`${n} concursos, con un máximo posible de ${m} puntos. ${d}`, rkPos:'Puesto', rkWho:'Concursante', rkWhoId:'Identificador', rkDone:'Concursos', rkHits:'Aciertos', rkPts:'Puntos',
   rkPlaces:['REC de oro','REC de plata','REC de bronce'], rkNoBonus:'Sin bonificación', rkLegAbs:'Bonificación según el porcentaje de la puntuación máxima:', rkLegRel:'Bonificación relativa: quien más puntos logra obtiene el máximo y el resto, en proporción.',
   rkFoot:'Ranking elaborado a partir de los resguardos válidos recibidos. Si detectas un error en tus datos, comunícalo a tu profesor o profesora.', rkEmpty:'Todavía no hay resguardos válidos.',
-  anLoad:'Carga los archivos .json de los concursos con análisis activado (puedes mezclar varios concursos).', anDrop:'Arrastra aquí los archivos .json', anView:'Vista', anOne:'Un concurso', anCourse:'Todo lo cargado: temas y retención',
+  anLoad:'Carga los archivos .json (xAPI) de los concursos con análisis activado (puedes mezclar varios concursos).', anXapi:'Descargar todas las interacciones en xAPI', anXapiNote:'Un único archivo con las declaraciones xAPI de todos los resguardos cargados, listo para importar en un LRS. Con «Anonimizar», sale sin nombres ni identificadores.', anDrop:'Arrastra aquí los archivos .json', anView:'Vista', anOne:'Un concurso', anCourse:'Todo lo cargado: temas y retención',
   anAnon:'Anonimizar (identificador genérico en lugar del nombre y el ID)', anLoaded:(f,q)=>`${f} resguardos con análisis de ${q} concursos.`, anBad:f=>`«${f}» no es un resguardo de REC con análisis.`,
   anUnknown:f=>`«${f}» es de un concurso que no está en este proyecto.`, anMod:(f,n)=>`«${f}» (${n}) ha sido modificado: no se tiene en cuenta.`, anDupl:(n,c)=>`${n} tiene dos resguardos de «${c}»: se usa el de más puntos.`,
   anSummary:'Resumen', anStudents:'alumnos', anHit:'de aciertos de media', anPts:'puntos de media', anTime:'tiempo medio de respuesta', anTo:'respuestas sin contestar a tiempo',
@@ -345,7 +345,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   rkGala:s=>`Awards show: ${s}`, rkSub:(n,m,d)=>`${n} contests, with a maximum possible score of ${m} points. ${d}`, rkPos:'Rank', rkWho:'Contestant', rkWhoId:'ID', rkDone:'Contests', rkHits:'Correct', rkPts:'Points',
   rkPlaces:['Gold REC','Silver REC','Bronze REC'], rkNoBonus:'No bonus', rkLegAbs:'Bonus by percentage of the maximum score:', rkLegRel:'Relative bonus: the top scorer gets the maximum and the rest in proportion.',
   rkFoot:'Ranking based on the valid tickets received. If you find an error in your data, tell your teacher.', rkEmpty:'There are no valid tickets yet.',
-  anLoad:'Load the .json files from contests with analysis enabled (you can mix several contests).', anDrop:'Drop the .json files here', anView:'View', anOne:'One contest', anCourse:'Everything loaded: topics and retention',
+  anLoad:'Load the .json (xAPI) files from contests with analysis enabled (you can mix several contests).', anXapi:'Download all interactions as xAPI', anXapiNote:'A single file with the xAPI statements from all loaded tickets, ready to import into an LRS. With “Anonymise”, names and IDs are removed.', anDrop:'Drop the .json files here', anView:'View', anOne:'One contest', anCourse:'Everything loaded: topics and retention',
   anAnon:'Anonymise (generic identifier instead of name and ID)', anLoaded:(f,q)=>`${f} tickets with analysis from ${q} contests.`, anBad:f=>`“${f}” is not a REC ticket with analysis.`,
   anUnknown:f=>`“${f}” belongs to a contest that is not in this project.`, anMod:(f,n)=>`“${f}” (${n}) has been modified: it is not counted.`, anDupl:(n,c)=>`${n} has two tickets for “${c}”: the highest score is used.`,
   anSummary:'Summary', anStudents:'students', anHit:'average correct answers', anPts:'average points', anTime:'average response time', anTo:'answers not given in time',
@@ -843,7 +843,7 @@ function renderRanking(){
   info();
   $('rkSec').onchange = e => { RK.sec=e.target.value; RKLAST=null; renderRanking(); };
   $('rkText').oninput = e => RK.text = e.target.value;
-  $('rkFiles').onchange = async e => { const texts = await Promise.all([...e.target.files].map(async f=>{ const x=await f.text(); try{ const o=JSON.parse(x); return o.ticket||o.resguardo||''; }catch(err){ return x; } }));
+  $('rkFiles').onchange = async e => { const texts = await Promise.all([...e.target.files].map(async f=>{ const x=await f.text(); try{ const rf=recordFromFile(JSON.parse(x)); return (rf.record&&rf.record.ticket)||''; }catch(err){ return x; } }));
     RK.text = (RK.text.trim()+'\n\n'+texts.join('\n\n')).trim(); $('rkText').value = RK.text; };
   document.querySelectorAll('[name=rkm]').forEach(r=>r.onchange=()=>{ RK.mode=r.value; $('rkThrBox').classList.toggle('hidden', RK.mode!=='abs'); recalc(); });
   $('rkName').oninput = e => { RK.name=e.target.value; recalc(); };
@@ -905,6 +905,60 @@ function renderExtra(){
     $('exOut').innerHTML = ids.length ? `<table class="dtable"><thead><tr><th>ID</th><th>${t('exPct')}</th><th>${t('exCode')}</th></tr></thead><tbody>${ids.map(d=>`<tr><td>${d}</td><td>+${pct} %</td><td><code style="font-size:16px">TE${pct}-${cyrb53(`${P.adapt}|te|${d}|${pct}`).toString(36).toUpperCase().padStart(6,'0').slice(0,5)}</code></td></tr>`).join('')}</tbody></table>` : ''; };
 }
 
+/* ---- xAPI (Experience API 1.0.3): una declaración por interacción ---- */
+function buildXapi(o){
+  // o: {base, lang, platform, quiz:{id,title}, actor:{name,id}, log, start, end, total, max, maxQ, extra, record}
+  const hid = s => 'r' + cyrb53(String(s)).toString(36).slice(0,9);
+  const L = t => ({[o.lang]: String(t)});
+  const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{ const r=Math.random()*16|0; return (c==='x'?r:(r&3|8)).toString(16); }));
+  const dur = s => 'PT' + (Math.round((s||0)*10)/10) + 'S';
+  const actor = {objectType:'Agent', name:o.actor.name, account:{homePage:o.base, name:o.actor.id}};
+  const contest = {objectType:'Activity', id:`${o.base}contests/${encodeURIComponent(o.quiz.id)}`, definition:{type:'http://adlnet.gov/expapi/activities/assessment', name:L(o.quiz.title)}};
+  const ctx = (extra) => ({platform:o.platform, language:o.lang, contextActivities:{parent:[{objectType:'Activity', id:contest.id}]},
+    extensions:{[`${o.base}xapi/extra-time`]: o.extra||0, ...(extra||{})}});
+  const verb = (v, es, en) => ({id:`http://adlnet.gov/expapi/verbs/${v}`, display:{'es-ES':es, 'en-US':en}});
+  const st = [{id:uuid(), actor, verb:verb('attempted','intentó','attempted'), object:contest, context:{platform:o.platform, language:o.lang, extensions:{[`${o.base}xapi/extra-time`]: o.extra||0}}, timestamp:o.start}];
+  o.log.forEach((l,i)=>{
+    const def = {type:'http://adlnet.gov/expapi/activities/cmi.interaction', name:L(l.name), description:L(l.q||l.name)};
+    let resp = '';
+    const sel = l.sel||[], good = l.good||[];
+    if(l.tipo==='mc' || l.tipo==='mm'){ def.interactionType='choice'; def.choices=(l.opciones||[]).map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[good.map(hid).join('[,]')]; resp = sel.map(hid).join('[,]'); }
+    else if(l.tipo==='tf'){ const tv = x => /^(verdadero|true)/i.test(String(x).trim()) ? 'true' : 'false'; def.interactionType='true-false'; def.correctResponsesPattern=[good[0]?tv(good[0]):'true']; resp = sel[0]?tv(sel[0]):''; }
+    else if(l.tipo==='match'){ const sp = x => String(x).split(' → '); const src=[...new Set(good.map(g=>sp(g)[0]))], tgt=[...new Set([...good, ...sel].map(g=>sp(g)[1]).filter(Boolean))];
+      def.interactionType='matching'; def.source=src.map(x=>({id:hid(x), description:L(x)})); def.target=tgt.map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[good.map(g=>hid(sp(g)[0])+'[.]'+hid(sp(g)[1])).join('[,]')]; resp = sel.map(g=>hid(sp(g)[0])+'[.]'+hid(sp(g)[1]||'')).join('[,]'); }
+    else if(l.tipo==='order'){ const items=(good[0]||'').split(' → '); def.interactionType='sequencing'; def.choices=items.map(x=>({id:hid(x), description:L(x)}));
+      def.correctResponsesPattern=[items.map(hid).join('[,]')]; resp = sel[0] ? sel[0].split(' → ').map(hid).join('[,]') : ''; }
+    else if(l.tipo==='short'){ def.interactionType='fill-in'; def.correctResponsesPattern=good.slice(); resp = sel[0]||''; }
+    else { def.interactionType='other'; resp = sel[0]||''; }
+    const res = {success: !!l.ok, response: resp, score:{raw:l.pts||0, min:0, max:o.maxQ, scaled:+((l.pts||0)/o.maxQ).toFixed(4)},
+      extensions:{[`${o.base}xapi/result`]: l.res, [`${o.base}xapi/time-limit`]: l.limite??null}};
+    if(l.t!=null) res.duration = dur(l.t);
+    st.push({id:uuid(), actor, verb:verb('answered','respondió','answered'), object:{objectType:'Activity', id:`${contest.id}/questions/${encodeURIComponent(l.name)}`, definition:def},
+      result:res, context:ctx({[`${o.base}xapi/topic`]: l.tema||'', [`${o.base}xapi/position`]: i+1}), timestamp:l.at||o.end});
+  });
+  const secs = Math.max(0,(Date.parse(o.end)-Date.parse(o.start))/1000);
+  st.push({id:uuid(), actor, verb:verb('completed','completó','completed'), object:contest,
+    result:{completion:true, duration:dur(secs), score:{raw:o.total, min:0, max:o.max, scaled:+(o.total/o.max).toFixed(4)}, extensions:{[`${o.base}xapi/record`]: o.record}},
+    context:ctx(), timestamp:o.end});
+  return st;
+}
+/* lee un archivo de resguardo: formato propio o xAPI (lista de declaraciones con el registro en «completed») */
+function recordFromFile(o){
+  if(!Array.isArray(o)) return {record:o, statements:null};
+  for(const s of o){ const ex = s && s.result && s.result.extensions; if(!ex) continue;
+    const k = Object.keys(ex).find(k=>/\/xapi\/record$/.test(k)); if(k) return {record:ex[k], statements:o}; }
+  return {record:null, statements:o};
+}
+/* anonimiza una lista de declaraciones (para exportar a un LRS o a un estudio) */
+function anonStatements(list, anonOf){
+  return list.map(s=>{ const c = structuredClone(s); const id = c.actor && c.actor.account ? c.actor.account.name : '';
+    const a = anonOf(id); c.actor = {objectType:'Agent', account:{homePage:c.actor.account.homePage, name:a}};
+    const ex = c.result && c.result.extensions; if(ex){ const k = Object.keys(ex).find(k=>/\/xapi\/record$/.test(k)); if(k) delete ex[k]; }
+    return c; });
+}
+
 /* análisis de resultados */
 let AN = {files:[], issues:[], view:'one', contest:'', anon:false, order:'dif'};
 const RES = {correct:'acierto', partial:'parcial', wrong:'fallo', timeout:'tiempo', acierto:'acierto', parcial:'parcial', fallo:'fallo', tiempo:'tiempo'};
@@ -915,16 +969,16 @@ const median = a => { if(!a.length) return null; const b=[...a].sort((x,y)=>x-y)
 const anonOf = id => 'A' + cyrb53(`${P.adapt}|anon|${normId(id)}`).toString(36).toUpperCase().padStart(7,'0').slice(0,6);
 async function anLoad(list){
   for(const f of list){
-    let o; try{ o = JSON.parse(await f.text()); }catch(e){ AN.issues.push(['ko',t('anBad',f.name)]); continue; }
+    let o, st=null; try{ const rf = recordFromFile(JSON.parse(await f.text())); if(!rf.record) throw 0; o = JSON.parse(JSON.stringify(rf.record)); st = rf.statements; }catch(e){ AN.issues.push(['ko',t('anBad',f.name)]); continue; }
     let r;
     if(o.format==='rec-result-1') r = {cid:o.contest_id, name:o.name, sid:o.student_id, anon:o.anon_id, points:o.points, correct:o.correct, questions:o.questions, max:o.max, extra:o.extra_time, code:o.code, raw:o.detail, check:o.check,
-      detail:(o.detail||[]).map(d=>({id:d.id, topic:d.topic, type:d.type, question:d.question, result:RES[d.result], chosen:d.chosen||[], answer:d.answer||[], options:d.options||[], seconds:d.seconds, limit:d.limit}))};
+      detail:(o.detail||[]).map(d=>({id:d.id, topic:d.topic, type:d.type, question:d.question, result:RES[d.result], chosen:d.chosen||[], answer:d.answer||[], options:d.options||[], seconds:d.seconds, limit:d.limit, points:d.points||0}))};
     else { AN.issues.push(['ko',t('anBad',f.name)]); continue; }
     const c = P.contests.find(x=>x.id===r.cid); if(!c){ AN.issues.push(['ko',t('anUnknown',f.name)]); continue; }
     const okCode = makeCode(c, r.sid, r.points, r.correct, r.max, r.questions) === r.code;
     const okDet = cyrb53(`${c.salt}|${c.id}|${normId(r.sid)}|${JSON.stringify(r.raw)}`).toString(36).toUpperCase() === r.check;
     if(!okCode || !okDet){ AN.issues.push(['ko',t('anMod',f.name,r.name)]); continue; }
-    r.c = c; r.sid = normId(r.sid); r.anon = r.anon || anonOf(r.sid);
+    r.c = c; r.sid = normId(r.sid); r.anon = r.anon || anonOf(r.sid); r._st = st;
     r.detail.forEach(d=>{ d.lim = d.limit || TDEF[d.type] || 20; d.rel = d.seconds!=null ? Math.min(1, d.seconds/d.lim) : null; d.topic = d.topic || t('noTopic'); });
     const dup = AN.files.find(x=>x.c.uid===c.uid && x.sid===r.sid);
     if(dup){ if(dup.code===r.code) continue; AN.issues.push(['warn',t('anDupl',r.name,c.name||c.title)]); if(dup.points>=r.points) continue; AN.files.splice(AN.files.indexOf(dup),1); }
@@ -964,7 +1018,8 @@ function renderAnalysis(){
     <ul class="msgs">${AN.files.length?`<li class="msg ok">${t('anLoaded',AN.files.length,cs.length)}</li>`:''}${AN.issues.map(([c,x])=>`<li class="msg ${c}">${esc(x)}</li>`).join('')}</ul>
     ${AN.files.length?`<div class="grid2"><label>${t('anView')}<select id="anView"><option value="one">${t('anOne')}</option><option value="course">${t('anCourse')}</option></select></label>
       <label class="${AN.view==='one'?'':'hidden'}">${t('contest')||'Concurso'}<select id="anC">${cs.map(c=>`<option value="${c.uid}">${esc(c.name||c.title)} (${AN.files.filter(f=>f.c.uid===c.uid).length})</option>`).join('')}</select></label></div>
-      <label class="check"><input type="checkbox" id="anAnon" ${AN.anon?'checked':''}> ${t('anAnon')}</label>`:''}</div><div id="anOut"></div>`;
+      <label class="check"><input type="checkbox" id="anAnon" ${AN.anon?'checked':''}> ${t('anAnon')}</label>
+      <div class="row"><button class="btn alt" id="anXapi">${t('anXapi')}</button><span class="note">${t('anXapiNote')}</span></div>`:''}</div><div id="anOut"></div>`;
   $('anFiles').onchange = e => anLoad([...e.target.files]);
   const d=$('anDrop'); ['dragenter','dragover'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault(); d.classList.add('over');})); ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault(); d.classList.remove('over');}));
   d.addEventListener('drop', e=>anLoad([...e.dataTransfer.files]));
@@ -972,6 +1027,14 @@ function renderAnalysis(){
   $('anView').value=AN.view; $('anView').onchange=e=>{AN.view=e.target.value; renderAnalysis();};
   if($('anC')){ $('anC').value=AN.contest; $('anC').onchange=e=>{AN.contest=e.target.value; renderAnalysis();}; }
   $('anAnon').onchange=e=>{AN.anon=e.target.checked; renderAnalysis();};
+  $('anXapi').onclick=()=>{ let all=[];
+    AN.files.forEach(f=>{ let st=f._st; if(!st){ const now=new Date().toISOString(), base=location.origin+location.pathname.replace(/[^/]*$/,'');
+        st=buildXapi({base, lang:LANG==='es'?'es-ES':'en-GB', platform:'REC', quiz:{id:f.c.id, title:f.c.title}, actor:{name:f.name, id:f.sid},
+          log:f.detail.map(d=>({name:d.id, q:d.question, tipo:d.type, sel:d.chosen, good:d.answer, opciones:d.options, ok:d.result==='acierto', pts:d.points||0, t:d.seconds, res:d.result, limite:d.limit, tema:d.topic})),
+          start:now, end:now, total:f.points, max:f.max||f.questions*1000, maxQ:Math.round((f.max||f.questions*1000)/f.questions), extra:f.extra||0, record:{}}); }
+      all=all.concat(st); });
+    if(AN.anon) all=anonStatements(all, id=>anonOf(id));
+    download(`xapi-statements${AN.anon?'-anon':''}.json`, JSON.stringify(all,null,1), 'application/json'); };
   AN.view==='one' ? anOne() : anCourse();
 }
 function anOne(){

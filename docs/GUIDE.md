@@ -92,7 +92,7 @@ A contest is a set of questions from the bank with its own password. Press **New
 - **Section:** e.g. “Unit 1”. Contests in the same section are added up in the ranking.
 - **Visible name and description:** what students see on the home page.
 - **Password:** press **Generate** for one that is easy to dictate. Capitals and accents do not matter.
-- **Visible on the home page**, **answer analysis** (students download a file with their answers) and **practice mode** (no points, no clock, with solutions; same password).
+- **Visible on the home page**, **answer analysis** (students download an xAPI file with their answers) and **practice mode** (no points, no clock, with solutions; same password).
 - **Time and scoring:** seconds per question type and points for an instant correct answer and for one in the last second (1000 and 500 by default).
 - **Presentation:** Cam’s welcome message and, if you like, your own lines after a correct answer, a wrong one or when time runs out.
 
@@ -142,6 +142,8 @@ Load the `.json` files from contests with analysis (e.g. all submissions from a 
 
 - **One contest:** summary, ideas for the next class, speed and accuracy map (masters it, knows but hesitates, rushes and needs review), question-by-question analysis (difficulty, most common mistake and whether the question discriminates) and student by student.
 - **Everything loaded:** mastery by topic and retention between a section’s contests and its global test.
+
+**The xAPI file.** The file students download is in **xAPI** format (Experience API), the standard for recording learning activities: it contains one statement per question (what they answered, whether it was correct and how long it took) and, inside, the verifiable ticket used by the ranking and the analysis. It is a single file per student and contest. The **Download all interactions as xAPI** button merges the statements from all loaded files into one, ready to import into an LRS (your institution’s learning record store, if it has one); with “Anonymise” ticked, names and IDs are removed.
 
 **Class review** projects the most missed questions full screen with the group’s answer distribution; the solution appears when you press (also with the arrow keys and the space bar). **Anonymise** replaces name and ID with a generic code, the same for each student across contests, also in CSV exports.
 
