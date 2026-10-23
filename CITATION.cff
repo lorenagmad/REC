@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use REC, please cite it as below."
+title: "REC"
+type: software
+license: AGPL-3.0-or-later
+repository-code: "https://github.com/lorenagmad/REC"
+url: "https://lorenagmad.github.io/REC/"
+authors:
+  - family-names: "Gutiérrez Madroñal"
+    given-names: "Lorena"
+    affiliation: "University of Cádiz"
+    email: "lorena.gutierrez@uca.es"
+    orcid: "https://orcid.org/0000-0002-2214-617X"
+  - family-names: "Baena Pérez"
+    given-names: "Rubén"
+    affiliation: "University of Cádiz"
+    orcid: "https://orcid.org/0000-0001-7630-6223"
+  - family-names: "Mota Macías"
+    given-names: "José Miguel"
+    affiliation: "University of Cádiz"
+    orcid: "https://orcid.org/0000-0002-4980-0549"
+keywords:
+  - gamification
+  - quiz game show
+  - game-based learning
+  - learning analytics
+  - Moodle XML
+  - xAPI
+abstract: >-
+  REC turns quizzes into a live TV game show. The sooner students answer, the more each
+  correct answer is worth; they get a ticket with a verification code, and the teacher gets
+  rankings, bonuses and an analysis of what they learnt. It runs entirely in the browser,
+  with no servers or student accounts, and is published as a static site such as GitHub Pages.
