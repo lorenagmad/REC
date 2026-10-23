@@ -1,5 +1,7 @@
 # ● REC
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23594647.svg)](https://doi.org/10.5281/zenodo.23594647)
+
 **REC** convierte tus cuestionarios en un concurso de televisión en directo. Cada acierto vale más cuanto antes se responde, el alumnado recibe un resguardo con un código de verificación y tú obtienes ranking, bonificaciones y un análisis de lo aprendido. Funciona en cualquier móvil u ordenador, sin servidores ni cuentas para el alumnado, y se publica gratis en GitHub Pages.
 
 **REC** turns your quizzes into a live TV game show. The sooner students answer, the more each correct answer is worth; they get a ticket with a verification code, and you get rankings, bonuses and an analysis of what they learnt. It works on any phone or computer, with no servers or student accounts, and is published for free on GitHub Pages.
