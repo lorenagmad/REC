@@ -1,0 +1,212 @@
+%%
+%% Copyright 2026 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+
+\documentclass[preprint,12pt, a4paper]{elsarticle}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+
+%% Data that the authors still have to provide are marked in red
+\newcommand{\todo}[1]{\textcolor{red}{[#1]}}
+%% Sections still being planned are marked in blue
+\newcommand{\plan}[1]{\textcolor{blue}{[Planned: #1]}}
+\DeclareUrlCommand\file{\urlstyle{tt}}
+
+\journal{SoftwareX}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{REC: \todo{short title, to be decided after planning}}
+
+\author[uca]{Lorena Gutiérrez-Madroñal\corref{cor1}}
+\ead{lorena.gutierrez@uca.es}
+\author[uca]{Rubén Baena-Pérez}
+\author[uca]{José Miguel Mota-Macías}
+\cortext[cor1]{Corresponding author.}
+
+\address[uca]{Department of Computer Science and Engineering, School of Engineering, University of Cádiz, Avda.\ de la Universidad de Cádiz 10, 11519 Puerto Real, Cádiz, Spain}
+
+\begin{abstract}
+\todo{Abstract (ca.\ 100 words), to be written at the end.}
+\end{abstract}
+
+\begin{keyword}
+Gamification \sep Game-based learning \sep Student response systems \sep Learning analytics \sep xAPI
+\end{keyword}
+
+\end{frontmatter}
+
+\section*{Required Metadata}
+\label{sec:metadata}
+
+\section*{Current code version}
+\label{sec:codeversion}
+
+\begin{table}[!h]
+\small
+\begin{tabular}{|l|p{5.6cm}|p{6.4cm}|}
+\hline
+\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Please fill in this column} \\
+\hline
+C1 & Current code version & v1.0.0 (\url{https://doi.org/10.5281/zenodo.23594648}) \\
+\hline
+C2 & Permanent GitHub link to code/repository used for this code version & \url{https://github.com/lorenagmad/REC} \\
+\hline
+C3 & Legal Code License & AGPL-3.0-or-later \\
+\hline
+C4 & Code versioning system used & git \\
+\hline
+C5 & Software code languages, tools, and services used & JavaScript (ECMAScript 2020), HTML5, CSS3; Web Crypto, IndexedDB and Web Audio APIs; no third-party libraries \\
+\hline
+C6 & Compilation requirements, operating environments \& dependencies & A current web browser (Chrome, Edge, Firefox or Safari) on a computer, tablet or phone; any static web host with HTTPS, such as GitHub Pages, to publish contests \\
+\hline
+C7 & If available Link to developer documentation/manual & \url{https://github.com/lorenagmad/REC/blob/main/docs/GUIDE.md} \\
+\hline
+C8 & Support email for questions & \href{mailto:lorena.gutierrez@uca.es}{lorena.gutierrez@uca.es} \\
+\hline
+\end{tabular}
+\caption{Code metadata (mandatory)}
+\label{tab:codemetadata}
+\end{table}
+
+%% ============================================================================
+\section{Motivation and significance}
+\label{sec:motivation}
+
+Game-based student response systems such as Kahoot! have become common in higher education, where they are used to increase participation and to give students immediate feedback~\cite{wang2020}. At the University of Cádiz, a teaching-innovation project running since the 2017/18 academic year in the course \emph{Herramientas Multimedia y Animación}, now \emph{Animación y Nuevas Tecnologías en Publicidad}, scores the quizzes held after each lecture by correctness and response speed, and the resulting rankings reward students in the final exam~\cite{gutierrez2018}. Encouraging participation is therefore no longer the main challenge. What teachers still lack is an analysis of what each student has actually learnt, built from their answers during the quiz and kept in the teacher's hands rather than the provider's.
+
+The tool presented here grew out of this practice. In late 2019, the free plan of Kahoot! for higher education was limited to 50 players per live game, and in 2021 to 10~\cite{kahoot2019,kahoot2021}, which made it unusable in the course \emph{Fundamentos Técnicos en la Publicidad Digital}, with about 150 students. Moving the quizzes to Moodle, the institutional learning management system, solved the problem of scale but not that of scoring, because Moodle quizzes do not rank students by correctness and response speed. Each quiz had to be downloaded, filtered and scored in a spreadsheet, and the ranking then published in the virtual campus by hand. This took 15 to 30 minutes per quiz, that is, 3 to 6.5 hours per semester for the 13 quizzes of the animation course.
+
+Commercial game-based response systems such as Kahoot!~\cite{kahoot}, Wayground (formerly Quizizz)~\cite{wayground}, Socrative~\cite{socrative}, Blooket~\cite{blooket}, Gimkit~\cite{gimkit} and Mentimeter~\cite{mentimeter} let students join without an account, and several of them award points for speed. However, they store students' answers on the provider's servers, and their free plans limit the number of players or the export of results (Table~\ref{tab:comparison}). The Moodle quiz~\cite{moodlequiz} keeps the data within the institution and imports Moodle XML, but it requires student accounts and does not score speed. Open-source alternatives such as ClassQuiz~\cite{classquiz} and QuizDock~\cite{quizdock} can be self-hosted, but they need a server with a database. Response times also carry information about learning: answers that reflect misconceptions tend to be given faster than correct ones~\cite{heckler2015}, and in gamified quizzes the response time of wrong answers helps to tell guesses from weak recall~\cite{liang2024}. According to their documentation, none of these tools combines speed and correctness in its analysis of students' answers.
+
+\begin{table}[!htb]
+\centering
+\caption{Comparison with related tools, according to their documentation (October 2026). Speed: points depend on response time; Static: runs as static files, with no application server or database; No cloud: answers are not stored on the provider's servers; Moodle XML: imports Moodle XML questions; Times: exports each student's response time per question; Speed$\times$acc.: built-in analysis combining speed and correctness; Retention: built-in analysis across sessions; xAPI: exports xAPI statements; 150 free: a free game for about 150 students. \checkmark{} yes; $\circ$ partial; $\times$ no; ? not documented.}
+\label{tab:comparison}\vspace{3pt}
+\small\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+Tool & Speed & Static & No cloud & Moodle XML & Times & Speed$\times$acc. & Retention & xAPI & 150 free \\
+\midrule
+REC & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+Kahoot!~\cite{kahoot} & \checkmark & $\times$ & $\times$ & $\times$ & $\circ$\textsuperscript{a} & $\times$ & $\circ$\textsuperscript{a} & ? & $\times$ \\
+Wayground~\cite{wayground} & $\circ$\textsuperscript{a} & $\times$ & $\times$ & ? & $\circ$ & $\times$ & ? & ? & $\times$ \\
+Socrative~\cite{socrative} & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & ? & ? & $\times$ \\
+Moodle quiz~\cite{moodlequiz} & $\times$ & $\times$ & $\circ$\textsuperscript{b} & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ & \checkmark \\
+Blooket~\cite{blooket} & \checkmark & $\times$ & $\times$ & $\times$ & $\circ$\textsuperscript{c} & $\times$ & ? & ? & $\times$ \\
+Gimkit~\cite{gimkit} & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & ? & \checkmark \\
+Mentimeter~\cite{mentimeter} & \checkmark & $\times$ & $\times$ & ? & ? & $\times$ & ? & ? & $\circ$ \\
+\bottomrule
+\end{tabular}}
+
+\vspace{2pt}{\footnotesize \textsuperscript{a}~Paid plans only. \textsuperscript{b}~Stored on the institution's server. \textsuperscript{c}~Average time per question only.}
+\end{table}
+
+REC was developed under three requirements: (i)~to reuse the questions teachers already have in Moodle, through the import of Moodle XML; (ii)~to run in any browser without student accounts or servers, with contests published encrypted on a static website and opened with a password; and (iii)~to give the teacher an analysis of each student's answers, combining speed and correctness, with the data held by the teacher. The teacher prepares the contests in the studio and publishes them encrypted. After the lecture, all students play at the same time, each on their own device (phone, tablet or laptop), with the password given in class; nothing is projected during the quiz. At the end, each student obtains a ticket with a verification code, with which the studio detects tickets that have been modified, and a results file in xAPI format~\cite{xapi}, which they submit through the virtual campus. The teacher then verifies the tickets, builds and publishes the ranking, and analyses the results. The same tool supports graded continuous assessment, with rankings that reward students in the final exam, and ungraded diagnostic quizzes held before a topic is taught, which also record attendance.
+
+%% ============================================================================
+\section{Software description}
+\label{sec:description}
+
+\plan{Architecture (two self-contained files: studio and studio floor), functionalities (including point-on-image questions, practice mode and extra time, as features rather than exclusive ones), and how AI assistance in development is reported. State the limit of the ticket check: without a server, a student who recomputes the code in the browser's developer tools is not detected.}
+
+\subsection{Software architecture}
+\label{sec:architecture}
+
+\subsection{Software functionalities}
+\label{sec:functionalities}
+
+%% ============================================================================
+\section{Illustrative examples}
+\label{sec:examples}
+
+\plan{To be negotiated.}
+
+%% ============================================================================
+\section{Impact}
+\label{sec:impact}
+
+\plan{To be negotiated. Includes the REC $\rightarrow$ ranking $\rightarrow$ Aspa personalised-exam workflow~\cite{aspa} and the second-semester trial (results in June 2027).}
+
+%% ============================================================================
+\section{Conclusions}
+\label{sec:conclusions}
+
+\plan{To be negotiated. Future work includes bundling the typefaces with the tool instead of loading them from Google Fonts.}
+
+\section*{Acknowledgements}
+\label{sec:acknowledgements}
+
+\todo{Optional.}
+
+%% References
+\begin{thebibliography}{00}
+\small
+
+\bibitem{wang2020} A.~I. Wang, R.~Tahir, The effect of using Kahoot! for learning -- A literature review, Computers \& Education 149 (2020) 103818. \url{https://doi.org/10.1016/j.compedu.2020.103818}
+
+\bibitem{gutierrez2018} L.~Gutiérrez-Madroñal, J.~C. Collado Machuca, Cómo potenciar y evaluar de forma continua, la asistencia, los conocimientos y la participación activa del alumno en el aula a través de la gamificación [Fostering and continuously assessing students' attendance, knowledge and active participation in class through gamification], in: III Jornadas de Innovación Docente Universitaria UCA. Libro de Actas, Universidad de Cádiz, 2018, pp. 54--59. ISBN 978-84-09-04190-9 (in Spanish).
+
+\bibitem{kahoot2019} Kahoot!, Plans and billing options for schools, help centre article (updated 25 November 2019), archived at \url{https://web.archive.org/web/20191213032024/https://support.kahoot.com/hc/en-us/articles/360008246494-Plans-and-billing-options-for-schools} (accessed 23 October 2026).
+
+\bibitem{kahoot2021} Kahoot!, How many players can join a game?, help centre article (updated 27 February 2021), archived at \url{https://web.archive.org/web/20210302015423/https://support.kahoot.com/hc/en-us/articles/115003072287-How-many-players-can-join-a-game-} (accessed 23 October 2026).
+
+\bibitem{kahoot} Kahoot!, \url{https://kahoot.com} and help centre \url{https://support.kahoot.com} (accessed 23 October 2026).
+
+\bibitem{wayground} Wayground (formerly Quizizz), \url{https://wayground.com} and help centre \url{https://help.wayground.com} (accessed 23 October 2026).
+
+\bibitem{socrative} Socrative, \url{https://www.socrative.com} and help centre \url{https://help.socrative.com} (accessed 23 October 2026).
+
+\bibitem{blooket} Blooket, \url{https://www.blooket.com} and help centre \url{https://help.blooket.com} (accessed 23 October 2026).
+
+\bibitem{gimkit} Gimkit, \url{https://www.gimkit.com} and help centre \url{https://help.gimkit.com} (accessed 23 October 2026).
+
+\bibitem{mentimeter} Mentimeter, \url{https://www.mentimeter.com} and help centre \url{https://help.mentimeter.com} (accessed 23 October 2026).
+
+\bibitem{moodlequiz} Moodle, Quiz activity documentation, \url{https://docs.moodle.org/en/Quiz_activity} (accessed 23 October 2026).
+
+\bibitem{classquiz} ClassQuiz, \url{https://github.com/mawoka-myblock/ClassQuiz} (accessed 23 October 2026).
+
+\bibitem{quizdock} QuizDock, \url{https://github.com/quizdock/quizdock} (accessed 23 October 2026).
+
+\bibitem{heckler2015} A.~F. Heckler, T.~M. Scaife, Patterns of response times and response choices to science questions: The influence of relative processing time, Cognitive Science 39~(3) (2015) 496--537. \url{https://doi.org/10.1111/cogs.12166}
+
+\bibitem{liang2024} Z.~Liang, More haste, less speed? Relationship between response time and response accuracy in gamified online quizzes in an undergraduate engineering course, Frontiers in Education 9 (2024) 1412954. \url{https://doi.org/10.3389/feduc.2024.1412954}
+
+\bibitem{xapi} Advanced Distributed Learning Initiative, Experience API (xAPI) specification, version 1.0.3, \url{https://github.com/adlnet/xAPI-Spec} (accessed 23 October 2026).
+
+\bibitem{aspa} L.~Gutiérrez-Madroñal, R.~Baena-Pérez, J.~M. Mota-Macías, Aspa v1.0.0, Zenodo, 2026. \url{https://doi.org/10.5281/zenodo.23571011}
+
+\end{thebibliography}
+
+\section*{Current executable software version}
+\label{sec:execversion}
+
+REC is a web application interpreted by the browser, so there is no compiled executable. The studio floor is available at \url{https://lorenagmad.github.io/REC/} and the studio at \url{https://lorenagmad.github.io/REC/studio.html}; the demonstration contest opens with the password \texttt{rec demo}.
+
+\end{document}
+\endinput
