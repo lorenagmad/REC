@@ -2,6 +2,8 @@ cff-version: 1.2.0
 message: "If you use REC, please cite it as below."
 title: "REC"
 type: software
+version: 1.0.0
+date-released: "2026-10-23"
 license: AGPL-3.0-or-later
 repository-code: "https://github.com/lorenagmad/REC"
 url: "https://lorenagmad.github.io/REC/"
