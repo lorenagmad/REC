@@ -94,6 +94,7 @@ A contest is a set of questions from the bank with its own password. Press **New
 - **Password:** press **Generate** for one that is easy to dictate. Capitals and accents do not matter.
 - **Visible on the home page**, **answer analysis** (students download an xAPI file with their answers) and **practice mode** (no points, no clock, with solutions; same password).
 - **Time and scoring:** seconds per question type and points for an instant correct answer and for one in the last second (1000 and 500 by default).
+- **Language in which it appears:** both languages (default), Spanish only or English only. Useful if you prepare the same contest in both languages: each version appears only in its own language.
 - **Presentation:** Cam’s welcome message and, if you like, your own lines after a correct answer, a wrong one or when time runs out.
 
 Then choose the questions from the bank. For a **global test**, use **Generate a global test**: choose the source contests, how many questions to take from each and, optionally, a maximum per topic. The studio picks them at random and you can adjust them by hand.

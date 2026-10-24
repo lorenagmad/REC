@@ -94,6 +94,7 @@ Un concurso es un conjunto de preguntas del banco con su propia contraseña. Pul
 - **Contraseña:** pulsa **Generar** para obtener una fácil de dictar. Las mayúsculas y las tildes no cuentan.
 - **Visible en la portada**, **análisis de respuestas** (el alumnado descarga un archivo xAPI con sus respuestas) y **modo práctica** (sin puntos, sin reloj y con soluciones; usa la misma contraseña).
 - **Tiempo y puntuación:** segundos por tipo de pregunta y puntos de un acierto instantáneo y de uno en el último segundo (por defecto, 1000 y 500).
+- **Idioma en el que aparece:** en los dos idiomas (por defecto), solo en español o solo en inglés. Útil si preparas el mismo concurso en ambas lenguas: cada versión aparece solo en su idioma.
 - **Presentación:** el mensaje de bienvenida de Cam y, si quieres, tus propias frases tras un acierto, un fallo o cuando se acaba el tiempo.
 
 Después elige las preguntas del banco. Para una **evaluación global**, usa **Generar una evaluación global**: eliges los concursos de origen, cuántas preguntas sacar de cada uno y, si quieres, un máximo por tema. El estudio las escoge al azar y puedes ajustarlas a mano.

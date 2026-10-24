@@ -242,7 +242,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   kNew:'Nuevo concurso', kEmpty:'Todavía no hay concursos.', kQ:n=>`${n} preguntas`, kNoPass:'Sin contraseña', kHidden:'Oculto', kGlobal:'Evaluación global',
   kEdit:'Editar concurso', kTitleF:'Título interno', kTitleHint:'Aparece en los resguardos. No lo cambies una vez usado el concurso.', kSection:'Sección', kSectionHint:'Por ejemplo, «Bloque 1». Los concursos de una misma sección se suman en el ranking.',
   kName:'Nombre visible', kNameHint:'Por ejemplo, «Sesión 1».', kDesc:'Descripción breve', kPass:'Contraseña', kGen:'Generar', kPassHint:'Las mayúsculas y las tildes no cuentan. Dila en clase justo antes de empezar.',
-  kIsGlobal:'Es una evaluación global', kActive:'Visible en la portada', kAnalysis:'Análisis de respuestas (el alumno descarga un archivo)', kPractice:'Modo práctica disponible (sin puntos)',
+  kIsGlobal:'Es una evaluación global', kActive:'Visible en la portada', kAnalysis:'Análisis de respuestas (el alumno descarga un archivo)', kPractice:'Modo práctica disponible (sin puntos)', kLang:'Idioma en el que aparece en la portada', kLangAll:'En los dos idiomas', kLangEs:'Solo en español', kLangEn:'Solo en inglés',
   kSettings:'Tiempo y puntuación', kTimes:'Segundos por tipo de pregunta', kPmax:'Puntos de un acierto instantáneo', kPmin:'Puntos de un acierto en el último segundo',
   kHost:'Presentación (opcional)', kIntro:'Mensaje de bienvenida de Cam', kOk:'Frases tras un acierto (una por línea)', kKo:'Frases tras un fallo', kTo:'Frases si se acaba el tiempo', kHostHint:'Si las dejas vacías, Cam usará sus frases de siempre.',
   kQuestions:'Preguntas del concurso', kPickMode:'Cómo elegirlas', kPickManual:'Elegir del banco', kPickAuto:'Generar una evaluación global', kSelected:n=>`${n} preguntas elegidas`, kClear:'Vaciar', kUp:'↑', kRemove:'Quitar',
@@ -262,7 +262,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   rkValid:(v,n)=>`${v} resguardos válidos de ${n} alumnos.`, rkBad:(w,c,p)=>`Código NO válido: ${w}, ${c}, ${p} puntos. No se ha contado.`, rkDup:(w,c)=>`Resguardo repetido de ${w} en ${c}: se cuenta el de más puntos.`,
   rkOther:n=>`${n} resguardos de otras secciones o concursos desconocidos ignorados.`, rkIncomplete:w=>`Resguardo incompleto de ${w}.`,
   rkThrInfo:(list)=>`En esta sección: ${list}.`, rkFrom:(k,p)=>`${k} desde ${p} puntos`,
-  rkGala:s=>`Gala de premios: ${s}`, rkSub:(n,m,d)=>`${n} concursos, con un máximo posible de ${m} puntos. ${d}`, rkPos:'Puesto', rkWho:'Concursante', rkWhoId:'Identificador', rkDone:'Concursos', rkHits:'Aciertos', rkPts:'Puntos',
+  rkGala:s=>`Gala de premios: ${s}`, rkSub:(n,m,d)=>`${n} concurso${n===1?'':'s'}, con un máximo posible de ${m} puntos. ${d}`, rkPos:'Puesto', rkWho:'Concursante', rkWhoId:'Identificador', rkDone:'Concursos', rkHits:'Aciertos', rkPts:'Puntos',
   rkPlaces:['REC de oro','REC de plata','REC de bronce'], rkNoBonus:'Sin bonificación', rkLegAbs:'Bonificación según el porcentaje de la puntuación máxima:', rkLegRel:'Bonificación relativa: quien más puntos logra obtiene el máximo y el resto, en proporción.',
   rkFoot:'Ranking elaborado a partir de los resguardos válidos recibidos. Si detectas un error en tus datos, comunícalo a tu profesor o profesora.', rkEmpty:'Todavía no hay resguardos válidos.',
   anLoad:'Carga los archivos .json (xAPI) de los concursos con análisis activado (puedes mezclar varios concursos).', anXapi:'Descargar todas las interacciones en xAPI', anXapiNote:'Un único archivo con las declaraciones xAPI de todos los resguardos cargados, listo para importar en un LRS. Con «Anonimizar», sale sin nombres ni identificadores.', anDrop:'Arrastra aquí los archivos .json', anView:'Vista', anOne:'Un concurso', anCourse:'Todo lo cargado: temas y retención',
@@ -288,7 +288,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   rvTitle:'Repaso en clase', rvShow:'Mostrar solución', rvHide:'Ocultar solución', rvPrev:'← Anterior', rvNext:'Siguiente →', rvEnd:'Terminar', rvGroup:p=>`Acierta el ${p} del grupo`, rvNothing:'Todas las preguntas se han acertado: no hay nada que repasar.',
   exTitle:'Códigos de tiempo extra', exLead:'Para el alumnado con una adaptación de tiempo reconocida. Cada código va ligado a su identificador y sirve para todos los concursos de este proyecto. Su puntuación se calcula sobre el tiempo ampliado.',
   exIds:'Identificadores (uno por línea)', exPct:'Tiempo extra', exGo:'Generar códigos', exNote:'Entrega cada código de forma privada. El alumno lo escribe antes de empezar, en «¿Tienes reconocida una adaptación de tiempo?».', exCode:'Código',
-  needContests:'Primero crea algún concurso.', contest:'Concurso', sec:'(sin sección)' },
+  needContests:'Primero crea algún concurso.', anHotOut:'Fuera de la zona correcta', anAxisX:'más lento ← rapidez de respuesta → más rápido', anAxisY:'% de aciertos', contest:'Concurso', sec:'(sin sección)' },
 en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save project', tabCourse:'Course', tabBank:'Question bank', tabContests:'Contests', tabPublish:'Publish', tabResults:'Results',
   savedAt:t=>`Saved in this browser ${t}`, confirmNew:'Start a new project? The current one will be removed from this browser (save it first if you need it).',
   badProject:'That file is not a REC project.', projLoaded:'Project loaded.',
@@ -322,7 +322,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   kNew:'New contest', kEmpty:'There are no contests yet.', kQ:n=>`${n} questions`, kNoPass:'No password', kHidden:'Hidden', kGlobal:'Global test',
   kEdit:'Edit contest', kTitleF:'Internal title', kTitleHint:'It appears on tickets. Do not change it once the contest has been used.', kSection:'Section', kSectionHint:'For example, “Unit 1”. Contests in the same section are added up in the ranking.',
   kName:'Visible name', kNameHint:'For example, “Session 1”.', kDesc:'Short description', kPass:'Password', kGen:'Generate', kPassHint:'Capital letters and accents do not matter. Say it in class right before starting.',
-  kIsGlobal:'It is a global test', kActive:'Visible on the home page', kAnalysis:'Answer analysis (students download a file)', kPractice:'Practice mode available (no points)',
+  kIsGlobal:'It is a global test', kActive:'Visible on the home page', kAnalysis:'Answer analysis (students download a file)', kPractice:'Practice mode available (no points)', kLang:'Language in which it appears on the home page', kLangAll:'In both languages', kLangEs:'Spanish only', kLangEn:'English only',
   kSettings:'Time and scoring', kTimes:'Seconds per question type', kPmax:'Points for an instant correct answer', kPmin:'Points for a correct answer in the last second',
   kHost:'Presentation (optional)', kIntro:'Cam’s welcome message', kOk:'Lines after a correct answer (one per line)', kKo:'Lines after a wrong answer', kTo:'Lines when time runs out', kHostHint:'If you leave them empty, Cam will use her usual lines.',
   kQuestions:'Contest questions', kPickMode:'How to choose them', kPickManual:'Choose from the bank', kPickAuto:'Generate a global test', kSelected:n=>`${n} questions chosen`, kClear:'Clear', kUp:'↑', kRemove:'Remove',
@@ -342,7 +342,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   rkValid:(v,n)=>`${v} valid tickets from ${n} students.`, rkBad:(w,c,p)=>`Code NOT valid: ${w}, ${c}, ${p} points. Not counted.`, rkDup:(w,c)=>`Repeated ticket from ${w} in ${c}: the highest score is used.`,
   rkOther:n=>`${n} tickets from other sections or unknown contests ignored.`, rkIncomplete:w=>`Incomplete ticket from ${w}.`,
   rkThrInfo:(list)=>`In this section: ${list}.`, rkFrom:(k,p)=>`${k} from ${p} points`,
-  rkGala:s=>`Awards show: ${s}`, rkSub:(n,m,d)=>`${n} contests, with a maximum possible score of ${m} points. ${d}`, rkPos:'Rank', rkWho:'Contestant', rkWhoId:'ID', rkDone:'Contests', rkHits:'Correct', rkPts:'Points',
+  rkGala:s=>`Awards show: ${s}`, rkSub:(n,m,d)=>`${n} contest${n===1?'':'s'}, with a maximum possible score of ${m} points. ${d}`, rkPos:'Rank', rkWho:'Contestant', rkWhoId:'ID', rkDone:'Contests', rkHits:'Correct', rkPts:'Points',
   rkPlaces:['Gold REC','Silver REC','Bronze REC'], rkNoBonus:'No bonus', rkLegAbs:'Bonus by percentage of the maximum score:', rkLegRel:'Relative bonus: the top scorer gets the maximum and the rest in proportion.',
   rkFoot:'Ranking based on the valid tickets received. If you find an error in your data, tell your teacher.', rkEmpty:'There are no valid tickets yet.',
   anLoad:'Load the .json (xAPI) files from contests with analysis enabled (you can mix several contests).', anXapi:'Download all interactions as xAPI', anXapiNote:'A single file with the xAPI statements from all loaded tickets, ready to import into an LRS. With “Anonymise”, names and IDs are removed.', anDrop:'Drop the .json files here', anView:'View', anOne:'One contest', anCourse:'Everything loaded: topics and retention',
@@ -368,7 +368,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   rvTitle:'Class review', rvShow:'Show solution', rvHide:'Hide solution', rvPrev:'← Previous', rvNext:'Next →', rvEnd:'Finish', rvGroup:p=>`${p} of the group got it right`, rvNothing:'Every question was answered correctly: nothing to review.',
   exTitle:'Extra-time codes', exLead:'For students with an approved extra-time arrangement. Each code is linked to the student’s ID and works for every contest in this project. Their score is calculated on the extended time.',
   exIds:'IDs (one per line)', exPct:'Extra time', exGo:'Generate codes', exNote:'Give each code privately. Students type it before starting, under “Do you have an approved extra-time arrangement?”.', exCode:'Code',
-  needContests:'Create a contest first.', contest:'Contest', sec:'(no section)' }
+  needContests:'Create a contest first.', anHotOut:'Outside the correct area', anAxisX:'slower ← response speed → faster', anAxisY:'% correct', contest:'Contest', sec:'(no section)' }
 };
 let LANG = localStorage.getItem('rec-studio:lang') || ((navigator.language||'es').startsWith('es')?'es':'en');
 const t = (k, ...a) => { const v = (TX[LANG][k] ?? TX.es[k]); return typeof v === 'function' ? v(...a) : v; };
@@ -689,7 +689,8 @@ function renderContestEd(){
     <label>${t('kName')}<input type="text" id="kName" value="${esc(c.name)}"><span class="hintx">${t('kNameHint')}</span></label><label>${t('kDesc')}<input type="text" id="kDesc" value="${esc(c.description)}"></label></div>
   <div class="grid2"><label>${t('kPass')}<div class="row" style="flex-wrap:nowrap"><input type="text" id="kPass" value="${esc(c.password)}"><button class="btn sm alt" id="kGen">${t('kGen')}</button></div><span class="hintx">${t('kPassHint')}</span></label>
     <div style="display:grid;gap:6px;align-content:start;padding-top:22px"><label class="check"><input type="checkbox" id="kGlob" ${c.global?'checked':''}> ${t('kIsGlobal')}</label><label class="check"><input type="checkbox" id="kAct" ${c.active?'checked':''}> ${t('kActive')}</label>
-      <label class="check"><input type="checkbox" id="kAna" ${c.analysis?'checked':''}> ${t('kAnalysis')}</label><label class="check"><input type="checkbox" id="kPrac" ${c.practice?'checked':''}> ${t('kPractice')}</label></div></div>
+      <label class="check"><input type="checkbox" id="kAna" ${c.analysis?'checked':''}> ${t('kAnalysis')}</label><label class="check"><input type="checkbox" id="kPrac" ${c.practice?'checked':''}> ${t('kPractice')}</label>
+      <label>${t('kLang')}<select id="kLangSel"><option value="">${t('kLangAll')}</option><option value="es">${t('kLangEs')}</option><option value="en">${t('kLangEn')}</option></select></label></div></div>
   <details class="box" style="margin:0"><summary style="cursor:pointer;font-weight:700">${t('kSettings')}</summary>
     <p class="note">${t('kTimes')}</p><div class="grid6">${Object.keys(DEFTIMES).map(k=>`<label>${esc(TX[LANG].types[{opcion_multiple:'mc',verdadero_falso:'tf',emparejar:'match',ordenar:'order',respuesta_corta:'short',imagen:'hot'}[k]])}<input type="number" min="5" max="300" data-tm="${k}" value="${st.times[k]}"></label>`).join('')}</div>
     <div class="grid2"><label>${t('kPmax')}<input type="number" min="10" step="10" id="kPmax" value="${st.points_max}"></label><label>${t('kPmin')}<input type="number" min="0" step="10" id="kPmin" value="${st.points_min}"></label></div></details>
@@ -713,6 +714,7 @@ function renderContestEd(){
   on('kTitle','oninput',e=>c.title=e.target.value); on('kSec','oninput',e=>c.section=e.target.value.trim()); on('kName','oninput',e=>c.name=e.target.value); on('kDesc','oninput',e=>c.description=e.target.value);
   on('kPass','oninput',e=>c.password=e.target.value); on('kGen','onclick',()=>{ c.password=genPass(); $('kPass').value=c.password; });
   on('kGlob','onchange',e=>c.global=e.target.checked); on('kAct','onchange',e=>c.active=e.target.checked); on('kAna','onchange',e=>c.analysis=e.target.checked); on('kPrac','onchange',e=>c.practice=e.target.checked);
+  if($('kLangSel')){ $('kLangSel').value=c.lang||''; $('kLangSel').onchange=e=>{ c.lang=e.target.value||undefined; }; }
   all('[data-tm]',el=>el.oninput=()=>st.times[el.dataset.tm]=Math.max(5,+el.value||DEFTIMES[el.dataset.tm]));
   on('kPmax','oninput',e=>st.points_max=Math.max(10,+e.target.value||1000)); on('kPmin','oninput',e=>st.points_min=Math.max(0,+e.target.value||0));
   on('kIntro','oninput',e=>c.intro=e.target.value); const lines=v=>v.split('\n').map(s=>s.trim()).filter(Boolean);
@@ -794,7 +796,7 @@ function renderPublish(){
         const pack = contestPack(c), bytes = new TextEncoder().encode(JSON.stringify(pack));
         files.push({name:`contests/${c.id}.bin`, data: await encrypt(bytes, c.password)});
         man.contests.push({file:`${c.id}.bin`, id:c.id, title:c.title, section:c.section, name:c.name||c.title, description:c.description, questions:pack.quiz.questions.length,
-          video:pack.quiz.questions.some(q=>q.media.some(m=>m.kind==='video'||m.kind==='iframe')), global:!!c.global, active:!!c.active, analysis:!!c.analysis, practice:!!c.practice,
+          video:pack.quiz.questions.some(q=>q.media.some(m=>m.kind==='video'||m.kind==='iframe')), global:!!c.global, active:!!c.active, analysis:!!c.analysis, practice:!!c.practice, lang:c.lang||undefined,
           settings:{times:c.settings.times, points_max:c.settings.points_max, points_min:c.settings.points_min}});
       }
       files.unshift({name:'contests/index.json', data:JSON.stringify(man,null,2)});
@@ -997,20 +999,33 @@ function qStats(F){
   const up=new Set(srt.slice(0,half).map(f=>f.sid)), lo=new Set(srt.slice(N-half).map(f=>f.sid));
   F.forEach(f=>f.detail.forEach(d=>{ if(!qm.has(d.id)) qm.set(d.id,{id:d.id, text:d.question, topic:d.topic, good:d.answer, options:d.options, rows:[]}); qm.get(d.id).rows.push({...d, who:f}); }));
   return [...qm.values()].map(q=>{ const n=q.rows.length, c=k=>q.rows.filter(r=>r.result===k).length, times=q.rows.filter(r=>r.seconds!=null).map(r=>r.seconds);
-    const wrong={}; q.rows.filter(r=>r.result!=='acierto').forEach(r=>r.chosen.filter(e=>!q.good.includes(e)).forEach(e=>wrong[e]=(wrong[e]||0)+1));
-    const chosen={}; q.rows.forEach(r=>r.chosen.forEach(e=>chosen[e]=(chosen[e]||0)+1));
+    const hot = q.rows.some(r=>r.type==='hot'), wrong={}, chosen={};
+    if(hot){ chosen[q.good[0]] = q.rows.filter(r=>r.result==='acierto').length; const out = q.rows.filter(r=>r.result!=='acierto' && r.result!=='tiempo').length; if(out) chosen[t('anHotOut')] = out; }
+    else { q.rows.filter(r=>r.result!=='acierto').forEach(r=>r.chosen.filter(e=>!q.good.includes(e)).forEach(e=>wrong[e]=(wrong[e]||0)+1)); q.rows.forEach(r=>r.chosen.forEach(e=>chosen[e]=(chosen[e]||0)+1)); }
     let disc=null; if(half>=2){ const rate=s=>{ const r=q.rows.filter(x=>s.has(x.who.sid)); return r.length? r.filter(x=>x.result==='acierto').length/r.length : 0; }; disc=rate(up)-rate(lo); }
     return {...q, n, ok:c('acierto'), part:c('parcial'), ko:c('fallo'), to:c('tiempo'), pOk:n?c('acierto')/n:0, tAvg:avg(times), topWrong:Object.entries(wrong).sort((a,b)=>b[1]-a[1])[0], chosen, disc, pPrec:n?q.rows.filter(r=>r.cat==='precipita').length/n:0}; });
 }
 function scatter(F){
   const pts=F.map(f=>{ const r=f.detail.filter(d=>d.rel!=null).map(d=>d.rel); return {f, x:r.length?1-avg(r):0, y:f.correct/f.questions}; });
-  const mx=median(pts.map(p=>p.x))??.5, my=median(pts.map(p=>p.y))??.5, W=640,H=380,Pd=44, X=v=>Pd+v*(W-2*Pd), Y=v=>H-Pd-v*(H-2*Pd), C=t('anCat');
+  /* eje de rapidez ajustado a los datos del grupo, con margen, para que los puntos no se amontonen */
+  const xs=pts.map(p=>p.x), x0=Math.max(0,Math.min(...xs)-.08), x1=Math.min(1,Math.max(...xs)+.08), span=Math.max(.2,x1-x0);
+  const mx=median(xs)??.5, my=median(pts.map(p=>p.y))??.5, W=640,H=400,Pd=48, X=v=>Pd+(v-x0)/span*(W-2*Pd), Y=v=>H-Pd-v*(H-2*Pd-10), C=t('anCat');
+  const L=Pd, R=W-Pd;
   const lab=(s,x,y,a)=>`<text x="${x}" y="${y}" text-anchor="${a}" font-size="13" font-weight="700" fill="#5D6470">${s}</text>`;
-  return `<svg class="scatter" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('anMap')}"><rect x="${X(mx)}" y="${Y(1)}" width="${X(1)-X(mx)}" height="${Y(my)-Y(1)}" fill="#DCF3E2"/><rect x="${X(mx)}" y="${Y(my)}" width="${X(1)-X(mx)}" height="${Y(0)-Y(my)}" fill="#F6E1EF"/>
-    <line x1="${X(mx)}" y1="${Y(0)}" x2="${X(mx)}" y2="${Y(1)}" stroke="#A7ADB6" stroke-dasharray="4 4"/><line x1="${X(0)}" y1="${Y(my)}" x2="${X(1)}" y2="${Y(my)}" stroke="#A7ADB6" stroke-dasharray="4 4"/>
-    <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(0)}" stroke="#15171C"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(1)}" stroke="#15171C"/>
-    ${lab(C.domina,X(1)-6,Y(1)+18,'end')}${lab(C.duda,X(0)+6,Y(1)+18,'start')}${lab(C.precipita,X(1)-6,Y(0)-8,'end')}${lab(C.nosabe,X(0)+6,Y(0)-8,'start')}
-    ${pts.map(p=>`<g><circle cx="${X(p.x)}" cy="${Y(p.y)}" r="9" fill="#15171C" stroke="#E8322B" stroke-width="2"><title>${esc(whoA(p.f))}: ${pctS(p.y)}</title></circle><text x="${X(p.x)+12}" y="${Y(p.y)+4}" font-size="11.5" fill="#15171C">${esc(String(whoA(p.f)).split(' ')[0])}</text></g>`).join('')}</svg>`;
+  /* etiquetas sin solaparse: a la derecha, a la izquierda, debajo o encima del punto */
+  const placed=[], labels=[];
+  [...pts].sort((a,b)=>b.y-a.y||a.x-b.x).forEach(p=>{ const name=esc(String(whoA(p.f)).split(' ')[0]), w=name.length*6.6+4, cx=X(p.x), cy=Y(p.y);
+    const opts=[[cx+13,cy+4,'start'],[cx-13,cy+4,'end'],[cx,cy+24,'middle'],[cx,cy-15,'middle'],[cx+13,cy+18,'start'],[cx-13,cy-10,'end']];
+    const box=([x,y,a])=>{ const lx=a==='start'?x:a==='end'?x-w:x-w/2; return [lx,y-11,lx+w,y+3]; };
+    const hit=(b)=>placed.some(q=>!(b[2]<q[0]||b[0]>q[2]||b[3]<q[1]||b[1]>q[3])) || pts.some(o=>{ const ox=X(o.x), oy=Y(o.y); return ox+9>b[0]&&ox-9<b[2]&&oy+9>b[1]&&oy-9<b[3]; });
+    const ch=opts.find(o=>!hit(box(o)))||opts[0]; placed.push(box(ch));
+    labels.push(`<text x="${ch[0]}" y="${ch[1]}" text-anchor="${ch[2]}" font-size="11.5" fill="#15171C">${name}</text>`); });
+  return `<svg class="scatter" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('anMap')}"><rect x="${X(mx)}" y="${Y(1)}" width="${R-X(mx)}" height="${Y(my)-Y(1)}" fill="#DCF3E2"/><rect x="${X(mx)}" y="${Y(my)}" width="${R-X(mx)}" height="${Y(0)-Y(my)}" fill="#F6E1EF"/>
+    <line x1="${X(mx)}" y1="${Y(0)}" x2="${X(mx)}" y2="${Y(1)}" stroke="#A7ADB6" stroke-dasharray="4 4"/><line x1="${L}" y1="${Y(my)}" x2="${R}" y2="${Y(my)}" stroke="#A7ADB6" stroke-dasharray="4 4"/>
+    <line x1="${L}" y1="${Y(0)}" x2="${R}" y2="${Y(0)}" stroke="#15171C"/><line x1="${L}" y1="${Y(0)}" x2="${L}" y2="${Y(1)}" stroke="#15171C"/>
+    ${lab(C.domina,R-6,Y(1)+18,'end')}${lab(C.duda,L+6,Y(1)+18,'start')}${lab(C.precipita,R-6,Y(0)-8,'end')}${lab(C.nosabe,L+6,Y(0)-8,'start')}
+    <text x="${W/2}" y="${H-12}" text-anchor="middle" font-size="12" fill="#5D6470">${t('anAxisX')}</text><text x="16" y="${H/2}" text-anchor="middle" font-size="12" fill="#5D6470" transform="rotate(-90 16 ${H/2})">${t('anAxisY')}</text>
+    ${pts.map(p=>`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="8" fill="#15171C" stroke="#E8322B" stroke-width="2"><title>${esc(whoA(p.f))}: ${pctS(p.y)}</title></circle>`).join('')}${labels.join('')}</svg>`;
 }
 function renderAnalysis(){
   const ids=[...new Set(AN.files.map(f=>f.c.uid))], cs=P.contests.filter(c=>ids.includes(c.uid)); if(!ids.includes(AN.contest)) AN.contest=ids[0]||'';

@@ -884,9 +884,10 @@ async function openQuiz(m, pass){
 function doneBefore(qid){ try{ for(let i=0;i<localStorage.length;i++){ if(localStorage.key(i).startsWith(`rec:${qid}:`)) return true; } }catch(e){} return false; }
 const SHOWALL = new URLSearchParams(location.search).has('all') || new URLSearchParams(location.search).has('todos');
 function renderHome(){
-  const T = L(), list = MANIFEST.contests.filter(q=>SHOWALL || q.active!==false);
-  $('courseTitle').textContent = MANIFEST.course.title || ''; $('courseFoot').textContent = MANIFEST.course.subtitle || MANIFEST.course.title || '';
-  document.title = 'REC' + (MANIFEST.course.title ? ' | ' + MANIFEST.course.title : '');
+  const T = L(), list = MANIFEST.contests.filter(q=>(SHOWALL || q.active!==false) && (!q.lang || q.lang===LANG));  /* un concurso con idioma solo aparece en ese idioma */
+  const C = MANIFEST.course, ctitle = C['title_'+LANG] || C.title || '', csub = C['subtitle_'+LANG] || C.subtitle || '';
+  $('courseTitle').textContent = ctitle; $('courseFoot').textContent = csub || ctitle;
+  document.title = 'REC' + (ctitle ? ' | ' + ctitle : '');
   const secs = [...new Set(list.map(q=>q.section||''))];
   $('homeBlocks').innerHTML = secs.map(s=>`<div class="block">${s?`<h3><span>${escH(s)}</span></h3>`:''}<div class="qgrid">${
     list.filter(q=>(q.section||'')===s).map(q=>`<div class="qitem"><button class="qcard${q.global?' global':''}" data-q="${escH(q.file)}">

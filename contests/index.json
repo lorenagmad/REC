@@ -2,7 +2,9 @@
   "course": {
     "title": "Curso de demostración",
     "subtitle": "REC, concursos en directo",
-    "language": "es"
+    "language": "es",
+    "title_en": "Demo course",
+    "subtitle_en": "REC, live quiz shows"
   },
   "contests": [
     {
@@ -29,7 +31,35 @@
         },
         "points_max": 1000,
         "points_min": 500
-      }
+      },
+      "lang": "es"
+    },
+    {
+      "file": "demo-en.bin",
+      "id": "demo-en",
+      "title": "REC demo",
+      "section": "Examples",
+      "name": "Demo",
+      "description": "One example of each question type. Password: rec demo",
+      "questions": 6,
+      "video": false,
+      "global": false,
+      "active": true,
+      "analysis": true,
+      "practice": true,
+      "settings": {
+        "times": {
+          "opcion_multiple": 20,
+          "verdadero_falso": 15,
+          "emparejar": 45,
+          "ordenar": 45,
+          "respuesta_corta": 30,
+          "imagen": 25
+        },
+        "points_max": 1000,
+        "points_min": 500
+      },
+      "lang": "en"
     }
   ]
 }
