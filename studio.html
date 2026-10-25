@@ -272,13 +272,13 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   anIdeas:'Para la próxima clase', anReview:'Repaso en clase: proyectar las preguntas más falladas', anMap:'Mapa de rapidez y acierto',
   anMapNote:'Cada punto es un alumno. Arriba a la derecha, quien acierta y responde rápido. Abajo a la derecha, quien responde rápido pero falla, lo que puede indicar ideas equivocadas de las que no es consciente. Las líneas marcan la mediana del grupo.',
   anByQ:'Pregunta a pregunta', anByS:'Alumno a alumno', anOk:'Acierto', anPart:'Parcial', anKo:'Fallo', anToL:'Sin tiempo', anEasy:'Fácil', anMid:'Media', anHard:'Difícil',
-  anDiscG:'Distingue bien', anDiscS:'Distingue algo', anDiscN:'No distingue', anDiscR:'Revisar redacción', anMis:'Idea equivocada',
+  anDiscG:'Distingue bien', anDiscS:'Distingue algo', anDiscN:'No distingue', anDiscR:'Revisar redacción', anMis:'Posible idea equivocada',
   anCorrect:'Correcta:', anTopic:'Tema:', anAvgT:'Tiempo medio:', anFastWrong:'Rápido y mal:', anTopErr:'Error más frecuente:',
-  anDiscNote:'«Distingue bien»: la aciertan mucho más quienes mejor puntúan que quienes peor puntúan (con al menos 4 alumnos). «Idea equivocada»: al menos un 30 % respondió rápido y falló.',
+  anDiscNote:'«Distingue bien»: la aciertan mucho más quienes mejor puntúan que quienes peor puntúan (con al menos 4 alumnos). «Posible idea equivocada»: al menos un 30 % respondió rápido y falló, lo que puede indicar un concepto mal entendido.',
   anCat:{domina:'Domina', duda:'Sabe, pero duda', precipita:'Se precipita', nosabe:'Necesita repaso'}, anAlert:'Responde rápido y falla a menudo', anPleno:'Nada: ¡pleno!',
   anColS:['Alumno','Aciertos','Puntos','Tiempo medio','Perfil de respuestas','Conviene repasar'], anTimeoutI:'(sin tiempo)', anExtraT:p=>`Tiempo extra +${p} %`,
   anCsvQ:'Descargar análisis por pregunta (CSV)', anCsvS:'Descargar análisis por alumno (CSV)',
-  idea1:p=>`solo la acierta el ${p}`, idea2:(p,w,g)=>`el ${p} eligió «${w}» en lugar de «${g}»`, idea3:p=>`el ${p} respondió rápido y mal, señal de una idea equivocada`, idea4:'la aciertan más quienes peor van: revisa la redacción',
+  idea1:p=>`solo la acierta el ${p}`, idea2:(p,w,g)=>`el ${p} eligió «${w}» en lugar de «${g}»`, idea3:p=>`el ${p} respondió rápido y mal, lo que puede indicar una idea equivocada`, idea4:'la aciertan más quienes peor van: revisa la redacción',
   ideaMore:n=>`Y ${n} preguntas más con algún aviso: las verás marcadas en «Pregunta a pregunta».`, ideaNone:'Ninguna pregunta destaca por dificultad ni por confusión: el grupo domina esta parte.',
   anTopics:'Dominio por tema', anTopicsNote:(a,f)=>`Todas las respuestas cargadas (${a}, de ${f} resguardos), agrupadas por tema. Los temas en rosa son candidatos para el repaso final.`,
   anRet:'Retención: de las sesiones a la evaluación global', anRetNote:'Compara, para los mismos alumnos y el mismo tema, el porcentaje de aciertos en los concursos de una sección con el de su evaluación global. Si baja, lo aprendido no se ha consolidado.',
@@ -352,13 +352,13 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   anIdeas:'For the next class', anReview:'Class review: project the most missed questions', anMap:'Speed and accuracy map',
   anMapNote:'Each dot is a student. Top right: correct and fast. Bottom right: fast but wrong, which may indicate misconceptions they are unaware of. The lines mark the group median.',
   anByQ:'Question by question', anByS:'Student by student', anOk:'Correct', anPart:'Partial', anKo:'Wrong', anToL:'No time', anEasy:'Easy', anMid:'Medium', anHard:'Hard',
-  anDiscG:'Discriminates well', anDiscS:'Discriminates a little', anDiscN:'Does not discriminate', anDiscR:'Check wording', anMis:'Misconception',
+  anDiscG:'Discriminates well', anDiscS:'Discriminates a little', anDiscN:'Does not discriminate', anDiscR:'Check wording', anMis:'Possible misconception',
   anCorrect:'Correct:', anTopic:'Topic:', anAvgT:'Average time:', anFastWrong:'Fast and wrong:', anTopErr:'Most common mistake:',
-  anDiscNote:'“Discriminates well”: top scorers get it right much more often than low scorers (with at least 4 students). “Misconception”: at least 30 % answered fast and wrong.',
+  anDiscNote:'“Discriminates well”: top scorers get it right much more often than low scorers (with at least 4 students). “Possible misconception”: at least 30 % answered fast and wrong, which may indicate a misunderstood concept.',
   anCat:{domina:'Masters it', duda:'Knows it, but hesitates', precipita:'Rushes', nosabe:'Needs review'}, anAlert:'Often answers fast and wrong', anPleno:'Nothing: full marks!',
   anColS:['Student','Correct','Points','Average time','Answer profile','Worth reviewing'], anTimeoutI:'(no time)', anExtraT:p=>`Extra time +${p} %`,
   anCsvQ:'Download analysis by question (CSV)', anCsvS:'Download analysis by student (CSV)',
-  idea1:p=>`only ${p} get it right`, idea2:(p,w,g)=>`${p} chose “${w}” instead of “${g}”`, idea3:p=>`${p} answered fast and wrong, a sign of a misconception`, idea4:'low scorers get it right more often: check the wording',
+  idea1:p=>`only ${p} get it right`, idea2:(p,w,g)=>`${p} chose “${w}” instead of “${g}”`, idea3:p=>`${p} answered fast and wrong, which may indicate a misconception`, idea4:'low scorers get it right more often: check the wording',
   ideaMore:n=>`And ${n} more questions with some warning: see them flagged in “Question by question”.`, ideaNone:'No question stands out for difficulty or confusion: the group has mastered this part.',
   anTopics:'Mastery by topic', anTopicsNote:(a,f)=>`All loaded answers (${a}, from ${f} tickets), grouped by topic. Pink topics are candidates for the final review.`,
   anRet:'Retention: from contests to the global test', anRetNote:'For the same students and topic, compares the percentage of correct answers in a section’s contests with its global test. If it drops, learning has not consolidated.',
@@ -1060,7 +1060,7 @@ function anOne(){
   const disc=d=>d==null?'':d>=.3?`<span class="badge t-mc">${t('anDiscG')}</span>`:d>=.1?`<span class="badge">${t('anDiscS')}</span>`:d<0?`<span class="badge t-hot">${t('anDiscR')}</span>`:`<span class="badge">${t('anDiscN')}</span>`;
   const flagged=qs.map(q=>{ const b=[]; if(q.pOk<.5) b.push(t('idea1',pctS(q.pOk))); if(q.topWrong&&q.topWrong[1]/q.n>=.3) b.push(t('idea2',pctS(q.topWrong[1]/q.n),esc(q.topWrong[0]),esc(q.good.join(' + '))));
     if(q.pPrec>=.3) b.push(t('idea3',pctS(q.pPrec))); if(q.disc!=null&&q.disc<0) b.push(t('idea4')); return {q,b,sev:(1-q.pOk)+q.pPrec+(q.disc!=null&&q.disc<0?.5:0)}; }).filter(x=>x.b.length).sort((a,b)=>b.sev-a.sev);
-  const ideas=flagged.slice(0,5).map(x=>`<b>«${esc(x.q.text)}»</b>: ${x.b.join('; ')}.`); if(flagged.length>5) ideas.push(t('ideaMore',flagged.length-5)); if(!ideas.length) ideas.push(t('ideaNone'));
+  const ideas=flagged.slice(0,5).map(x=>`<b>${LANG==='es'?'«':'“'}${esc(x.q.text)}${LANG==='es'?'»':'”'}</b>: ${x.b.join('; ')}.`); if(flagged.length>5) ideas.push(t('ideaMore',flagged.length-5)); if(!ideas.length) ideas.push(t('ideaNone'));
   const cnt=f=>{ const o={}; f.detail.forEach(d=>o[d.cat]=(o[d.cat]||0)+1); return o; }, C=t('anCat');
   $('anOut').innerHTML = `<div class="box"><h2>${esc(c.name||c.title)}: ${t('anSummary')}</h2><div class="kpis">
       <div class="kpi"><b>${N}</b><span>${t('anStudents')}</span></div><div class="kpi"><b>${pctS(avg(F.map(f=>f.correct/f.questions))||0)}</b><span>${t('anHit')}</span></div>
