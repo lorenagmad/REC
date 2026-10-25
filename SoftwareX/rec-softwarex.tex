@@ -24,6 +24,8 @@
 \usepackage[british]{babel}
 \usepackage{booktabs}
 \usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds}
 \usepackage{hyperref}
 \setlength{\parindent}{0pt}
 
@@ -39,7 +41,7 @@
 
 \begin{frontmatter}
 
-\title{REC: \todo{short title, to be decided after planning}}
+\title{REC: A serverless tool to gamify quizzes and analyse students' answers offline}
 
 \author[uca]{Lorena Gutiérrez-Madroñal\corref{cor1}}
 \ead{lorena.gutierrez@uca.es}
@@ -50,7 +52,7 @@
 \address[uca]{Department of Computer Science and Engineering, School of Engineering, University of Cádiz, Avda.\ de la Universidad de Cádiz 10, 11519 Puerto Real, Cádiz, Spain}
 
 \begin{abstract}
-\todo{Abstract (ca.\ 100 words), to be written at the end.}
+REC is a tool for gamifying quizzes that adapts to any course. Teachers import their Moodle XML questions into a browser-based studio and publish each contest encrypted on a static website, such as GitHub Pages, with no server or student accounts. Students play on any device, and each correct answer earns more points the sooner it is given. At the end, they send the teacher a ticket with a verification code and their answers in xAPI format. The studio builds rankings with a bonus for the final exam and, offline, analyses speed and accuracy to point out possible misconceptions before the next class.
 \end{abstract}
 
 \begin{keyword}
@@ -132,31 +134,111 @@ REC was developed under three requirements: (i)~to reuse the questions teachers 
 \section{Software description}
 \label{sec:description}
 
-\plan{Architecture (two self-contained files: studio and studio floor), functionalities (including point-on-image questions, practice mode and extra time, as features rather than exclusive ones), and how AI assistance in development is reported. State the limit of the ticket check: without a server, a student who recomputes the code in the browser's developer tools is not detected.}
+REC~1.0.0~\cite{rec} is a web application written in JavaScript (ECMAScript 2020), HTML5 and CSS3. It uses no third-party libraries or frameworks, only standard browser interfaces (Web Crypto, IndexedDB, Web Audio, Fetch and the DOM), so that teachers need neither to program nor to install anything. The interface is available in Spanish and English. REC was developed by the authors with the assistance of a generative artificial-intelligence model (Claude, Anthropic): the authors specified the requirements, took the design decisions, and reviewed and tested the code.
 
 \subsection{Software architecture}
 \label{sec:architecture}
 
+REC consists of two self-contained files, each holding its own HTML, CSS and JavaScript (Figure~\ref{fig:flow}). The \emph{studio} (\file{studio.html}) is used by the teacher, and the \emph{studio floor} (\file{index.html}) by the students. A REC site is simply a folder with these two files and a \file{contests} subfolder, which any static web host with HTTPS can serve; a ready-to-upload kit and step-by-step guides for GitHub Pages are included in the repository.
+
+The studio keeps the teacher's project (course, question bank, contests and passwords) in the browser's IndexedDB and can save it to, or load it from, a JSON file. To publish, it encrypts each contest separately with AES-GCM (256-bit key derived from the contest password with PBKDF2-SHA-256, 300,000 iterations) and generates a ZIP package with the encrypted contests and a plain index of titles and settings. Unencrypted questions therefore never leave the teacher's computer; the project file, which is not encrypted, is meant to stay there too, as the studio warns. The studio floor downloads the index, decrypts the contest the student chooses with the password given in class, runs it, and produces the results locally. Sounds are synthesised with the Web Audio API, so the site contains no audio files.
+
+\begin{figure}[!htb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1mm, y=1mm, font=\footnotesize,
+  tea/.style={draw=blue!60!black, fill=blue!6, rounded corners=2pt, align=center, minimum height=13mm, text width=30mm, inner sep=2pt},
+  stu/.style={draw=green!40!black, fill=green!6, rounded corners=2pt, align=center, minimum height=13mm, text width=30mm, inner sep=2pt},
+  dat/.style={draw=black!50, fill=black!4, align=center, minimum height=8mm, text width=27mm, inner sep=1.5pt, font=\scriptsize},
+  arr/.style={-{Latex[length=1.8mm]}, thick, black!70},
+  lab/.style={font=\scriptsize, align=center, fill=white, inner sep=1pt}]
+  \node[dat] (moodle) at (0,22) {Moodle XML\\ questions};
+  \node[tea] (studio) at (0,0) {\textbf{Studio}\\ \scriptsize\texttt{studio.html}\\ bank, contests};
+  \node[dat] (project) at (0,-20) {Project\\ (IndexedDB, JSON)};
+  \node[dat] (site) at (55,0) {Static site (HTTPS)\\ \texttt{index.json}\\ \texttt{contests/*.bin}};
+  \node[stu] (floor) at (110,0) {\textbf{Studio floor}\\ \scriptsize\texttt{index.html}\\ any device};
+  \node[dat] (ticket) at (110,-24) {Ticket + code\\ xAPI file};
+  \node[tea, text width=40mm] (results) at (55,-24) {\textbf{Studio}\\ \scriptsize verification, ranking and bonus, analysis};
+  \draw[arr] (moodle) -- node[lab, right]{import} (studio);
+  \draw[arr, <->] (studio) -- (project);
+  \draw[arr] (studio) -- node[lab, above]{encrypted\\ AES-GCM} (site);
+  \draw[arr] (site) -- node[lab, above]{password\\ given in class} (floor);
+  \draw[arr] (floor) -- node[lab, right]{at the end} (ticket);
+  \draw[arr] (ticket) -- node[lab, above]{virtual campus} (results);
+\end{tikzpicture}}
+\caption{Architecture and workflow of REC. The teacher's studio (blue) publishes encrypted contests on a static site; students play on the studio floor (green) and send their tickets, which the studio verifies and analyses. Unencrypted questions stay on the teacher's computer.}
+\label{fig:flow}
+\end{figure}
+
 \subsection{Software functionalities}
 \label{sec:functionalities}
+
+\paragraph{Question bank} Questions are imported from Moodle XML, with their images, videos and feedback, so that teachers can reuse the quizzes they already have, or created in the studio. Six types are supported: multiple choice with one or several correct answers, true/false, matching, ordering, short answer with wildcards, and point on an image, whose correct zones are drawn on the image. Images are compressed on import, videos are linked from YouTube or Vimeo, and questions are organised by topic.
+
+\paragraph{Contests} A contest is a selection of questions with its own password, section, time per question type and score range, and the phrases of Cam, the host (Figure~\ref{fig:contest}). Contests are grouped by section on the home board, so that each course can arrange them by blocks or topics. Global tests for a block are generated automatically from its contests and topics, and each contest can also be offered in practice mode, without scoring, for self-study.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/23c-studio-contest-settings.png}
+\caption{Editing a contest in the studio: password, section, practice mode, answer analysis, time per question type and score range.}
+\label{fig:contest}
+\end{figure}
+
+\paragraph{Playing} The studio floor presents the questions in random order with a countdown and game-show effects (Figure~\ref{fig:floor}). A correct answer earns from the maximum down to the minimum score (1,000 to 500 by default) depending on the time used, and partly correct answers earn a proportional share. The minimum keeps a reward for students who answer correctly but slowly, since time pressure is one of the drawbacks reported for game-based response systems~\cite{wang2020}; streaks are celebrated by the host but add no points. Students who need more time receive a personal code, linked to their identity, that extends the time limits by a given percentage. For accessibility, students can enlarge the text, switch to high contrast and reduce animations, and the browser remembers these choices.
+
+\begin{figure}[!htb]
+\centering
+\begin{minipage}[c]{0.6\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/10-floor-point-on-image.png}\\[1pt]{\small (a)}\\[4pt]
+\includegraphics[width=\textwidth]{figures/11-floor-final-result.png}\\[1pt]{\small (c)}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.36\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/16-floor-mobile-question.png}\\[1pt]{\small (b)}
+\end{minipage}
+\caption{The studio floor: (a)~a point-on-image question after a correct answer, with the points earned and the time used; (b)~a matching question on a phone; (c)~the end of the contest, with the ticket and its verification code. Students' data are fictitious.}
+\label{fig:floor}
+\end{figure}
+
+\paragraph{Tickets} At the end, the student obtains a ticket with the score and a verification code computed from the contest, the student's identity and the result, and downloads it as a file of xAPI statements~\cite{xapi}, one per question, with the answer, its correctness, the time used, the time limit and the topic. When the teacher loads the tickets, the studio detects tickets that have been modified and duplicates. Because REC has no server, the code is computed in the student's browser: a student who recomputed it with the browser's developer tools would not be detected, and the same applies to the codes for extra time.
+
+\paragraph{Ranking} From the tickets of a contest or section, the studio builds the ranking and assigns a bonus of questions counted as correct in the final exam, either by levels of the percentage of the maximum score or relative to the top scorer. The ranking can be published with or without names and downloaded as a spreadsheet.
+
+\paragraph{Analysis} Each answer is classified by comparing its response time with the median for that question: correct and fast, correct and slow, wrong and fast, or wrong and slow (including time-outs). The \emph{speed and accuracy map} places each student by these two dimensions (Figure~\ref{fig:map}), and a question is flagged as a possible misconception when at least 30\% of the students answered it fast and wrong, in line with the finding that misconception-like answers tend to be given faster~\cite{heckler2015}. Because fast errors may also be guesses, and a confident error does not always reveal a misconception~\cite{hull2022}, the flags are presented as hypotheses for the teacher. The studio also reports the difficulty and discrimination of each question and mastery by topic; measures retention by comparing the answers in the sessions of a block with those in its global test; suggests ideas for the next class from fixed rules; projects the most-failed questions for a class review; and exports anonymised results as CSV or xAPI.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/28-studio-speed-accuracy-map.png}
+\caption{Speed and accuracy map of a contest. The dashed lines mark the group medians. Students' names are fictitious. \todo{Replace with anonymised real data after June?}}
+\label{fig:map}
+\end{figure}
 
 %% ============================================================================
 \section{Illustrative examples}
 \label{sec:examples}
 
-\plan{To be negotiated.}
+The two examples come from courses taught by the first author at the University of Cádiz in the second semester of the 2026/27 academic year, and show how the same tool adapts to two different uses. Students' data were anonymised before analysis \todo{reference to the university's consent}. In both courses, students played after the lecture, at the same time, on their own laptops, phones or tablets \todo{number of students per device type, if collected}, and submitted their tickets through the virtual campus. A screencast of the complete workflow is provided as supplementary material \todo{record}.
+
+\paragraph{Graded continuous assessment} In \emph{Animación y Nuevas Tecnologías en Publicidad}, an elective course with \todo{N} students, the quizzes held after each lecture count towards continuous assessment, and the rankings award questions counted as correct in the final exam. A contest was created from scratch in the studio by importing the course's questions from Moodle XML, which took \todo{X} minutes from the import to the published package. After the session, loading the \todo{N} tickets and building the ranking took \todo{Y} minutes, compared with 15 to 30 minutes per quiz with the former spreadsheet. The bonus was assigned by levels of the percentage of the maximum score \todo{levels used}. The studio flagged \todo{question and concept} as a possible misconception, since \todo{p}\% of the students answered it fast and wrong; in the next class, \todo{what the teacher did}. \todo{Retention between the sessions of a block and its global test, if they are all run in REC.}
+
+\paragraph{Diagnostic quizzes and attendance} In \emph{Fundamentos Técnicos en la Publicidad Digital}, with \todo{N} students, three ungraded contests were held before the corresponding topics were explained, to find out what students already knew and to record attendance; taking part added 0.1 points to the participation mark. \todo{Results: tickets received, tickets detected as modified or duplicated, questions flagged and how the lecture was adapted.}
 
 %% ============================================================================
 \section{Impact}
 \label{sec:impact}
 
-\plan{To be negotiated. Includes the REC $\rightarrow$ ranking $\rightarrow$ Aspa personalised-exam workflow~\cite{aspa} and the second-semester trial (results in June 2027).}
+\paragraph{Daily practice} REC's main contribution to its users' practice is that it adapts to each course, as the two examples show. The same tool runs games with groups of about 150 students without per-player fees; gives the teacher feedback on what students understood after a lecture, or on what they knew before it; records attendance; and motivates students to attend and pay attention, since their answers determine how many questions they will have counted as correct in the final exam. It also removes the manual work of computing rankings in a spreadsheet, which took 15 to 30 minutes per quiz \todo{compare with the times measured in Section~\ref{sec:examples}}.
+
+\paragraph{Personalised exams} REC completes a continuous-assessment workflow with Aspa, an offline tool by the same authors that generates paper exams personalised for each student~\cite{aspa}: the bonus of each student in REC becomes the number of questions omitted from their personalised exam and counted as correct. At present, the teacher chooses which questions are omitted for each student; a direct export from REC in the format of Aspa's class list is planned. \todo{Cite the published Aspa article instead of the software DOI, if available.}
+
+\paragraph{Research} Because REC gives the teacher each student's answers and response times as xAPI statements~\cite{xapi,serrano2017}, without depending on a provider, it makes it possible to study, in ordinary courses, questions that are hard to address with commercial tools. These include whether a bonus in the final exam increases participation and attendance, for which the attendance recorded by the tickets can be compared with that of earlier years \todo{optional: one aggregate attendance rate (attendees/enrolled) per year, Moodle years vs 2026/27, descriptive only; otherwise leave as a research question}; whether misconceptions shared by a large part of the group, detected from fast and wrong answers, persist in the global tests; and how response time relates to accuracy in different subjects, extending studies conducted with exported Kahoot! data~\cite{liang2024}. \todo{Teaching-innovation project of the University of Cádiz for 2027/28, once awarded.}
+
+\paragraph{Use} REC~1.0.0 was released in October 2026 and is in its first year of use. In the second semester of 2026/27 it was used in two courses with different purposes \todo{numbers of students, contests and tickets}. REC grew out of \emph{En el aire}\footnote{\url{https://github.com/lorenagmad/En-el-aire}}, a prototype built for a single course, and generalises it so that each teacher can create their own site from the kit; REC-FTPD\footnote{\url{https://github.com/lorenagmad/REC-FTPD}} is the instance for \emph{Fundamentos Técnicos en la Publicidad Digital}. REC will be presented in the teaching-innovation call of the University of Cádiz for 2027/28. It is distributed under the AGPL licence and is not used commercially.
 
 %% ============================================================================
 \section{Conclusions}
 \label{sec:conclusions}
 
-\plan{To be negotiated. Future work includes bundling the typefaces with the tool instead of loading them from Google Fonts.}
+REC is a tool for gamifying quizzes that adapts to any course: the same tool supports graded continuous assessment, with rankings that reward students in the final exam, and ungraded diagnostic quizzes that also record attendance. It works with large groups without student accounts or a server of its own: questions are published only encrypted, and students' answers reach the teacher in a file, so that no external provider stores them. After each session, the studio analyses the answers, including their response times, offline, and helps the teacher act in the next class. Its limits are the price of this serverless design: the verification code detects edited tickets but cannot stop a student from recomputing it, and the game is not synchronised in real time; removing them would require the server that REC avoids. Future work includes importing questions from the formats of other tools and exporting the bonus of each student directly to the class list of Aspa.
 
 \section*{Acknowledgements}
 \label{sec:acknowledgements}
@@ -199,7 +281,13 @@ REC was developed under three requirements: (i)~to reuse the questions teachers 
 
 \bibitem{xapi} Advanced Distributed Learning Initiative, Experience API (xAPI) specification, version 1.0.3, \url{https://github.com/adlnet/xAPI-Spec} (accessed 23 October 2026).
 
+\bibitem{rec} L.~Gutiérrez-Madroñal, R.~Baena-Pérez, J.~M. Mota-Macías, REC v1.0.0, Zenodo, 2026. \url{https://doi.org/10.5281/zenodo.23594648}
+
+\bibitem{hull2022} M.~M. Hull, A.~Jansky, M.~Hopf, Does confidence in a wrong answer imply a misconception?, Physical Review Physics Education Research 18~(2) (2022) 020108. \url{https://doi.org/10.1103/PhysRevPhysEducRes.18.020108}
+
 \bibitem{aspa} L.~Gutiérrez-Madroñal, R.~Baena-Pérez, J.~M. Mota-Macías, Aspa v1.0.0, Zenodo, 2026. \url{https://doi.org/10.5281/zenodo.23571011}
+
+\bibitem{serrano2017} Á.~Serrano-Laguna, I.~Martínez-Ortiz, J.~Haag, D.~Regan, A.~Johnson, B.~Fernández-Manjón, Applying standards to systematize learning analytics in serious games, Computer Standards \& Interfaces 50 (2017) 116--123. \url{https://doi.org/10.1016/j.csi.2016.09.014}
 
 \end{thebibliography}
 
