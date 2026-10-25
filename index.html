@@ -811,7 +811,7 @@ function finish(chosen){
   const sk = (TH.streakQ||Lx.streakQ)[S.streak]; if(full && sk && !PRACTICE) quip = sk;
   const sub = PRACTICE ? (full ? Lx.pracOk : frac>0 ? Lx.pracPart(Math.round(frac*100)) : Lx.seeSol) : pts>0 ? Lx.gotPts(fmtN(pts), t.toFixed(1)) : Lx.seeSol;
   const fbs = [...new Set([...(g.fb||[]), q.fb].filter(Boolean))];
-  v.innerHTML = `<div class="vhost"><span class="hostslot" data-size="58"></span><div><h3>${title}</h3><p>${sub}</p>${quip?`<p class="quip">«${escH(quip)}»</p>`:''}</div></div><button class="btn" id="btnNext">${S.i < S.qs.length-1 ? Lx.nextQ : (PRACTICE?Lx.seeHow:Lx.seeResult)}</button>` + (fbs.length ? `<div class="fbk">${fbs.map(f=>`<div>${f}</div>`).join('')}</div>` : '');
+  v.innerHTML = `<div class="vhost"><span class="hostslot" data-size="58"></span><div><h3>${title}</h3><p>${sub}</p>${quip?`<p class="quip">${LANG==='es'?'«':'“'}${escH(quip)}${LANG==='es'?'»':'”'}</p>`:''}</div></div><button class="btn" id="btnNext">${S.i < S.qs.length-1 ? Lx.nextQ : (PRACTICE?Lx.seeHow:Lx.seeResult)}</button>` + (fbs.length ? `<div class="fbk">${fbs.map(f=>`<div>${f}</div>`).join('')}</div>` : '');
   fillHosts(v); hostMood(v, frac>0?'ok':'ko');
   if(frac>0){ SFX.ok(); if(full && !PRACTICE) confetti(S.streak>=3?140:70); } else if(!answered) SFX.out(); else SFX.ko();
   const st=$('streak'); st.classList.toggle('hidden', PRACTICE || S.streak<2); st.textContent = Lx.streak(S.streak);
