@@ -320,6 +320,8 @@ html.a11y-hc .mrow,html.a11y-hc .olist li,html.a11y-hc .solbox,html.a11y-hc .rul
   <div class="bignum" id="pScore"></div>
   <div class="panel">
     <div id="pList" style="display:grid;gap:8px"></div>
+    <div class="hidden" id="pLogBox" style="display:grid;gap:8px"><p class="note" id="pLogNote"></p>
+      <div class="row"><button class="btn" id="btnPLog" style="background:var(--rec)" data-t="pracLogDl"></button><span class="note" id="pLogMsg" role="status"></span></div></div>
     <div class="row"><button class="btn" id="btnPAgain" data-t="pracAgain"></button><button class="btn ghost" data-home data-t="backHome2"></button></div>
   </div>
 </section>
@@ -363,6 +365,10 @@ html.a11y-hc .mrow,html.a11y-hc .olist li,html.a11y-hc .solbox,html.a11y-hc .rul
 const I18N = {
 es:{ madeWith:'Hecho con REC', loading:'Cargando concursos…', howTitle:'Cómo se juega', verifyLink:'Comprobar resguardos (profesorado)', backHome:'← Volver a la portada', backHome2:'Volver a la portada',
   practice:'Modo práctica', pracNote:'Sin puntos, sin resguardo y sin reloj. Después de cada respuesta verás la solución y, si la hay, una explicación.',
+  pracNoteLog:'Sin puntos y sin reloj. Tu profesor o profesora ha activado el registro de práctica: identifícate para que tus repasos se guarden en este navegador. Al final podrás descargar tu registro.',
+  pracOnly:'Solo práctica', pracLogDl:'Descargar mi registro de práctica', pracLogCard:n=>`⬇ Mi registro de práctica${n?` (${n})`:''}`,
+  pracLogNote:(n,k)=>`Esta ha sido tu práctica n.º ${k}. Tu registro de este concurso tiene ${n} práctica${n===1?'':'s'}, guardado en este navegador. Descárgalo cuando termines de repasar y súbelo donde te indiquen.`,
+  pracLogDone:'Registro descargado. Súbelo donde te hayan indicado.', pracLogWho:'¿De quién es el registro?', pracFile:'practica',
   name:'Nombre y apellidos', sid:'DNI, NIE o n.º de estudiante', extraQ:'¿Tienes reconocida una adaptación de tiempo?', extraCode:'Código de tiempo extra',
   extraNote:'Te lo da tu profesor o profesora. Con él tendrás más segundos por pregunta y tu puntuación no se verá afectada.',
   videoNote:'Algunas preguntas tienen vídeo. El tiempo empieza a contar cuando pulsas «Responder», así que míralo con calma (y con sonido).',
@@ -405,6 +411,10 @@ es:{ madeWith:'Hecho con REC', loading:'Cargando concursos…', howTitle:'Cómo 
          {min:.4,title:'Buen share',text:'Con un poco más de ensayo, a por el prime time.'},{min:0,title:'Toca ensayar',text:'Repasa y vuelve al próximo directo.'}] },
 en:{ madeWith:'Made with REC', loading:'Loading contests…', howTitle:'How to play', verifyLink:'Check tickets (teachers)', backHome:'← Back to the home page', backHome2:'Back to the home page',
   practice:'Practice mode', pracNote:'No points, no ticket and no clock. After each answer you will see the solution and, if available, an explanation.',
+  pracNoteLog:'No points and no clock. Your teacher has enabled the practice log: identify yourself so your practice sessions are saved in this browser. At the end you can download your log.',
+  pracOnly:'Practice only', pracLogDl:'Download my practice log', pracLogCard:n=>`⬇ My practice log${n?` (${n})`:''}`,
+  pracLogNote:(n,k)=>`This was your practice no. ${k}. Your log for this contest has ${n} practice session${n===1?'':'s'}, saved in this browser. Download it when you have finished reviewing and upload it where you are told.`,
+  pracLogDone:'Log downloaded. Upload it where you were told.', pracLogWho:'Whose log is it?', pracFile:'practice',
   name:'Full name', sid:'Student ID', extraQ:'Do you have an approved extra-time arrangement?', extraCode:'Extra-time code',
   extraNote:'Your teacher will give it to you. It gives you more seconds per question and does not affect your score.',
   videoNote:'Some questions include a video. The clock starts when you press “Answer”, so take your time to watch it (with sound).',
@@ -600,6 +610,7 @@ function anonStatements(list, anonOf){
 /* ============ juego ============ */
 const DEF = {tiempos:{opcion_multiple:20, verdadero_falso:15, emparejar:45, ordenar:45, respuesta_corta:30, imagen:25}, puntos_max:1000, puntos_min:500};
 const TKEY = {mc:'opcion_multiple', mm:'opcion_multiple', tf:'verdadero_falso', match:'emparejar', order:'ordenar', short:'respuesta_corta', hot:'imagen'};
+let PRACLOG = false;  /* práctica con registro: concurso con «Análisis de respuestas» activado */
 let MANIFEST = null, QUIZ = null, BLOBS = {}, TH = {}, S = null, PRACTICE = false, ANALISIS = false, CFG = DEF, MAXP = 1000, MINP = 500, LOCKED = null, LOCKPRAC = false;
 let blobUrls = {};
 function blobUrl(id){ if(blobUrls[id]) return blobUrls[id]; const b = BLOBS[id]; if(!b) return null;
@@ -611,6 +622,7 @@ const TQ = k => (TH[k] && TH[k].length) ? TH[k] : L()[k];   // frases del concur
 function setupQuiz(pack, practice){
   resetBlobs(); PRACTICE = !!practice;
   ANALISIS = !!(LOCKED && LOCKED.analysis) && !PRACTICE;
+  PRACLOG = !!(LOCKED && LOCKED.analysis) && PRACTICE;
   const st = (LOCKED && LOCKED.settings) || {};
   CFG = {tiempos:{...DEF.tiempos, ...(st.times||{})}, puntos_max: st.points_max || DEF.puntos_max, puntos_min: st.points_min ?? DEF.puntos_min};
   MAXP = CFG.puntos_max; MINP = Math.min(CFG.puntos_min, MAXP);
@@ -628,7 +640,8 @@ function setupTexts(){
     : `<li><b>${QUIZ.questions.length}</b>${T.ruleOne}</li><li><b>${fmtN(MAXP)} → ${fmtN(MINP)}</b>${T.rulePts}</li>
        <li><b>${(()=>{ const v=types.map(k=>CFG.tiempos[k]); const lo=Math.min(...v), hi=Math.max(...v); return lo===hi?`${lo} s`:`${lo}–${hi} s`; })()}</b>${types.length>1?T.perType:T.perQ}. ${T.ruleZero}</li>`;
   $('videoNote').hidden = PRACTICE || !QUIZ.questions.some(q => q.media.some(m => m.kind==='video'));
-  $('idFields').classList.toggle('hidden', PRACTICE); $('pracNote').classList.toggle('hidden', !PRACTICE); $('extraBox').classList.toggle('hidden', PRACTICE);
+  $('idFields').classList.toggle('hidden', PRACTICE && !PRACLOG); $('pracNote').classList.toggle('hidden', !PRACTICE); $('extraBox').classList.toggle('hidden', PRACTICE);
+  $('pracNote').querySelector('[data-t="pracNote"]').textContent = PRACLOG ? T.pracNoteLog : T.pracNote;
   $('btnStart').textContent = PRACTICE ? T.startPrac : T.start;
 }
 
@@ -643,10 +656,11 @@ function newRun(name, id, pct){
 }
 $('btnStart').onclick = () => {
   const T = L();
-  if(PRACTICE){ newRun('', '', 0); show('sQ'); renderQ(); return; }
+  if(PRACTICE && !PRACLOG){ newRun('', '', 0); show('sQ'); renderQ(); return; }
   const name = $('inName').value.trim().replace(/\s+/g,' '), id = $('inDni').value.trim();
   if(name.length < 3){ $('introErr').textContent = T.errName; $('inName').focus(); return; }
   if(normId(id).length < 4){ $('introErr').textContent = T.errSid; $('inDni').focus(); return; }
+  if(PRACTICE){ newRun(name, id, 0); show('sQ'); renderQ(); return; }  /* práctica con registro: identificada, sin reloj */
   const ex = parseExtra($('inExtra').value, id);
   if(ex.err){ $('introErr').textContent = T.errExtra; $('extraBox').open = true; $('inExtra').focus(); return; }
   const prev = store.get(`rec:${QUIZ.id}:${normId(id)}`);
@@ -795,7 +809,7 @@ function startAnswering(){
 function finish(chosen){
   if(S.timer.done) return; S.timer.done = true; cancelAnimationFrame(S.timer.raf);
   const q = S.qs[S.i], ui = uiOf(q), T = S.timer.T, Lx = L();
-  const t = Math.min((performance.now()-S.timer.t0)/1000, T);
+  const t = PRACTICE ? (performance.now()-S.timer.t0)/1000 : Math.min((performance.now()-S.timer.t0)/1000, T);
   const answered = chosen!==null && chosen!==undefined && !(Array.isArray(chosen) && !chosen.length);
   const g = answered ? ui.grade(q, chosen) : {frac:0, sel:[], fb:[]};
   const frac = Math.max(0, Math.min(1, g.frac));
@@ -836,8 +850,49 @@ function renderPracticeEnd(){
   $('pScore').innerHTML = `${ok}/${n}<small>${T.pracWell}</small>`;
   const miss = S.log.filter(l=>!l.ok);
   $('pList').innerHTML = miss.length ? `<p style="margin:0;font-weight:700">${T.toReview}</p>` + miss.map(l=>`<div class="solbox"><b>${escH(l.q)}</b><br>${T.solution} ${escH(l.good.join(' · '))}</div>`).join('') : `<p style="margin:0">${T.allGood}</p>`;
-  $('btnPAgain').onclick = () => { newRun('', '', 0); show('sQ'); renderQ(); };
+  $('btnPAgain').onclick = () => { newRun(S.name, S.id, 0); show('sQ'); renderQ(); };
+  $('pLogBox').classList.toggle('hidden', !PRACLOG); $('pLogMsg').textContent = '';
+  if(PRACLOG){
+    const rec = pracSave(QUIZ, S);
+    $('pLogNote').textContent = T.pracLogNote(rec.attempts.length, rec.attempts[rec.attempts.length-1].n);
+    $('btnPLog').onclick = () => { pracDownload(QUIZ.id, normId(S.id)); $('pLogMsg').textContent = L().pracLogDone; };
+  }
   if(ok===n) confetti(120); window.scrollTo({top:0});
+}
+/* ---- registro de práctica: localStorage, por concurso y alumno ---- */
+const pracKey = (qid, sid) => `rec:prac:${qid}:${sid}`;
+function pracSave(Q, run){
+  const sid = normId(run.id), k = pracKey(Q.id, sid);
+  const rec = store.get(k) || {quiz:{id:Q.id, title:Q.title}, name:run.name, id:sid, base: location.origin + location.pathname.replace(/[^/]*$/,''), attempts:[]};
+  rec.name = run.name; rec.quiz.title = Q.title;
+  const uuid = crypto.randomUUID ? crypto.randomUUID() : 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2);
+  rec.attempts.push({uuid, n: rec.attempts.length+1, start: run.start, end: new Date().toISOString(), lang: LANG, log: run.log});
+  store.set(k, rec); return rec;
+}
+function pracRecords(qid){ const out=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith(`rec:prac:${qid}:`)){ const r=store.get(k); if(r && r.attempts && r.attempts.length) out.push(r); } } }catch(e){} return out; }
+/* identificador de declaración estable: el mismo intento genera siempre los mismos identificadores */
+function stableUuid(seed){ const h = [1,2,3,4].map(k=>cyrb53(seed, k).toString(16).padStart(14,'0').slice(-8)).join('');
+  return `${h.slice(0,8)}-${h.slice(8,12)}-4${h.slice(13,16)}-${'89ab'[parseInt(h[16],16)%4]}${h.slice(17,20)}-${h.slice(20,32)}`; }
+function pracDownload(qid, sid){
+  const rec = store.get(pracKey(qid, sid)); if(!rec) return;
+  const base = rec.base || (location.origin + location.pathname.replace(/[^/]*$/,'')), all = [];
+  rec.attempts.forEach(a=>{
+    const lang = a.lang==='en' ? 'en-GB' : 'es-ES';
+    const st = buildXapi({base, lang, platform:'REC', quiz:rec.quiz, actor:{name:rec.name, id:rec.id}, log:a.log, start:a.start, end:a.end,
+      total:a.log.filter(l=>l.ok).length, max:a.log.length||1, maxQ:1, extra:0, record:null});
+    st.forEach((x,i)=>{
+      x.id = stableUuid(`${a.uuid}|${i}`);
+      x.context = x.context || {}; x.context.extensions = {...(x.context.extensions||{}), [`${base}xapi/practice`]: true, [`${base}xapi/attempt`]: a.n, [`${base}xapi/attempt-id`]: a.uuid};
+      if(x.result && x.result.extensions){ Object.keys(x.result.extensions).filter(k=>/\/xapi\/record$/.test(k)).forEach(k=>delete x.result.extensions[k]); }
+      if(x.result && x.result.score){ delete x.result.score; }   /* la práctica no puntúa */
+    });
+    /* detalle legible de cada respuesta para el análisis del estudio */
+    st.filter(x=>/\/answered$/.test(x.verb.id)).forEach((x,i)=>{ const l=a.log[i];
+      x.result.extensions[`${base}xapi/detail`] = {id:l.name, topic:l.tema||'', type:l.tipo||'', question:l.q, result:l.res, chosen:l.sel, answer:l.good, options:l.opciones||[], seconds:l.t}; });
+    all.push(...st);
+  });
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(all,null,1)],{type:'application/json'}));
+  a.download=`${L().pracFile}-${qid}-${sid}.json`; document.body.appendChild(a); a.click(); a.remove();
 }
 function ticketText(r){ const k=L().tk;
   return `REC | ${QUIZ.title}\n${k.name}: ${r.name}\n${k.sid}: ${r.id}\n${k.pts}: ${r.score}\n${k.hits}: ${r.hits}/${r.n}\n${k.max}: ${r.max||r.n*1000}` + (r.extra?`\n${k.extra}: +${r.extra} %`:'') + `\n${k.date}: ${r.date}\n${k.code}: ${r.code}`; }
@@ -890,15 +945,18 @@ function renderHome(){
   document.title = 'REC' + (ctitle ? ' | ' + ctitle : '');
   const secs = [...new Set(list.map(q=>q.section||''))];
   $('homeBlocks').innerHTML = secs.map(s=>`<div class="block">${s?`<h3><span>${escH(s)}</span></h3>`:''}<div class="qgrid">${
-    list.filter(q=>(q.section||'')===s).map(q=>`<div class="qitem"><button class="qcard${q.global?' global':''}" data-q="${escH(q.file)}">
-      <span class="t">${escH(q.name||q.title)}${q.active===false?`<span class="tagoff">${T.hidden}</span>`:doneBefore(q.id)?`<span class="tagdone">${T.done}</span>`:''}</span>
+    list.filter(q=>(q.section||'')===s).map(q=>{ const recs = pracRecords(q.id); return `<div class="qitem"><button class="qcard${q.global?' global':''}" data-q="${escH(q.file)}"${q.practice_only?' data-only="1"':''}>
+      <span class="t">${escH(q.name||q.title)}${q.active===false?`<span class="tagoff">${T.hidden}</span>`:q.practice_only?`<span class="tagdone" style="background:var(--y);color:var(--ink)">${T.pracOnly}</span>`:doneBefore(q.id)?`<span class="tagdone">${T.done}</span>`:''}</span>
       ${q.description?`<span class="d">${escH(q.description)}</span>`:''}<span class="m">${q.questions} ${T.questions}${q.video?T.withVideo:''}</span></button>
-      ${q.practice?`<button class="qprac" data-p="${escH(q.file)}">${T.practiceBtn}</button>`:''}</div>`).join('')}</div></div>`).join('') || `<p>${T.noContests}</p>`;
-  $('homeBlocks').querySelectorAll('.qcard').forEach(b=> b.onclick = () => openLock(MANIFEST.contests.find(q=>q.file===b.dataset.q), false));
-  $('homeBlocks').querySelectorAll('.qprac').forEach(b=> b.onclick = () => openLock(MANIFEST.contests.find(q=>q.file===b.dataset.p), true));
+      ${q.practice && !q.practice_only?`<button class="qprac" data-p="${escH(q.file)}">${T.practiceBtn}</button>`:''}
+      ${recs.map(r=>`<button class="qprac" data-log="${escH(q.id)}" data-sid="${escH(r.id)}">${T.pracLogCard(r.attempts.length)}${recs.length>1?` · ${escH(r.name.split(' ')[0])}`:''}</button>`).join('')}</div>`; }).join('')}</div></div>`).join('') || `<p>${T.noContests}</p>`;
+  /* un concurso «solo práctica» no ofrece el modo evaluable aunque se tenga la contraseña */
+  $('homeBlocks').querySelectorAll('.qcard').forEach(b=> b.onclick = () => openLock(MANIFEST.contests.find(q=>q.file===b.dataset.q), !!b.dataset.only));
+  $('homeBlocks').querySelectorAll('[data-log]').forEach(b=> b.onclick = () => pracDownload(b.dataset.log, b.dataset.sid));
+  $('homeBlocks').querySelectorAll('.qprac[data-p]').forEach(b=> b.onclick = () => openLock(MANIFEST.contests.find(q=>q.file===b.dataset.p), true));
 }
 function openLock(m, prac){
-  const T=L(); LOCKED = m; LOCKPRAC = !!prac;
+  const T=L(); LOCKED = m; LOCKPRAC = !!prac || !!m.practice_only;
   $('lockTitle').textContent = (prac?T.pracTitle:'') + (m.section?`${m.section}: `:'') + (m.name||m.title); $('lockSub').textContent = m.description||'';
   $('lockGo').textContent = prac ? T.startPrac : T.enter;
   $('lockPass').value=''; $('lockErr').textContent=''; $('lock').classList.remove('hidden'); $('lockPass').focus();

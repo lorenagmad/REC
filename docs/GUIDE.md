@@ -92,7 +92,8 @@ A contest is a set of questions from the bank with its own password. Press **New
 - **Section:** e.g. “Unit 1”. Contests in the same section are added up in the ranking.
 - **Visible name and description:** what students see on the home page.
 - **Password:** press **Generate** for one that is easy to dictate. Capitals and accents do not matter.
-- **Visible on the home page**, **answer analysis** (students download an xAPI file with their answers) and **practice mode** (no points, no clock, with solutions; same password).
+- **Visible on the home page**, **answer analysis** (students download an xAPI file with their answers) and **practice mode** (no points, no clock, with solutions; same password). If the contest has analysis enabled, practice is also logged: see “Practice log” in Part 3.
+- **Practice mode only:** the home page offers only practice, even if students know the password. Use it to reopen for review, for example at the end of the course, a contest that was already scored in class.
 - **Time and scoring:** seconds per question type and points for an instant correct answer and for one in the last second (1000 and 500 by default).
 - **Language in which it appears:** both languages (default), Spanish only or English only. Useful if you prepare the same contest in both languages: each version appears only in its own language.
 - **Presentation:** Cam’s welcome message and, if you like, your own lines after a correct answer, a wrong one or when time runs out.
@@ -120,6 +121,17 @@ Share your site’s address (e.g. on your learning platform) and say the passwor
 - can switch language (ES/EN), mute the sound and open **Accessibility** (text size, high contrast and reduced motion);
 - at the end, copy their ticket or download the file (if the contest has analysis) and send it the way you indicate, e.g. a Moodle assignment.
 
+**Practice log.** If the contest has both **practice mode** and **answer analysis** enabled, every practice session is logged:
+
+- before practising, students type their name and ID, as in the scored mode;
+- they practise without points or clock as many times as they like. Although they do not see the clock, the time of each answer is recorded for the analysis;
+- each practice session is added to a log in their browser, one per contest and student;
+- when they have finished reviewing, they press **Download my practice log**, on the practice end screen or on the contest card on the home page, and send you that file (`practice-<contest>-<id>.json`; in Spanish, `practica-…`). It contains all their practice sessions in xAPI format.
+
+The log is kept in the browser used to practise. If a student practises on several devices (e.g. phone and laptop), they should send one file from each: the studio merges them without duplicating sessions. If the contest does not have analysis enabled, practice stays anonymous and produces no file.
+
+A typical use: after each class session the contest is taken in scored mode; at the end of the course it is marked **Practice mode only**, published again, and students review before the exam and upload their log to the learning platform.
+
 **Extra time.** In **Results → Extra time** you generate a personal code linked to the student’s ID (+25 %, +50 %, +75 % or double). Give it privately; the student types it before starting. Nothing needs to be uploaded to GitHub: the code works for every contest published from your project, and the score is calculated on the extended time. If you start a new project, the codes you handed out stop working.
 
 ---
@@ -135,14 +147,17 @@ The **bonus** (e.g. free questions in the exam) can be:
 - **By percentage of the maximum** (recommended): students know from the start what they need. Note that getting everything right at half time gives 75 % of the maximum.
 - **Relative to the top scorer:** the top scorer gets the maximum and the rest in proportion.
 
+Practice logs do not count in the ranking: if you load any, the studio says so and leaves them out.
+
 You can rename the bonus and change the number of levels and the thresholds: the ranking is recalculated instantly. Download the version to publish (with the ID partly hidden) and the full CSV sheet for yourself. **Publish the ranking only in a closed space, such as your learning platform.**
 
 ### Analysis
 
-Load the `.json` files from contests with analysis (e.g. all submissions from a Moodle assignment). There are two views:
+Load the `.json` files from contests with analysis and, if you have them, the practice logs (e.g. all submissions from a Moodle assignment). There are three views:
 
 - **One contest:** summary, ideas for the next class, speed and accuracy map (masters it, knows but hesitates, rushes and needs review), question-by-question analysis (difficulty, most common mistake and whether the question discriminates) and student by student.
 - **Everything loaded:** mastery by topic and retention between a section’s contests and its global test.
+- **Practice:** how students review. By student: number of practice sessions, questions practised, and correct answers in the first session versus the last. By question: percentage wrong in practice and how many students still get it wrong in their last session. If you also load the tickets from that contest’s scored session, it compares, for each question and student, the session with their last review: which questions have been recovered and which are still wrong. It can be downloaded as CSV, anonymised too.
 
 **The xAPI file.** The file students download is in **xAPI** format (Experience API), the standard for recording learning activities: it contains one statement per question (what they answered, whether it was correct and how long it took) and, inside, the verifiable ticket used by the ranking and the analysis. It is a single file per student and contest. The **Download all interactions as xAPI** button merges the statements from all loaded files into one, ready to import into an LRS (your institution’s learning record store, if it has one); with “Anonymise” ticked, names and IDs are removed.
 

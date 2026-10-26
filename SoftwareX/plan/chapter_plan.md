@@ -146,6 +146,15 @@ ARS `plan` mode, started 23 October 2026. All claims below are in the author's w
 - **Future work:** other import formats; direct export of the bonus to Aspa's class list. Typefaces/Google Fonts dropped (author's decision).
 - **Attendance comparison:** optional single aggregate rate per year; no class lists. Otherwise it stays a research question.
 
+## Third scenario (26 Oct 2026): first-semester review quizzes
+
+- **The course:** a first-semester subject with ~6 Moodle review quizzes (exam-like questions).
+- **Design (author's option, recommended):** evaluable contest after each session → at the end of the course, the same contest offered in practice-only mode for review → compare errors in the session vs the last practice attempt.
+- **Problem in v1.0.0:** practice mode has no ticket/file and no identification, and it also needs the password.
+  - A change for v1.1.0 is proposed (`plan/propuesta-practica-v1.1.0.md`): identified practice when analysis is on, a cumulative xAPI file, a "practice only" setting, and a Practice view in the studio. It will be implemented in the conversation where REC is developed.
+- **Video:** migrating the Moodle quizzes to REC → also measures creation time from Moodle XML (available before June).
+- **Data:** available in Jan/Feb 2027, before June.
+
 ## Pending
 
 - [ ] **Version for the paper:** after v1.0.0 the code changed:
