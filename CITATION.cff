@@ -4,11 +4,14 @@ title: "REC"
 type: software
 version: 1.1.0
 date-released: "2026-10-26"
-doi: 10.5281/zenodo.23594647
+doi: 10.5281/zenodo.23670870
 license: AGPL-3.0-or-later
 repository-code: "https://github.com/lorenagmad/REC"
 url: "https://lorenagmad.github.io/REC/"
 identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23670870
+    description: "REC v1.1.0"
   - type: doi
     value: 10.5281/zenodo.23594648
     description: "REC v1.0.0"
