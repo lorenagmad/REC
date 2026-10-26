@@ -288,7 +288,18 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   rvTitle:'Repaso en clase', rvShow:'Mostrar solución', rvHide:'Ocultar solución', rvPrev:'← Anterior', rvNext:'Siguiente →', rvEnd:'Terminar', rvGroup:p=>`Acierta el ${p} del grupo`, rvNothing:'Todas las preguntas se han acertado: no hay nada que repasar.',
   exTitle:'Códigos de tiempo extra', exLead:'Para el alumnado con una adaptación de tiempo reconocida. Cada código va ligado a su identificador y sirve para todos los concursos de este proyecto. Su puntuación se calcula sobre el tiempo ampliado.',
   exIds:'Identificadores (uno por línea)', exPct:'Tiempo extra', exGo:'Generar códigos', exNote:'Entrega cada código de forma privada. El alumno lo escribe antes de empezar, en «¿Tienes reconocida una adaptación de tiempo?».', exCode:'Código',
-  needContests:'Primero crea algún concurso.', anHotOut:'Fuera de la zona correcta', anAxisX:'más lento ← rapidez de respuesta → más rápido', anAxisY:'% de aciertos', contest:'Concurso', sec:'(sin sección)' },
+  needContests:'Primero crea algún concurso.', kPracOnly:'Solo modo práctica (en la portada no se ofrece el modo evaluable)', kPracOnlyBadge:'Solo práctica',
+  anPracView:'Práctica: repasos del alumnado', anPracLoaded:(r,a)=>`${r} registros de práctica (${a} prácticas).`, anPracUnknown:f=>`«${f}» es un registro de práctica de un concurso que no está en este proyecto.`,
+  anPracKpi:['alumnos','prácticas en total','prácticas por alumno','acierto en la primera práctica','acierto en la última práctica'],
+  anPracByS:'Por alumno', anPracColsS:['Alumno','Prácticas','Preguntas practicadas','Acierto en la primera','Acierto en la última','Cambio','Última práctica'],
+  anPracByQ:'Por pregunta', anPracColsQ:['Pregunta','Tema','Respuestas en práctica','Fallo en práctica','La siguen fallando en su última práctica'],
+  anPracNoteQ:'Ordenadas de más a menos alumnos que todavía las fallan en su última práctica.',
+  anPracCmp:'Sesión evaluada frente al último repaso', anPracCmpNote:'Para los mismos alumnos, acierto en la sesión evaluada en clase frente al acierto en su última práctica.',
+  anPracCmpNone:'Para comparar, carga también los resguardos (.json) de la sesión evaluada de este concurso.',
+  anPracCmpColsQ:['Pregunta','Alumnos','Acierto en la sesión','Acierto en el último repaso','Cambio'],
+  anPracCmpColsS:['Alumno','Sesión','Último repaso','Recuperadas','Siguen falladas','Preguntas que siguen falladas'],
+  anPracTotal:'Total', anOfN:(a,b)=>`${a} de ${b}`, anPracCsvS:'Descargar práctica por alumno (CSV)', anPracCsvQ:'Descargar práctica por pregunta (CSV)',
+  rkPracSkipped:n=>`${n} registro${n===1?'':'s'} de práctica ignorado${n===1?'':'s'}: no cuentan en el ranking.`, anHotOut:'Fuera de la zona correcta', anAxisX:'más lento ← rapidez de respuesta → más rápido', anAxisY:'% de aciertos', contest:'Concurso', sec:'(sin sección)' },
 en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save project', tabCourse:'Course', tabBank:'Question bank', tabContests:'Contests', tabPublish:'Publish', tabResults:'Results',
   savedAt:t=>`Saved in this browser ${t}`, confirmNew:'Start a new project? The current one will be removed from this browser (save it first if you need it).',
   badProject:'That file is not a REC project.', projLoaded:'Project loaded.',
@@ -368,7 +379,18 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   rvTitle:'Class review', rvShow:'Show solution', rvHide:'Hide solution', rvPrev:'← Previous', rvNext:'Next →', rvEnd:'Finish', rvGroup:p=>`${p} of the group got it right`, rvNothing:'Every question was answered correctly: nothing to review.',
   exTitle:'Extra-time codes', exLead:'For students with an approved extra-time arrangement. Each code is linked to the student’s ID and works for every contest in this project. Their score is calculated on the extended time.',
   exIds:'IDs (one per line)', exPct:'Extra time', exGo:'Generate codes', exNote:'Give each code privately. Students type it before starting, under “Do you have an approved extra-time arrangement?”.', exCode:'Code',
-  needContests:'Create a contest first.', anHotOut:'Outside the correct area', anAxisX:'slower ← response speed → faster', anAxisY:'% correct', contest:'Contest', sec:'(no section)' }
+  needContests:'Create a contest first.', kPracOnly:'Practice mode only (the scored mode is not offered on the home page)', kPracOnlyBadge:'Practice only',
+  anPracView:'Practice: students’ reviews', anPracLoaded:(r,a)=>`${r} practice logs (${a} practice sessions).`, anPracUnknown:f=>`“${f}” is a practice log for a contest that is not in this project.`,
+  anPracKpi:['students','practice sessions in total','practice sessions per student','correct in the first session','correct in the last session'],
+  anPracByS:'By student', anPracColsS:['Student','Sessions','Questions practised','Correct in the first','Correct in the last','Change','Last session'],
+  anPracByQ:'By question', anPracColsQ:['Question','Topic','Answers in practice','Wrong in practice','Still wrong in their last session'],
+  anPracNoteQ:'Sorted from most to fewest students who still get them wrong in their last session.',
+  anPracCmp:'Scored session versus last review', anPracCmpNote:'For the same students, correct answers in the scored class session versus in their last practice session.',
+  anPracCmpNone:'To compare, also load the tickets (.json) from this contest’s scored session.',
+  anPracCmpColsQ:['Question','Students','Correct in the session','Correct in the last review','Change'],
+  anPracCmpColsS:['Student','Session','Last review','Recovered','Still wrong','Questions still wrong'],
+  anPracTotal:'Total', anOfN:(a,b)=>`${a} of ${b}`, anPracCsvS:'Download practice by student (CSV)', anPracCsvQ:'Download practice by question (CSV)',
+  rkPracSkipped:n=>`${n} practice log${n===1?'':'s'} ignored: they do not count in the ranking.`, anHotOut:'Outside the correct area', anAxisX:'slower ← response speed → faster', anAxisY:'% correct', contest:'Contest', sec:'(no section)' }
 };
 let LANG = localStorage.getItem('rec-studio:lang') || ((navigator.language||'es').startsWith('es')?'es':'en');
 const t = (k, ...a) => { const v = (TX[LANG][k] ?? TX.es[k]); return typeof v === 'function' ? v(...a) : v; };
@@ -669,7 +691,7 @@ function renderContests(){
   <div class="row" style="margin-bottom:14px"><button class="btn rec" id="kNew">${t('kNew')}</button></div>
   ${P.contests.length ? secs.map(s=>`<h2 style="margin:18px 0 10px">${esc(s||t('sec'))}</h2><div class="ccards">${P.contests.filter(c=>(c.section||'')===s).map(c=>`
     <div class="ccard ${c.active?'':'off'}" style="${c.global?'--x:1':''}"><div class="t">${esc(c.name||c.title||'—')}</div><div class="s">${esc(c.title)}</div>
-      <div class="row">${c.global?`<span class="badge t-hot">${t('kGlobal')}</span>`:''}<span class="badge">${t('kQ', c.qids.length)}</span>${c.password?'':`<span class="badge t-hot">${t('kNoPass')}</span>`}${c.active?'':`<span class="badge">${t('kHidden')}</span>`}</div>
+      <div class="row">${c.global?`<span class="badge t-hot">${t('kGlobal')}</span>`:''}<span class="badge">${t('kQ', c.qids.length)}</span>${c.password?'':`<span class="badge t-hot">${t('kNoPass')}</span>`}${c.active?'':`<span class="badge">${t('kHidden')}</span>`}${c.practice_only?`<span class="badge t-order">${t('kPracOnlyBadge')}</span>`:''}</div>
       <div class="row"><button class="btn sm" data-ced="${c.uid}">${t('edit')}</button><button class="btn sm alt" data-cdup="${c.uid}">${t('kDup')}</button><button class="btn sm danger" data-cdel="${c.uid}">${t('del')}</button></div></div>`).join('')}</div>`).join('')
     : `<p class="note">${t('kEmpty')}</p>`}`;
   $('kNew').onclick = () => openContest(null);
@@ -689,7 +711,7 @@ function renderContestEd(){
     <label>${t('kName')}<input type="text" id="kName" value="${esc(c.name)}"><span class="hintx">${t('kNameHint')}</span></label><label>${t('kDesc')}<input type="text" id="kDesc" value="${esc(c.description)}"></label></div>
   <div class="grid2"><label>${t('kPass')}<div class="row" style="flex-wrap:nowrap"><input type="text" id="kPass" value="${esc(c.password)}"><button class="btn sm alt" id="kGen">${t('kGen')}</button></div><span class="hintx">${t('kPassHint')}</span></label>
     <div style="display:grid;gap:6px;align-content:start;padding-top:22px"><label class="check"><input type="checkbox" id="kGlob" ${c.global?'checked':''}> ${t('kIsGlobal')}</label><label class="check"><input type="checkbox" id="kAct" ${c.active?'checked':''}> ${t('kActive')}</label>
-      <label class="check"><input type="checkbox" id="kAna" ${c.analysis?'checked':''}> ${t('kAnalysis')}</label><label class="check"><input type="checkbox" id="kPrac" ${c.practice?'checked':''}> ${t('kPractice')}</label>
+      <label class="check"><input type="checkbox" id="kAna" ${c.analysis?'checked':''}> ${t('kAnalysis')}</label><label class="check"><input type="checkbox" id="kPrac" ${c.practice?'checked':''}> ${t('kPractice')}</label><label class="check"><input type="checkbox" id="kPracOnly" ${c.practice_only?'checked':''}> ${t('kPracOnly')}</label>
       <label>${t('kLang')}<select id="kLangSel"><option value="">${t('kLangAll')}</option><option value="es">${t('kLangEs')}</option><option value="en">${t('kLangEn')}</option></select></label></div></div>
   <details class="box" style="margin:0"><summary style="cursor:pointer;font-weight:700">${t('kSettings')}</summary>
     <p class="note">${t('kTimes')}</p><div class="grid6">${Object.keys(DEFTIMES).map(k=>`<label>${esc(TX[LANG].types[{opcion_multiple:'mc',verdadero_falso:'tf',emparejar:'match',ordenar:'order',respuesta_corta:'short',imagen:'hot'}[k]])}<input type="number" min="5" max="300" data-tm="${k}" value="${st.times[k]}"></label>`).join('')}</div>
@@ -713,7 +735,8 @@ function renderContestEd(){
   on('cX','onclick',closeEditor); on('cCancel','onclick',closeEditor);
   on('kTitle','oninput',e=>c.title=e.target.value); on('kSec','oninput',e=>c.section=e.target.value.trim()); on('kName','oninput',e=>c.name=e.target.value); on('kDesc','oninput',e=>c.description=e.target.value);
   on('kPass','oninput',e=>c.password=e.target.value); on('kGen','onclick',()=>{ c.password=genPass(); $('kPass').value=c.password; });
-  on('kGlob','onchange',e=>c.global=e.target.checked); on('kAct','onchange',e=>c.active=e.target.checked); on('kAna','onchange',e=>c.analysis=e.target.checked); on('kPrac','onchange',e=>c.practice=e.target.checked);
+  on('kGlob','onchange',e=>c.global=e.target.checked); on('kAct','onchange',e=>c.active=e.target.checked); on('kAna','onchange',e=>c.analysis=e.target.checked); on('kPrac','onchange',e=>{ c.practice=e.target.checked; if(!c.practice){ c.practice_only=false; if($('kPracOnly')) $('kPracOnly').checked=false; } });
+  on('kPracOnly','onchange',e=>{ c.practice_only=e.target.checked; if(c.practice_only){ c.practice=true; $('kPrac').checked=true; } });
   if($('kLangSel')){ $('kLangSel').value=c.lang||''; $('kLangSel').onchange=e=>{ c.lang=e.target.value||undefined; }; }
   all('[data-tm]',el=>el.oninput=()=>st.times[el.dataset.tm]=Math.max(5,+el.value||DEFTIMES[el.dataset.tm]));
   on('kPmax','oninput',e=>st.points_max=Math.max(10,+e.target.value||1000)); on('kPmin','oninput',e=>st.points_min=Math.max(0,+e.target.value||0));
@@ -796,7 +819,7 @@ function renderPublish(){
         const pack = contestPack(c), bytes = new TextEncoder().encode(JSON.stringify(pack));
         files.push({name:`contests/${c.id}.bin`, data: await encrypt(bytes, c.password)});
         man.contests.push({file:`${c.id}.bin`, id:c.id, title:c.title, section:c.section, name:c.name||c.title, description:c.description, questions:pack.quiz.questions.length,
-          video:pack.quiz.questions.some(q=>q.media.some(m=>m.kind==='video'||m.kind==='iframe')), global:!!c.global, active:!!c.active, analysis:!!c.analysis, practice:!!c.practice, lang:c.lang||undefined,
+          video:pack.quiz.questions.some(q=>q.media.some(m=>m.kind==='video'||m.kind==='iframe')), global:!!c.global, active:!!c.active, analysis:!!c.analysis, practice:!!c.practice||!!c.practice_only, practice_only:!!c.practice_only||undefined, lang:c.lang||undefined,
           settings:{times:c.settings.times, points_max:c.settings.points_max, points_min:c.settings.points_min}});
       }
       files.unshift({name:'contests/index.json', data:JSON.stringify(man,null,2)});
@@ -845,7 +868,7 @@ function renderRanking(){
   info();
   $('rkSec').onchange = e => { RK.sec=e.target.value; RKLAST=null; renderRanking(); };
   $('rkText').oninput = e => RK.text = e.target.value;
-  $('rkFiles').onchange = async e => { const texts = await Promise.all([...e.target.files].map(async f=>{ const x=await f.text(); try{ const rf=recordFromFile(JSON.parse(x)); return (rf.record&&rf.record.ticket)||''; }catch(err){ return x; } }));
+  $('rkFiles').onchange = async e => { const texts = await Promise.all([...e.target.files].map(async f=>{ const x=await f.text(); try{ const j=JSON.parse(x); if(isPracticeLog(j)){ RK.pracSkipped=(RK.pracSkipped||0)+1; return ''; } const rf=recordFromFile(j); return (rf.record&&rf.record.ticket)||''; }catch(err){ return x; } }));
     RK.text = (RK.text.trim()+'\n\n'+texts.join('\n\n')).trim(); $('rkText').value = RK.text; };
   document.querySelectorAll('[name=rkm]').forEach(r=>r.onchange=()=>{ RK.mode=r.value; $('rkThrBox').classList.toggle('hidden', RK.mode!=='abs'); recalc(); });
   $('rkName').oninput = e => { RK.name=e.target.value; recalc(); };
@@ -860,6 +883,7 @@ function renderRanking(){
       if(makeCode(c,tk.id,tk.pts,tk.hits,tk.max,tk.n)!==tk.code){ issues.push(['ko',t('rkBad',who,c.name||c.title,fmt(tk.pts))]); return; }
       const k=tk.id+'|'+c.uid; if(best[k]){ issues.push(['warn',t('rkDup',who,c.name||c.title)]); if(tk.pts<=best[k].pts) return; } best[k]={...tk, c}; });
     if(other) issues.push(['warn',t('rkOther',other)]);
+    if(RK.pracSkipped) issues.push(['info',t('rkPracSkipped',RK.pracSkipped)]);
     const mx = list.reduce((s,c)=>{ const tk=Object.values(best).find(x=>x.c.uid===c.uid && x.max); return s + (tk? tk.max : c.qids.length*(c.settings.points_max||1000)); }, 0);
     const st={}; Object.values(best).forEach(tk=>{ const s = st[tk.id] ||= {id:tk.id, name:tk.name, per:{}, total:0, hits:0, n:0}; if(tk.name.length>s.name.length) s.name=tk.name; s.per[tk.c.uid]=tk; s.total+=tk.pts; s.hits+=tk.hits; s.n++; });
     const rows = Object.values(st).sort((a,b)=>b.total-a.total||b.hits-a.hits||a.name.localeCompare(b.name));
@@ -962,7 +986,28 @@ function anonStatements(list, anonOf){
 }
 
 /* análisis de resultados */
-let AN = {files:[], issues:[], view:'one', contest:'', anon:false, order:'dif'};
+let AN = {files:[], issues:[], view:'one', contest:'', anon:false, order:'dif', prac:new Map(), pstIds:new Set(), pst:[], pcontest:''};
+/* ---- registros de práctica (xAPI con la extensión …/xapi/practice) ---- */
+const extOf = (o, re) => { const ex = o && o.extensions; if(!ex) return undefined; const k = Object.keys(ex).find(k=>re.test(k)); return k ? ex[k] : undefined; };
+function isPracticeLog(j){ return Array.isArray(j) && j.some(s=>s && s.context && extOf(s.context, /\/xapi\/practice$/)===true); }
+function cidOf(s){ const id = (s.verb && /answered$/.test(s.verb.id)) ? ((s.context.contextActivities||{}).parent||[{}])[0].id : s.object.id;
+  const m = String(id||'').match(/\/contests\/([^/]+)/); return m ? decodeURIComponent(m[1]) : null; }
+function loadPractice(j, fname){
+  let added = 0;
+  j.forEach(s=>{
+    if(!s || !s.context || extOf(s.context, /\/xapi\/practice$/)!==true) return;
+    const c = P.contests.find(x=>x.id===cidOf(s)); if(!c){ if(!AN._pu) AN._pu=new Set(); if(!AN._pu.has(fname)){ AN._pu.add(fname); AN.issues.push(['ko',t('anPracUnknown',fname)]); } return; }
+    const sid = normId(s.actor && s.actor.account ? s.actor.account.name : ''), aid = extOf(s.context, /\/xapi\/attempt-id$/), key = c.uid+'|'+sid;
+    if(!sid || !aid) return;
+    if(!AN.pstIds.has(s.id)){ AN.pstIds.add(s.id); AN.pst.push(s); }
+    const e = AN.prac.get(key) || {c, sid, name:s.actor.name||sid, anon:anonOf(sid), attempts:new Map()}; AN.prac.set(key, e);
+    const a = e.attempts.get(aid) || {aid, n:extOf(s.context, /\/xapi\/attempt$/)||0, start:null, end:null, items:new Map()}; e.attempts.set(aid, a);
+    if(/attempted$/.test(s.verb.id)) a.start = s.timestamp;
+    else if(/completed$/.test(s.verb.id)) a.end = s.timestamp;
+    else if(/answered$/.test(s.verb.id)){ const d = extOf(s.result, /\/xapi\/detail$/); if(d && !a.items.has(d.id)){ a.items.set(d.id, {...d, result:RES[d.result]||d.result}); added++; } }
+  });
+  return added;
+}
 const RES = {correct:'acierto', partial:'parcial', wrong:'fallo', timeout:'tiempo', acierto:'acierto', parcial:'parcial', fallo:'fallo', tiempo:'tiempo'};
 const TDEF = {tf:15, mc:20, mm:20, match:45, order:45, short:30, hot:25};
 const pctS = x => Math.round(x*100)+' %';
@@ -971,7 +1016,9 @@ const median = a => { if(!a.length) return null; const b=[...a].sort((x,y)=>x-y)
 const anonOf = id => 'A' + cyrb53(`${P.adapt}|anon|${normId(id)}`).toString(36).toUpperCase().padStart(7,'0').slice(0,6);
 async function anLoad(list){
   for(const f of list){
-    let o, st=null; try{ const rf = recordFromFile(JSON.parse(await f.text())); if(!rf.record) throw 0; o = JSON.parse(JSON.stringify(rf.record)); st = rf.statements; }catch(e){ AN.issues.push(['ko',t('anBad',f.name)]); continue; }
+    let o, st=null, j; try{ j = JSON.parse(await f.text()); }catch(e){ AN.issues.push(['ko',t('anBad',f.name)]); continue; }
+    if(isPracticeLog(j)){ loadPractice(j, f.name); continue; }   /* registro de práctica: va aparte, no es un resguardo */
+    try{ const rf = recordFromFile(j); if(!rf.record) throw 0; o = JSON.parse(JSON.stringify(rf.record)); st = rf.statements; }catch(e){ AN.issues.push(['ko',t('anBad',f.name)]); continue; }
     let r;
     if(o.format==='rec-result-1') r = {cid:o.contest_id, name:o.name, sid:o.student_id, anon:o.anon_id, points:o.points, correct:o.correct, questions:o.questions, max:o.max, extra:o.extra_time, code:o.code, raw:o.detail, check:o.check,
       detail:(o.detail||[]).map(d=>({id:d.id, topic:d.topic, type:d.type, question:d.question, result:RES[d.result], chosen:d.chosen||[], answer:d.answer||[], options:d.options||[], seconds:d.seconds, limit:d.limit, points:d.points||0}))};
@@ -1029,18 +1076,22 @@ function scatter(F){
 }
 function renderAnalysis(){
   const ids=[...new Set(AN.files.map(f=>f.c.uid))], cs=P.contests.filter(c=>ids.includes(c.uid)); if(!ids.includes(AN.contest)) AN.contest=ids[0]||'';
+  const pids=[...new Set([...AN.prac.values()].map(e=>e.c.uid))], pcs=P.contests.filter(c=>pids.includes(c.uid)); if(!pids.includes(AN.pcontest)) AN.pcontest=pids[0]||'';
+  if(!AN.files.length && AN.prac.size) AN.view='practice'; if(AN.view==='practice' && !AN.prac.size) AN.view='one';
   $('rBody').innerHTML = `<div class="box"><p class="note">${t('anLoad')}</p><div class="drop" id="anDrop">${t('anDrop')}<br><input type="file" id="anFiles" multiple accept=".json" style="max-width:340px;margin-top:8px"></div>
-    <ul class="msgs">${AN.files.length?`<li class="msg ok">${t('anLoaded',AN.files.length,cs.length)}</li>`:''}${AN.issues.map(([c,x])=>`<li class="msg ${c}">${esc(x)}</li>`).join('')}</ul>
-    ${AN.files.length?`<div class="grid2"><label>${t('anView')}<select id="anView"><option value="one">${t('anOne')}</option><option value="course">${t('anCourse')}</option></select></label>
-      <label class="${AN.view==='one'?'':'hidden'}">${t('contest')||'Concurso'}<select id="anC">${cs.map(c=>`<option value="${c.uid}">${esc(c.name||c.title)} (${AN.files.filter(f=>f.c.uid===c.uid).length})</option>`).join('')}</select></label></div>
+    <ul class="msgs">${AN.files.length?`<li class="msg ok">${t('anLoaded',AN.files.length,cs.length)}</li>`:''}${AN.prac.size?`<li class="msg ok">${t('anPracLoaded',AN.prac.size,[...AN.prac.values()].reduce((s,e)=>s+e.attempts.size,0))}</li>`:''}${AN.issues.map(([c,x])=>`<li class="msg ${c}">${esc(x)}</li>`).join('')}</ul>
+    ${(AN.files.length||AN.prac.size)?`<div class="grid2"><label>${t('anView')}<select id="anView">${AN.files.length?`<option value="one">${t('anOne')}</option><option value="course">${t('anCourse')}</option>`:''}${AN.prac.size?`<option value="practice">${t('anPracView')}</option>`:''}</select></label>
+      <label class="${AN.view==='one'?'':'hidden'}">${t('contest')||'Concurso'}<select id="anC">${cs.map(c=>`<option value="${c.uid}">${esc(c.name||c.title)} (${AN.files.filter(f=>f.c.uid===c.uid).length})</option>`).join('')}</select></label>
+      <label class="${AN.view==='practice'?'':'hidden'}">${t('contest')||'Concurso'}<select id="anPC">${pcs.map(c=>`<option value="${c.uid}">${esc(c.name||c.title)} (${[...AN.prac.values()].filter(e=>e.c.uid===c.uid).length})</option>`).join('')}</select></label></div>
       <label class="check"><input type="checkbox" id="anAnon" ${AN.anon?'checked':''}> ${t('anAnon')}</label>
       <div class="row"><button class="btn alt" id="anXapi">${t('anXapi')}</button><span class="note">${t('anXapiNote')}</span></div>`:''}</div><div id="anOut"></div>`;
   $('anFiles').onchange = e => anLoad([...e.target.files]);
   const d=$('anDrop'); ['dragenter','dragover'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault(); d.classList.add('over');})); ['dragleave','drop'].forEach(v=>d.addEventListener(v,e=>{e.preventDefault(); d.classList.remove('over');}));
   d.addEventListener('drop', e=>anLoad([...e.dataTransfer.files]));
-  if(!AN.files.length) return;
+  if(!AN.files.length && !AN.prac.size) return;
   $('anView').value=AN.view; $('anView').onchange=e=>{AN.view=e.target.value; renderAnalysis();};
   if($('anC')){ $('anC').value=AN.contest; $('anC').onchange=e=>{AN.contest=e.target.value; renderAnalysis();}; }
+  if($('anPC')){ $('anPC').value=AN.pcontest; $('anPC').onchange=e=>{AN.pcontest=e.target.value; renderAnalysis();}; }
   $('anAnon').onchange=e=>{AN.anon=e.target.checked; renderAnalysis();};
   $('anXapi').onclick=()=>{ let all=[];
     AN.files.forEach(f=>{ let st=f._st; if(!st){ const now=new Date().toISOString(), base=location.origin+location.pathname.replace(/[^/]*$/,'');
@@ -1048,9 +1099,63 @@ function renderAnalysis(){
           log:f.detail.map(d=>({name:d.id, q:d.question, tipo:d.type, sel:d.chosen, good:d.answer, opciones:d.options, ok:d.result==='acierto', pts:d.points||0, t:d.seconds, res:d.result, limite:d.limit, tema:d.topic})),
           start:now, end:now, total:f.points, max:f.max||f.questions*1000, maxQ:Math.round((f.max||f.questions*1000)/f.questions), extra:f.extra||0, record:{}}); }
       all=all.concat(st); });
+    all=all.concat(AN.pst);   /* registros de práctica, ya sin duplicados */
     if(AN.anon) all=anonStatements(all, id=>anonOf(id));
     download(`xapi-statements${AN.anon?'-anon':''}.json`, JSON.stringify(all,null,1), 'application/json'); };
-  AN.view==='one' ? anOne() : anCourse();
+  AN.view==='practice' ? anPractice() : AN.view==='one' ? anOne() : anCourse();
+}
+function anPractice(){
+  const c = P.contests.find(x=>x.uid===AN.pcontest); if(!c) return;
+  const E = [...AN.prac.values()].filter(e=>e.c.uid===c.uid).map(e=>{
+    const at = [...e.attempts.values()].filter(a=>a.items.size).sort((a,b)=>String(a.start||a.end).localeCompare(String(b.start||b.end)));
+    const acc = a => a ? [...a.items.values()].filter(d=>d.result==='acierto').length / a.items.size : null;
+    const qset = new Set(at.flatMap(a=>[...a.items.keys()]));
+    return {...e, at, first:at[0], last:at[at.length-1], qn:qset.size, a1:acc(at[0]), aL:acc(at[at.length-1])};
+  }).filter(e=>e.at.length).sort((a,b)=>(a.aL??0)-(b.aL??0));
+  const who = e => AN.anon ? e.anon : e.name, dfmt = x => x ? new Date(x).toLocaleDateString(LANG==='es'?'es-ES':'en-GB',{day:'numeric',month:'short'}) : '–';
+  const arrow = d => d==null ? '–' : Math.abs(d)<.005 ? '=' : `<span class="${d>=.05?'up':d<=-.05?'down':''}">${d>=0?'▲':'▼'} ${Math.abs(Math.round(d*100))}</span>`;
+  /* por pregunta */
+  const Q = new Map();
+  E.forEach(e=>{ e.at.forEach(a=>a.items.forEach(d=>{ const q = Q.get(d.id) || {id:d.id, text:d.question, topic:d.topic, n:0, ko:0, lastN:0, lastKo:0}; Q.set(d.id,q); q.n++; if(d.result!=='acierto') q.ko++; }));
+    e.last.items.forEach(d=>{ const q=Q.get(d.id); q.lastN++; if(d.result!=='acierto') q.lastKo++; }); });
+  const QS = [...Q.values()].sort((a,b)=>(b.lastKo/(b.lastN||1))-(a.lastKo/(a.lastN||1)) || b.ko/b.n-a.ko/a.n);
+  /* comparación con la sesión evaluada */
+  const F = AN.files.filter(f=>f.c.uid===c.uid), bySid = Object.fromEntries(F.map(f=>[f.sid,f]));
+  const both = E.filter(e=>bySid[e.sid]);
+  const cmpS = both.map(e=>{ const f=bySid[e.sid], sess=Object.fromEntries(f.detail.map(d=>[d.id,d.result==='acierto'])), last=e.last.items;
+    const ids=[...last.keys()].filter(id=>id in sess); const sOk=ids.filter(id=>sess[id]).length, lOk=ids.filter(id=>last.get(id).result==='acierto').length;
+    const rec=ids.filter(id=>!sess[id] && last.get(id).result==='acierto'), still=ids.filter(id=>!sess[id] && last.get(id).result!=='acierto');
+    return {e, n:ids.length, sOk, lOk, rec, still}; });
+  const cmpQ = new Map(); cmpS.forEach(x=>{ const f=bySid[x.e.sid]; f.detail.forEach(d=>{ const l=x.e.last.items.get(d.id); if(!l) return;
+    const q=cmpQ.get(d.id)||{id:d.id, text:d.question, n:0, s:0, l:0}; cmpQ.set(d.id,q); q.n++; if(d.result==='acierto') q.s++; if(l.result==='acierto') q.l++; }); });
+  const CQ = [...cmpQ.values()].sort((a,b)=>(a.l/a.n-a.s/a.n)-(b.l/b.n-b.s/b.n));
+  const tot = cmpS.reduce((o,x)=>({n:o.n+x.n, s:o.s+x.sOk, l:o.l+x.lOk}),{n:0,s:0,l:0});
+  const K = t('anPracKpi'), nAt = E.reduce((s,e)=>s+e.at.length,0), qname = id => esc((Q.get(id)||cmpQ.get(id)||{text:id}).text);
+  const head = cols => `<tr>${cols.map((h,i)=>`<th class="${i?'num':''}">${h}</th>`).join('')}</tr>`;
+  $('anOut').innerHTML = `<div class="box"><h2>${esc(c.name||c.title)}: ${t('anPracView')}</h2><div class="kpis">
+      <div class="kpi"><b>${E.length}</b><span>${K[0]}</span></div><div class="kpi"><b>${nAt}</b><span>${K[1]}</span></div>
+      <div class="kpi"><b>${E.length?(nAt/E.length).toFixed(1).replace('.',LANG==='es'?',':'.'):'–'}</b><span>${K[2]}</span></div>
+      <div class="kpi"><b>${E.length?pctS(avg(E.map(e=>e.a1))):'–'}</b><span>${K[3]}</span></div><div class="kpi"><b>${E.length?pctS(avg(E.map(e=>e.aL))):'–'}</b><span>${K[4]}</span></div></div></div>
+  <div class="box"><h2>${t('anPracByS')}</h2><div style="overflow-x:auto"><table class="dtable"><thead>${head(t('anPracColsS'))}</thead><tbody>
+    ${E.map(e=>`<tr><td>${esc(who(e))}${AN.anon?'':`<div class="ic">${esc(e.sid)}</div>`}</td><td class="num">${e.at.length}</td><td class="num">${e.qn}</td><td class="num">${pctS(e.a1)}</td><td class="num">${pctS(e.aL)}</td><td class="num">${arrow(e.aL-e.a1)}</td><td class="num">${dfmt(e.last.end||e.last.start)}</td></tr>`).join('')}
+    </tbody></table></div></div>
+  <div class="box"><h2>${t('anPracByQ')}</h2><p class="note">${t('anPracNoteQ')}</p><div style="overflow-x:auto"><table class="dtable"><thead>${head(t('anPracColsQ'))}</thead><tbody>
+    ${QS.map(q=>`<tr><td><b>${esc(q.text)}</b><div class="ic">${esc(q.id)}</div></td><td class="num">${esc(q.topic||'')}</td><td class="num">${q.n}</td><td class="num">${pctS(q.ko/q.n)}</td><td class="num">${q.lastKo?`<b class="down">${t('anOfN',q.lastKo,q.lastN)}</b>`:t('anOfN',0,q.lastN)}</td></tr>`).join('')}
+    </tbody></table></div></div>
+  <div class="box"><h2>${t('anPracCmp')}</h2>${both.length?`<p class="note">${t('anPracCmpNote')}</p>
+    <div class="kpis"><div class="kpi"><b>${both.length}</b><span>${K[0]}</span></div><div class="kpi"><b>${pctS(tot.s/(tot.n||1))}</b><span>${t('anPracCmpColsQ')[2]}</span></div><div class="kpi"><b>${pctS(tot.l/(tot.n||1))}</b><span>${t('anPracCmpColsQ')[3]}</span></div></div>
+    <div style="overflow-x:auto"><table class="dtable"><thead>${head(t('anPracCmpColsQ'))}</thead><tbody>
+    ${CQ.map(q=>`<tr><td>${esc(q.text)}</td><td class="num">${q.n}</td><td class="num">${pctS(q.s/q.n)}</td><td class="num">${pctS(q.l/q.n)}</td><td class="num">${arrow(q.l/q.n-q.s/q.n)}</td></tr>`).join('')}
+    <tr><td><b>${t('anPracTotal')}</b></td><td class="num">${both.length}</td><td class="num"><b>${pctS(tot.s/(tot.n||1))}</b></td><td class="num"><b>${pctS(tot.l/(tot.n||1))}</b></td><td class="num">${arrow(tot.l/(tot.n||1)-tot.s/(tot.n||1))}</td></tr></tbody></table></div>
+    <div style="overflow-x:auto"><table class="dtable"><thead>${head(t('anPracCmpColsS'))}</thead><tbody>
+    ${cmpS.map(x=>`<tr><td>${esc(who(x.e))}</td><td class="num">${t('anOfN',x.sOk,x.n)}</td><td class="num">${t('anOfN',x.lOk,x.n)}</td><td class="num">${x.rec.length}</td><td class="num">${x.still.length}</td><td class="ic">${x.still.map(qname).join('<br>')||'—'}</td></tr>`).join('')}</tbody></table></div>`
+    : `<p class="note">${t('anPracCmpNone')}</p>`}
+    <div class="row"><button class="btn" id="pcsvS">${t('anPracCsvS')}</button><button class="btn alt" id="pcsvQ">${t('anPracCsvQ')}</button></div></div>`;
+  const csv=(name,rows)=>{ const q=s=>`"${String(s??'').replace(/"/g,'""')}"`; download(name,'\ufeff'+rows.map(r=>r.map(q).join(';')).join('\r\n'),'text/csv'); }, dec=x=>x==null?'':Math.round(x*100);
+  $('pcsvS').onclick=()=>csv(`practice-students-${c.id}${AN.anon?'-anon':''}.csv`,[[...(AN.anon?['anon_id']:['name','id','anon_id']),'sessions','questions_practised','pct_correct_first','pct_correct_last','first_session','last_session','session_correct','last_review_correct','compared','recovered','still_wrong','still_wrong_questions'],
+    ...E.map(e=>{ const x=cmpS.find(y=>y.e===e); return [...(AN.anon?[e.anon]:[e.name,e.sid,e.anon]),e.at.length,e.qn,dec(e.a1),dec(e.aL),e.first.start||'',e.last.end||'',x?x.sOk:'',x?x.lOk:'',x?x.n:'',x?x.rec.length:'',x?x.still.length:'',x?x.still.join(' | '):'']; })]);
+  $('pcsvQ').onclick=()=>csv(`practice-questions-${c.id}.csv`,[['question','text','topic','answers_in_practice','pct_wrong_in_practice','students_last_session','still_wrong_last_session','session_students','pct_correct_session','pct_correct_last_review'],
+    ...QS.map(q=>{ const m=cmpQ.get(q.id); return [q.id,q.text,q.topic,q.n,dec(q.ko/q.n),q.lastN,q.lastKo,m?m.n:'',m?dec(m.s/m.n):'',m?dec(m.l/m.n):'']; })]);
 }
 function anOne(){
   const c=P.contests.find(x=>x.uid===AN.contest), F=AN.files.filter(f=>f.c.uid===c.uid).sort((a,b)=>b.points-a.points), N=F.length; classify(F);

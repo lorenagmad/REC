@@ -92,7 +92,8 @@ Un concurso es un conjunto de preguntas del banco con su propia contraseña. Pul
 - **Sección:** por ejemplo, «Tema 1» o «Bloque 1». Los concursos de una misma sección se suman en el ranking.
 - **Nombre visible y descripción:** lo que verá el alumnado en la portada.
 - **Contraseña:** pulsa **Generar** para obtener una fácil de dictar. Las mayúsculas y las tildes no cuentan.
-- **Visible en la portada**, **análisis de respuestas** (el alumnado descarga un archivo xAPI con sus respuestas) y **modo práctica** (sin puntos, sin reloj y con soluciones; usa la misma contraseña).
+- **Visible en la portada**, **análisis de respuestas** (el alumnado descarga un archivo xAPI con sus respuestas) y **modo práctica** (sin puntos, sin reloj y con soluciones; usa la misma contraseña). Si el concurso tiene el análisis activado, la práctica también se registra: consulta «Registro de práctica» en la Parte 3.
+- **Solo modo práctica:** la portada ofrece únicamente la práctica, aunque el alumno tenga la contraseña. Sirve para abrir como repaso, por ejemplo al final del curso, un concurso que ya se evaluó en clase.
 - **Tiempo y puntuación:** segundos por tipo de pregunta y puntos de un acierto instantáneo y de uno en el último segundo (por defecto, 1000 y 500).
 - **Idioma en el que aparece:** en los dos idiomas (por defecto), solo en español o solo en inglés. Útil si preparas el mismo concurso en ambas lenguas: cada versión aparece solo en su idioma.
 - **Presentación:** el mensaje de bienvenida de Cam y, si quieres, tus propias frases tras un acierto, un fallo o cuando se acaba el tiempo.
@@ -120,6 +121,17 @@ Comparte la dirección de tu sitio (por ejemplo, en el campus virtual) y di la c
 - puede cambiar el idioma (ES/EN), silenciar el sonido y abrir **Accesibilidad** (tamaño del texto, alto contraste y reducir animaciones);
 - al terminar, copia su resguardo o descarga el archivo (si el concurso tiene análisis) y te lo envía por donde indiques, por ejemplo, una tarea de Moodle.
 
+**Registro de práctica.** Si el concurso tiene activados el **modo práctica** y el **análisis de respuestas**, cada práctica queda registrada:
+
+- antes de practicar, el alumno escribe su nombre y su identificador, como en el modo evaluable;
+- practica sin puntos y sin reloj tantas veces como quiera. Aunque no vea el reloj, se registra el tiempo de cada respuesta para el análisis;
+- cada práctica se acumula en su navegador, en un registro por concurso y alumno;
+- cuando termine de repasar, pulsa **Descargar mi registro de práctica**, en la pantalla final de la práctica o en la tarjeta del concurso de la portada, y te envía ese archivo (`practica-<concurso>-<identificador>.json`; en inglés, `practice-…`). Contiene todas sus prácticas en formato xAPI.
+
+El registro se guarda en el navegador donde se practica. Si un alumno practica en varios dispositivos (por ejemplo, en el móvil y en el portátil), debe enviar un archivo desde cada uno: el estudio los une sin duplicar prácticas. Si el concurso no tiene el análisis activado, la práctica sigue siendo anónima y no genera ningún archivo.
+
+Un uso habitual: al final de cada sesión, el concurso se hace en modo evaluable; al final del curso, se marca como **Solo modo práctica**, se publica de nuevo y el alumnado repasa antes del examen y sube su registro al campus virtual.
+
 **Tiempo extra.** En **Resultados → Tiempo extra** generas un código personal ligado al identificador del alumno (+25 %, +50 %, +75 % o el doble). Se lo das en privado y lo escribe antes de empezar. No hay que subir nada a GitHub: el código vale para todos los concursos publicados desde tu proyecto, y su puntuación se calcula sobre el tiempo ampliado. Si empiezas un proyecto nuevo, los códigos repartidos dejan de valer.
 
 ---
@@ -135,14 +147,17 @@ La **bonificación** (por ejemplo, preguntas regaladas en el examen) puede ser:
 - **Según el porcentaje del máximo** (recomendada): cada alumno sabe desde el principio qué necesita. Ten en cuenta que acertarlo todo respondiendo a mitad de tiempo da un 75 % del máximo.
 - **Relativa al primero:** quien más puntos logra obtiene el máximo y el resto, en proporción.
 
+Los registros de práctica no cuentan en el ranking: si cargas alguno, el estudio lo indica y lo deja fuera.
+
 Puedes cambiar el nombre de la bonificación, el número de niveles y los umbrales: el ranking se recalcula al instante. Descarga la versión para publicar (con el identificador parcialmente oculto) y la hoja CSV completa para ti. **Publica el ranking solo en un espacio cerrado, como el campus virtual.**
 
 ### Análisis
 
-Carga los archivos `.json` de los concursos con análisis (por ejemplo, todas las entregas de una tarea de Moodle). Hay dos vistas:
+Carga los archivos `.json` de los concursos con análisis y, si los tienes, los registros de práctica (por ejemplo, todas las entregas de una tarea de Moodle). Hay tres vistas:
 
 - **Un concurso:** resumen, ideas para la próxima clase, mapa de rapidez y acierto (domina, sabe pero duda, se precipita y necesita repaso), análisis pregunta a pregunta (dificultad, error más frecuente y si la pregunta distingue a quien sabe) y alumno a alumno.
 - **Todo lo cargado:** dominio por tema y retención entre los concursos de una sección y su evaluación global.
+- **Práctica:** cómo repasa el alumnado. Por alumno, número de prácticas, preguntas practicadas y acierto en la primera práctica frente a la última. Por pregunta, porcentaje de fallo en práctica y cuántos alumnos la siguen fallando en su última práctica. Si cargas también los resguardos de la sesión evaluada de ese concurso, compara para cada pregunta y cada alumno el acierto en la sesión con el de su último repaso: qué preguntas se han recuperado y cuáles se siguen fallando. Se puede descargar en CSV, también anonimizado.
 
 **El archivo xAPI.** El archivo que descarga el alumnado está en formato **xAPI** (Experience API), el estándar para registrar actividades de aprendizaje: contiene una declaración por cada pregunta (qué respondió, si acertó y cuánto tardó) y, dentro, el resguardo verificable que usan el ranking y el análisis. Es un solo archivo por alumno y concurso. El botón **Descargar todas las interacciones en xAPI** junta las declaraciones de todos los archivos cargados en uno, listo para importar en un LRS (el almacén de datos de aprendizaje de tu centro, si lo tiene); con «Anonimizar» marcado, sale sin nombres ni identificadores.
 
