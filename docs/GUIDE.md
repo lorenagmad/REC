@@ -60,6 +60,7 @@ Bookmark it: that is where you will work from now on.
 Open your studio. It has five tabs: **Course**, **Question bank**, **Contests**, **Publish** and **Results**. At the top right you can switch the language (ES/EN) and open this guide with **Help**.
 
 - Everything you do is **saved automatically** in that browser.
+- Each site (or folder, if you work on your computer) has its own project: the studio for one subject does not show another subject’s data.
 - Use **Save project** every now and then to keep a copy on your computer (`.rec.json` file), and **Open project** to restore it or continue on another computer.
 - ⚠️ The project file contains the questions, answers and passwords unencrypted. **Keep it on your computer only and never upload it to GitHub.**
 
@@ -146,10 +147,11 @@ The **bonus** (e.g. free questions in the exam) can be:
 
 - **By percentage of the maximum** (recommended): students know from the start what they need. Note that getting everything right at half time gives 75 % of the maximum.
 - **Relative to the top scorer:** the top scorer gets the maximum and the rest in proportion.
+- **None, ranking only:** the awards show displays only ranks, points and correct answers, with no bonus column or legend.
 
 Practice logs do not count in the ranking: if you load any, the studio says so and leaves them out.
 
-You can rename the bonus and change the number of levels and the thresholds: the ranking is recalculated instantly. Download the version to publish (with the ID partly hidden) and the full CSV sheet for yourself. **Publish the ranking only in a closed space, such as your learning platform.**
+The bonus does not have to be exam questions: its name is free text (e.g. “tenths of a mark”). You can also change the number of levels and the thresholds: the ranking is recalculated instantly. Download the version to publish (with the ID partly hidden) and the full CSV sheet for yourself. **Publish the ranking only in a closed space, such as your learning platform.**
 
 ### Analysis
 
@@ -190,5 +192,7 @@ Load the `.json` files from contests with analysis and, if you have them, the pr
 **I changed a question and cannot see it.** Generate the package again, upload it to the `contests` folder and reload the page.
 
 **The home page says the list of contests cannot be loaded.** Check that the `contests` folder in your repository contains the `index.json` file.
+
+**When I open the studio, a notice about an “earlier project in this browser” appears.** Versions before 1.1.0 kept a single project for every site in the same browser, which is why another subject’s data could appear. Now each site keeps its own. If that old project belongs to this site, press “Recover it here”; if you are starting another subject, “Ignore and start a new one”.
 
 **I lost my studio project.** If you cleared the browser data, open the copy you saved with **Save project**. That is why it is worth saving it every now and then.

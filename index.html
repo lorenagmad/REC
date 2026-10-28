@@ -610,6 +610,9 @@ function anonStatements(list, anonOf){
 /* ============ juego ============ */
 const DEF = {tiempos:{opcion_multiple:20, verdadero_falso:15, emparejar:45, ordenar:45, respuesta_corta:30, imagen:25}, puntos_max:1000, puntos_min:500};
 const TKEY = {mc:'opcion_multiple', mm:'opcion_multiple', tf:'verdadero_falso', match:'emparejar', order:'ordenar', short:'respuesta_corta', hot:'imagen'};
+/* claves del navegador propias de cada sitio: dos concursos con el mismo identificador en sitios distintos no se mezclan */
+const NS = location.pathname.replace(/[^/]*$/,'');
+const doneKey = (qid, sid) => `rec@${NS}:${qid}:${sid}`;
 let PRACLOG = false;  /* práctica con registro: concurso con «Análisis de respuestas» activado */
 let MANIFEST = null, QUIZ = null, BLOBS = {}, TH = {}, S = null, PRACTICE = false, ANALISIS = false, CFG = DEF, MAXP = 1000, MINP = 500, LOCKED = null, LOCKPRAC = false;
 let blobUrls = {};
@@ -663,7 +666,10 @@ $('btnStart').onclick = () => {
   if(PRACTICE){ newRun(name, id, 0); show('sQ'); renderQ(); return; }  /* práctica con registro: identificada, sin reloj */
   const ex = parseExtra($('inExtra').value, id);
   if(ex.err){ $('introErr').textContent = T.errExtra; $('extraBox').open = true; $('inExtra').focus(); return; }
-  const prev = store.get(`rec:${QUIZ.id}:${normId(id)}`);
+  let prev = store.get(doneKey(QUIZ.id, normId(id)));
+  if(!prev){ /* intento guardado por la v1.0.0 (clave común a todos los sitios): solo cuenta si su código es de este concurso */
+    const old = store.get(`rec:${QUIZ.id}:${normId(id)}`);
+    if(old && old.code && makeCode(old.id, old.score, old.hits, QUIZ, old.max) === old.code){ prev = old; store.set(doneKey(QUIZ.id, normId(id)), old); } }
   if(prev){ renderFinal(prev, true); return; }
   newRun(name, id, ex.pct); ac();
   overlaySeq([
@@ -842,7 +848,7 @@ function next(){
   const r = { start:S.start, end:new Date().toISOString(), name:S.name, id:normId(S.id), score:S.score, hits:S.hits, n:S.qs.length, max:S.qs.length*MAXP, extra:S.extra,
     avg: okT.length ? (okT.reduce((a,b)=>a+b,0)/okT.length).toFixed(1) : '–', date: new Date().toLocaleString(LANG==='es'?'es-ES':'en-GB',{dateStyle:'short',timeStyle:'short'}), log:S.log };
   r.code = makeCode(r.id, r.score, r.hits, QUIZ, r.max); r.analysis = ANALISIS;
-  store.set(`rec:${QUIZ.id}:${r.id}`, r); renderFinal(r, false);
+  store.set(doneKey(QUIZ.id, r.id), r); renderFinal(r, false);
 }
 function renderPracticeEnd(){
   show('sPEnd'); const T=L(), n=S.log.length, ok=S.log.filter(l=>l.ok).length;
@@ -860,7 +866,7 @@ function renderPracticeEnd(){
   if(ok===n) confetti(120); window.scrollTo({top:0});
 }
 /* ---- registro de práctica: localStorage, por concurso y alumno ---- */
-const pracKey = (qid, sid) => `rec:prac:${qid}:${sid}`;
+const pracKey = (qid, sid) => `rec@${NS}:prac:${qid}:${sid}`;
 function pracSave(Q, run){
   const sid = normId(run.id), k = pracKey(Q.id, sid);
   const rec = store.get(k) || {quiz:{id:Q.id, title:Q.title}, name:run.name, id:sid, base: location.origin + location.pathname.replace(/[^/]*$/,''), attempts:[]};
@@ -869,7 +875,7 @@ function pracSave(Q, run){
   rec.attempts.push({uuid, n: rec.attempts.length+1, start: run.start, end: new Date().toISOString(), lang: LANG, log: run.log});
   store.set(k, rec); return rec;
 }
-function pracRecords(qid){ const out=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith(`rec:prac:${qid}:`)){ const r=store.get(k); if(r && r.attempts && r.attempts.length) out.push(r); } } }catch(e){} return out; }
+function pracRecords(qid){ const out=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith(`rec@${NS}:prac:${qid}:`)){ const r=store.get(k); if(r && r.attempts && r.attempts.length) out.push(r); } } }catch(e){} return out; }
 /* identificador de declaración estable: el mismo intento genera siempre los mismos identificadores */
 function stableUuid(seed){ const h = [1,2,3,4].map(k=>cyrb53(seed, k).toString(16).padStart(14,'0').slice(-8)).join('');
   return `${h.slice(0,8)}-${h.slice(8,12)}-4${h.slice(13,16)}-${'89ab'[parseInt(h[16],16)%4]}${h.slice(17,20)}-${h.slice(20,32)}`; }
@@ -936,7 +942,7 @@ async function openQuiz(m, pass){
   let plain; try{ plain = await crypto.subtle.decrypt({name:'AES-GCM', iv:buf.slice(16,28)}, key, buf.slice(28)); } catch(e){ throw new Error(T.errWrong); }
   return JSON.parse(new TextDecoder().decode(plain));
 }
-function doneBefore(qid){ try{ for(let i=0;i<localStorage.length;i++){ if(localStorage.key(i).startsWith(`rec:${qid}:`)) return true; } }catch(e){} return false; }
+function doneBefore(qid){ try{ for(let i=0;i<localStorage.length;i++){ if(localStorage.key(i).startsWith(`rec@${NS}:${qid}:`)) return true; } }catch(e){} return false; }
 const SHOWALL = new URLSearchParams(location.search).has('all') || new URLSearchParams(location.search).has('todos');
 function renderHome(){
   const T = L(), list = MANIFEST.contests.filter(q=>(SHOWALL || q.active!==false) && (!q.lang || q.lang===LANG));  /* un concurso con idioma solo aparece en ese idioma */

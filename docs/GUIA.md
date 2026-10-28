@@ -60,6 +60,7 @@ Guárdala en favoritos: es donde trabajarás a partir de ahora.
 Abre tu estudio. Tiene cinco pestañas: **Curso**, **Banco de preguntas**, **Concursos**, **Publicar** y **Resultados**. Arriba a la derecha puedes cambiar el idioma (ES/EN) y abrir esta guía con **Ayuda**.
 
 - Todo lo que haces se **guarda solo** en ese navegador.
+- Cada sitio (o carpeta, si trabajas en tu ordenador) tiene su propio proyecto: el estudio de una asignatura no muestra los datos de otra.
 - Usa **Guardar proyecto** de vez en cuando para tener una copia en tu ordenador (archivo `.rec.json`), y **Abrir proyecto** para recuperarla o seguir trabajando en otro ordenador.
 - ⚠️ El archivo del proyecto contiene las preguntas, las respuestas y las contraseñas sin cifrar. **Guárdalo solo en tu ordenador y no lo subas nunca a GitHub.**
 
@@ -146,10 +147,11 @@ La **bonificación** (por ejemplo, preguntas regaladas en el examen) puede ser:
 
 - **Según el porcentaje del máximo** (recomendada): cada alumno sabe desde el principio qué necesita. Ten en cuenta que acertarlo todo respondiendo a mitad de tiempo da un 75 % del máximo.
 - **Relativa al primero:** quien más puntos logra obtiene el máximo y el resto, en proporción.
+- **Ninguna, solo ranking:** la gala muestra solo puestos, puntos y aciertos, sin columna ni leyenda de bonificación.
 
 Los registros de práctica no cuentan en el ranking: si cargas alguno, el estudio lo indica y lo deja fuera.
 
-Puedes cambiar el nombre de la bonificación, el número de niveles y los umbrales: el ranking se recalcula al instante. Descarga la versión para publicar (con el identificador parcialmente oculto) y la hoja CSV completa para ti. **Publica el ranking solo en un espacio cerrado, como el campus virtual.**
+La bonificación no tiene por qué ser de preguntas: su nombre es libre (por ejemplo, «décimas en la nota»). Puedes cambiar también el número de niveles y los umbrales: el ranking se recalcula al instante. Descarga la versión para publicar (con el identificador parcialmente oculto) y la hoja CSV completa para ti. **Publica el ranking solo en un espacio cerrado, como el campus virtual.**
 
 ### Análisis
 
@@ -190,5 +192,7 @@ Carga los archivos `.json` de los concursos con análisis y, si los tienes, los 
 **He cambiado una pregunta y no se ve.** Genera el paquete de nuevo, súbelo a la carpeta `contests` y recarga la página.
 
 **La portada dice que no se puede cargar el listado de concursos.** Comprueba que la carpeta `contests` de tu repositorio contiene el archivo `index.json`.
+
+**Al abrir el estudio aparece un aviso sobre un «proyecto anterior en este navegador».** Las versiones anteriores a la 1.1.0 guardaban un único proyecto para todos los sitios del mismo navegador, por eso podían aparecer los datos de otra asignatura. Ahora cada sitio guarda el suyo. Si ese proyecto antiguo es el de este sitio, pulsa «Recuperarlo aquí»; si estás empezando otra asignatura, «Ignorar y empezar uno nuevo».
 
 **He perdido el proyecto del estudio.** Si borraste los datos del navegador, ábrelo desde la copia que guardaste con **Guardar proyecto**. Por eso conviene guardarlo de vez en cuando.
