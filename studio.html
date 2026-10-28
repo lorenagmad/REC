@@ -245,7 +245,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   kIsGlobal:'Es una evaluación global', kActive:'Visible en la portada', kAnalysis:'Análisis de respuestas (el alumno descarga un archivo)', kPractice:'Modo práctica disponible (sin puntos)', kLang:'Idioma en el que aparece en la portada', kLangAll:'En los dos idiomas', kLangEs:'Solo en español', kLangEn:'Solo en inglés',
   kSettings:'Tiempo y puntuación', kTimes:'Segundos por tipo de pregunta', kPmax:'Puntos de un acierto instantáneo', kPmin:'Puntos de un acierto en el último segundo',
   kHost:'Presentación (opcional)', kIntro:'Mensaje de bienvenida de Cam', kOk:'Frases tras un acierto (una por línea)', kKo:'Frases tras un fallo', kTo:'Frases si se acaba el tiempo', kHostHint:'Si las dejas vacías, Cam usará sus frases de siempre.',
-  kQuestions:'Preguntas del concurso', kPickMode:'Cómo elegirlas', kPickManual:'Elegir del banco', kPickAuto:'Generar una evaluación global', kSelected:n=>`${n} preguntas elegidas`, kClear:'Vaciar', kUp:'↑', kRemove:'Quitar',
+  kQuestions:'Preguntas del concurso', kPickMode:'Cómo elegirlas', kPickManual:'Elegir del banco', kPickAuto:'Generar una evaluación global', kSelected:n=>`${n} preguntas elegidas`, kClear:'Vaciar', kAddAll:n=>`Añadir todas las de la lista (${n})`, kRemAll:'Quitar las de la lista', kNoneYet:'Todavía no has elegido ninguna pregunta: márcalas en la lista o usa «Añadir todas las de la lista».', kNoQ:'Este concurso no tiene preguntas. Márcalas en la lista o usa «Añadir todas las de la lista».\n\n¿Quieres guardarlo igualmente, sin preguntas?', legacyTitle:'Proyecto anterior en este navegador', legacyText:(c,q,k)=>`Este navegador tiene guardado un proyecto de una versión anterior de REC${c?` («${c}»)`:''}, con ${q} preguntas y ${k} concursos. Si es el de este sitio, recupéralo. Si estás empezando otro curso o asignatura, ignóralo y empieza uno nuevo.`, legacyLoad:'Recuperarlo aquí', legacyIgnore:'Ignorar y empezar uno nuevo', kUp:'↑', kRemove:'Quitar',
   kAutoFrom:'Sacar preguntas de estos concursos', kAutoN:'Preguntas de cada concurso', kAutoByTopic:'Repartir por temas: como mucho estas preguntas de cada tema', kAutoGo:'Generar', kAutoDone:n=>`Se han elegido ${n} preguntas al azar. Puedes ajustarlas a mano.`,
   kAutoNone:'Elige al menos un concurso de origen.', kDelConfirm:'¿Borrar este concurso? Las preguntas siguen en el banco.', kDup:'Duplicar',
   pTitle:'Publicar en GitHub', pLead:'Genera el paquete con los concursos cifrados y súbelo a tu sitio de REC en GitHub. Las preguntas sin cifrar nunca salen de tu ordenador.',
@@ -256,7 +256,7 @@ es:{ studio:'Estudio', help:'Ayuda', pNew:'Nuevo', pOpen:'Abrir proyecto', pSave
   rTitle:'Resultados', rLead:'Ranking, análisis y tiempo extra. Todo se calcula en tu navegador: los datos del alumnado no salen de tu ordenador.',
   rRanking:'Ranking', rAnalysis:'Análisis', rExtra:'Tiempo extra',
   rkSection:'Sección', rkTickets:'Resguardos', rkTicketsHint:'Pega los resguardos (de todos los concursos de la sección, en cualquier orden) o carga archivos de texto o los .json de los concursos con análisis.',
-  rkFiles:'Cargar archivos', rkMode:'Bonificación', rkAbs:'Según el porcentaje del máximo (recomendado)', rkRel:'Relativa al primero', rkBonusName:'Nombre de la bonificación', rkBonusDef:'preguntas regaladas en el examen',
+  rkFiles:'Cargar archivos', rkMode:'Bonificación', rkAbs:'Según el porcentaje del máximo (recomendado)', rkRel:'Relativa al primero', rkNone:'Ninguna, solo ranking', rkBonusName:'Nombre de la bonificación', rkBonusDef:'preguntas regaladas en el examen',
   rkThr:'Porcentaje mínimo del máximo para cada nivel de bonificación', rkLevels:'Niveles de bonificación', rkGo:'Preparar la gala', rkNames:'Mostrar nombres en la versión publicada (el identificador siempre aparece parcialmente oculto)',
   rkHtml:'Descargar ranking para publicar', rkCsv:'Descargar hoja completa (CSV)', rkNoSec:'No hay concursos en esa sección.',
   rkValid:(v,n)=>`${v} resguardos válidos de ${n} alumnos.`, rkBad:(w,c,p)=>`Código NO válido: ${w}, ${c}, ${p} puntos. No se ha contado.`, rkDup:(w,c)=>`Resguardo repetido de ${w} en ${c}: se cuenta el de más puntos.`,
@@ -336,7 +336,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   kIsGlobal:'It is a global test', kActive:'Visible on the home page', kAnalysis:'Answer analysis (students download a file)', kPractice:'Practice mode available (no points)', kLang:'Language in which it appears on the home page', kLangAll:'In both languages', kLangEs:'Spanish only', kLangEn:'English only',
   kSettings:'Time and scoring', kTimes:'Seconds per question type', kPmax:'Points for an instant correct answer', kPmin:'Points for a correct answer in the last second',
   kHost:'Presentation (optional)', kIntro:'Cam’s welcome message', kOk:'Lines after a correct answer (one per line)', kKo:'Lines after a wrong answer', kTo:'Lines when time runs out', kHostHint:'If you leave them empty, Cam will use her usual lines.',
-  kQuestions:'Contest questions', kPickMode:'How to choose them', kPickManual:'Choose from the bank', kPickAuto:'Generate a global test', kSelected:n=>`${n} questions chosen`, kClear:'Clear', kUp:'↑', kRemove:'Remove',
+  kQuestions:'Contest questions', kPickMode:'How to choose them', kPickManual:'Choose from the bank', kPickAuto:'Generate a global test', kSelected:n=>`${n} questions chosen`, kClear:'Clear', kAddAll:n=>`Add all in the list (${n})`, kRemAll:'Remove those in the list', kNoneYet:'You have not chosen any questions yet: tick them in the list or use “Add all in the list”.', kNoQ:'This contest has no questions. Tick them in the list or use “Add all in the list”.\n\nDo you want to save it anyway, without questions?', legacyTitle:'Earlier project in this browser', legacyText:(c,q,k)=>`This browser holds a project saved by an earlier version of REC${c?` (“${c}”)`:''}, with ${q} questions and ${k} contests. If it belongs to this site, recover it. If you are starting another course or subject, ignore it and start a new one.`, legacyLoad:'Recover it here', legacyIgnore:'Ignore and start a new one', kUp:'↑', kRemove:'Remove',
   kAutoFrom:'Take questions from these contests', kAutoN:'Questions from each contest', kAutoByTopic:'Spread by topic: at most this many questions per topic', kAutoGo:'Generate', kAutoDone:n=>`${n} questions were chosen at random. You can adjust them by hand.`,
   kAutoNone:'Choose at least one source contest.', kDelConfirm:'Delete this contest? The questions stay in the bank.', kDup:'Duplicate',
   pTitle:'Publish on GitHub', pLead:'Generate the package with the encrypted contests and upload it to your REC site on GitHub. Unencrypted questions never leave your computer.',
@@ -347,7 +347,7 @@ en:{ studio:'Studio', help:'Help', pNew:'New', pOpen:'Open project', pSave:'Save
   rTitle:'Results', rLead:'Ranking, analysis and extra time. Everything is calculated in your browser: student data never leave your computer.',
   rRanking:'Ranking', rAnalysis:'Analysis', rExtra:'Extra time',
   rkSection:'Section', rkTickets:'Tickets', rkTicketsHint:'Paste the tickets (from all the contests in the section, in any order) or load text files or the .json files from contests with analysis.',
-  rkFiles:'Load files', rkMode:'Bonus', rkAbs:'By percentage of the maximum (recommended)', rkRel:'Relative to the top scorer', rkBonusName:'Bonus name', rkBonusDef:'free questions in the exam',
+  rkFiles:'Load files', rkMode:'Bonus', rkAbs:'By percentage of the maximum (recommended)', rkRel:'Relative to the top scorer', rkNone:'None, ranking only', rkBonusName:'Bonus name', rkBonusDef:'free questions in the exam',
   rkThr:'Minimum percentage of the maximum for each bonus level', rkLevels:'Bonus levels', rkGo:'Prepare the awards show', rkNames:'Show names in the published version (the ID is always partly hidden)',
   rkHtml:'Download ranking to publish', rkCsv:'Download full sheet (CSV)', rkNoSec:'There are no contests in that section.',
   rkValid:(v,n)=>`${v} valid tickets from ${n} students.`, rkBad:(w,c,p)=>`Code NOT valid: ${w}, ${c}, ${p} points. Not counted.`, rkDup:(w,c)=>`Repeated ticket from ${w} in ${c}: the highest score is used.`,
@@ -416,8 +416,10 @@ let P = blankProject();
 const DB = { open(){ return new Promise((res,rej)=>{ const r=indexedDB.open('rec-studio',1); r.onupgradeneeded=()=>r.result.createObjectStore('kv'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); },
   async get(k){ const db=await this.open(); return new Promise(res=>{ const q=db.transaction('kv').objectStore('kv').get(k); q.onsuccess=()=>res(q.result); q.onerror=()=>res(null); }); },
   async set(k,v){ const db=await this.open(); return new Promise(res=>{ const tx=db.transaction('kv','readwrite'); tx.objectStore('kv').put(v,k); tx.oncomplete=()=>res(true); tx.onerror=()=>res(false); }); } };
-let saveTimer = null;
-function touch(){ clearTimeout(saveTimer); saveTimer = setTimeout(async()=>{ await DB.set('project', P); $('saved').textContent = t('savedAt', new Date().toLocaleTimeString(LANG==='es'?'es-ES':'en-GB',{hour:'2-digit',minute:'2-digit'})); }, 600); }
+/* cada sitio o carpeta tiene su propio proyecto: la clave incluye la ruta de la página */
+const PKEY = 'project:' + location.pathname.replace(/[^/]*$/,'');
+let saveTimer = null, LEGACY = null;
+function touch(){ clearTimeout(saveTimer); saveTimer = setTimeout(async()=>{ await DB.set(PKEY, P); $('saved').textContent = t('savedAt', new Date().toLocaleTimeString(LANG==='es'?'es-ES':'en-GB',{hour:'2-digit',minute:'2-digit'})); }, 600); }
 $('pNew').onclick = () => { if(!confirm(t('confirmNew'))) return; P = blankProject(); touch(); renderAll(); };
 $('pSave').onclick = () => download(`${slug(P.course.title||'proyecto')}.rec.json`, JSON.stringify(P), 'application/json');
 $('pOpenFile').onchange = async e => { const f=e.target.files[0]; if(!f) return; try{ const o=JSON.parse(await f.text()); if(o.format!=='rec-project-1') throw 0; P=o; touch(); renderAll(); alert(t('projLoaded')); }catch(err){ alert(t('badProject')); } e.target.value=''; };
@@ -440,11 +442,15 @@ function renderAll(){
 function renderCourse(){
   const c = P.course;
   $('tab-course').innerHTML = `<h1>${t('cTitle')}</h1><p class="lead">${t('cLead')}</p>
+  ${LEGACY?`<div class="box" style="border-color:var(--y)"><h2>${t('legacyTitle')}</h2><p style="margin:0">${esc(t('legacyText', LEGACY.course.title||'', LEGACY.questions.length, LEGACY.contests.length))}</p>
+    <div class="row"><button class="btn" id="lgLoad">${t('legacyLoad')}</button><button class="btn alt" id="lgIgnore">${t('legacyIgnore')}</button></div></div>`:''}
   <div class="box"><div class="grid2"><label>${t('cName')}<input type="text" id="cName" value="${esc(c.title)}"></label><label>${t('cSub')}<input type="text" id="cSub" value="${esc(c.subtitle)}"></label></div>
     <label style="max-width:360px">${t('cLang')}<select id="cLang"><option value="es">Español</option><option value="en">English</option></select><span class="hintx">${t('cLangHint')}</span></label></div>
   <p class="msg warn"><b>${t('cWarnTitle')}.</b> ${t('cWarn')}</p>
   <p class="note" style="margin-top:12px">${t('cStats', P.questions.length, P.contests.length)} ${P.questions.length?'':t('cNext')}</p>`;
   $('cLang').value = c.language||'es';
+  if($('lgLoad')){ $('lgLoad').onclick = async () => { P = LEGACY; LEGACY = null; await DB.set(PKEY, P); await DB.set('project', null); renderAll(); };
+    $('lgIgnore').onclick = () => { localStorage.setItem('rec-studio:legacy-ignored:'+PKEY,'1'); LEGACY = null; renderAll(); }; }
   $('cName').oninput = e => { c.title = e.target.value; touch(); };
   $('cSub').oninput = e => { c.subtitle = e.target.value; touch(); };
   $('cLang').onchange = e => { c.language = e.target.value; touch(); };
@@ -569,7 +575,7 @@ function skeleton(type){
 }
 function openEditor(q, type){
   EISNEW = !q; E = q ? structuredClone(q) : skeleton(type); E0text = html2lines(E.h);
-  $('modal').classList.remove('hidden'); renderEditor(); setTimeout(()=>$('eName') && $('eName').focus(), 50);
+  $('modal').classList.remove('hidden'); renderEditor(); $('modal').scrollTop = 0; setTimeout(()=>$('eName') && $('eName').focus({preventScroll:true}), 50);
 }
 function closeEditor(){ $('modal').classList.add('hidden'); E=null; if($('newType')) $('newType').value=''; }
 function mediaSrc(m){ return m.blob ? `data:${P.media[m.blob].mime};base64,${P.media[m.blob].b64}` : m.url; }
@@ -700,8 +706,9 @@ function renderContests(){
   document.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=()=>{ if(!confirm(t('kDelConfirm'))) return; P.contests=P.contests.filter(c=>c.uid!==b.dataset.cdel); touch(); renderContests(); });
 }
 let C = null, CMODE = 'manual', CFILT = {topic:'', q:''}, CMSG = '';
-function openContest(c){ C = c ? structuredClone(c) : newContest(); CMODE = 'manual'; CMSG=''; $('modal').classList.remove('hidden'); renderContestEd(); }
+function openContest(c){ C = c ? structuredClone(c) : newContest(); CMODE = 'manual'; CMSG=''; $('modal').classList.remove('hidden'); renderContestEd(); $('modal').scrollTop = 0; const pk=document.querySelector('#sheet .pickl'); if(pk) pk.scrollTop = 0; }
 function renderContestEd(){
+  const keep = {m:$('modal').scrollTop, l:(document.querySelector('#sheet .pickl')||{}).scrollTop||0, f:(document.activeElement&&document.activeElement.dataset)?document.activeElement.dataset.pk:null};
   const c = C, st = c.settings, T = t('types'), byId = Object.fromEntries(P.questions.map(q=>[q.uid,q]));
   const pool = P.questions.filter(q=>(!CFILT.topic || (q.tema||'')===(CFILT.topic==='∅'?'':CFILT.topic)) && (!CFILT.q || (q.name+' '+strip(q.h)).toLowerCase().includes(CFILT.q.toLowerCase())));
   const others = P.contests.filter(x=>x.uid!==c.uid);
@@ -722,16 +729,19 @@ function renderContestEd(){
   <div class="box" style="margin:0"><h2>${t('kQuestions')}</h2>
     <div class="row"><span class="note">${t('kPickMode')}:</span><button class="btn sm ${CMODE==='manual'?'':'alt'}" id="mMan">${t('kPickManual')}</button><button class="btn sm ${CMODE==='auto'?'':'alt'}" id="mAuto">${t('kPickAuto')}</button></div>
     ${CMODE==='manual' ? `<div class="toolbar"><label>${t('bFilterTopic')}<select id="cfTopic"><option value="">${t('all')}</option>${topics().map(x=>`<option value="${esc(x||'∅')}">${esc(x||t('noTopic'))}</option>`).join('')}</select></label><label style="flex:1">${t('bSearch')}<input type="text" id="cfQ" value="${esc(CFILT.q)}"></label></div>
+      <div class="row"><button class="btn sm" id="cAddAll" ${pool.length?'':'disabled'}>${t('kAddAll', pool.length)}</button><button class="btn sm alt" id="cRemAll" ${pool.some(q=>c.qids.includes(q.uid))?'':'disabled'}>${t('kRemAll')}</button></div>
       <div class="pickl">${pool.map(q=>`<label><input type="checkbox" data-pk="${q.uid}" ${c.qids.includes(q.uid)?'checked':''}><span><span class="badge t-${q.type}">${esc(T[q.type])}</span> <b>${esc(q.name)}</b> <span class="ic">${esc(q.tema||'')}</span><br><span class="ic">${esc(strip(q.h).slice(0,120))}</span></span></label>`).join('') || `<span class="note">${t('bEmpty')}</span>`}</div>`
     : `<p class="note">${t('kAutoFrom')}:</p><div class="pickl" style="max-height:200px">${others.map(x=>`<label><input type="checkbox" data-src="${x.uid}" ${x.section===c.section&&!x.global?'checked':''}><span><b>${esc(x.name||x.title)}</b> <span class="ic">${esc(x.section||'')} · ${t('kQ',x.qids.length)}</span></span></label>`).join('') || `<span class="note">${t('needContests')}</span>`}</div>
       <div class="grid2"><label>${t('kAutoN')}<input type="number" min="1" id="aN" value="4"></label><label>${t('kAutoByTopic')}<input type="number" min="0" id="aT" value="0"></label></div>
       <div class="row"><button class="btn" id="aGo">${t('kAutoGo')}</button></div>`}
     ${CMSG?`<p class="msg info">${esc(CMSG)}</p>`:''}
-    <p class="note"><b>${t('kSelected', c.qids.length)}</b> <button class="btn sm alt" id="cClear">${t('kClear')}</button></p>
+    <p class="note"><b>${t('kSelected', c.qids.length)}</b> <button class="btn sm alt" id="cClear">${t('kClear')}</button></p>${c.qids.length?'':`<p class="msg warn">${t('kNoneYet')}</p>`}
     <div class="sel">${c.qids.map((id,i)=>byId[id]?`<div><span>${esc(byId[id].name)} <span class="ic">${esc(byId[id].tema||'')}</span></span><button class="btn sm alt" data-qu="${i}" ${i?'':'disabled'} aria-label="↑">↑</button><button class="btn sm danger" data-qr="${i}">${t('kRemove')}</button></div>`:'').join('')}</div></div>
   <p class="msg ko hidden" id="cErr"></p>
   <div class="row"><button class="btn rec" id="cSave">${t('save')}</button><button class="btn alt" id="cCancel">${t('cancel')}</button></div>`;
   const on=(id,ev,f)=>$(id)&&($(id)[ev]=f), all=(s,f)=>document.querySelectorAll('#sheet '+s).forEach(f);
+  $('modal').scrollTop = keep.m; const pkl=document.querySelector('#sheet .pickl'); if(pkl) pkl.scrollTop = keep.l;
+  if(keep.f){ const el=document.querySelector(`#sheet [data-pk="${keep.f}"]`); if(el) el.focus({preventScroll:true}); }
   on('cX','onclick',closeEditor); on('cCancel','onclick',closeEditor);
   on('kTitle','oninput',e=>c.title=e.target.value); on('kSec','oninput',e=>c.section=e.target.value.trim()); on('kName','oninput',e=>c.name=e.target.value); on('kDesc','oninput',e=>c.description=e.target.value);
   on('kPass','oninput',e=>c.password=e.target.value); on('kGen','onclick',()=>{ c.password=genPass(); $('kPass').value=c.password; });
@@ -748,6 +758,8 @@ function renderContestEd(){
   all('[data-qu]',el=>el.onclick=()=>{ const i=+el.dataset.qu; [c.qids[i-1],c.qids[i]]=[c.qids[i],c.qids[i-1]]; renderContestEd(); });
   all('[data-qr]',el=>el.onclick=()=>{ c.qids.splice(+el.dataset.qr,1); renderContestEd(); });
   on('cClear','onclick',()=>{ c.qids=[]; renderContestEd(); });
+  on('cAddAll','onclick',()=>{ pool.forEach(q=>{ if(!c.qids.includes(q.uid)) c.qids.push(q.uid); }); renderContestEd(); });
+  on('cRemAll','onclick',()=>{ const ids=new Set(pool.map(q=>q.uid)); c.qids=c.qids.filter(id=>!ids.has(id)); renderContestEd(); });
   on('aGo','onclick',()=>{ const srcs=[...document.querySelectorAll('#sheet [data-src]:checked')].map(x=>P.contests.find(k=>k.uid===x.dataset.src));
     if(!srcs.length){ CMSG=t('kAutoNone'); return renderContestEd(); }
     const n=Math.max(1,+$('aN').value||1), perTopic=Math.max(0,+$('aT').value||0), chosen=[], countT={};
@@ -758,6 +770,7 @@ function renderContestEd(){
   on('cSave','onclick',()=>{
     const err=m=>{ $('cErr').textContent=m; $('cErr').classList.remove('hidden'); };
     if(!c.title.trim()) return err(t('kTitleF')+': '+t('vName'));
+    if(!c.qids.length && !confirm(t('kNoQ'))) return;
     if(!c.id){ let base=slug(c.title), id=base, k=2; while(P.contests.some(x=>x.id===id && x.uid!==c.uid)) id=`${base}-${k++}`; c.id=id; }
     const i=P.contests.findIndex(x=>x.uid===c.uid); if(i>=0) P.contests[i]=c; else P.contests.push(c);
     touch(); closeEditor(); renderAll(); });
@@ -855,8 +868,8 @@ function renderRanking(){
   $('rBody').innerHTML = `<div class="box"><div class="grid2"><label>${t('rkSection')}<select id="rkSec">${secs.map(s=>`<option value="${esc(s)}">${esc(s||t('sec'))}</option>`).join('')}</select></label><p class="note" id="rkInfo" style="align-self:end"></p></div>
     <label>${t('rkTickets')}<textarea id="rkText" rows="7" style="font-family:var(--mono);font-size:13.5px">${esc(RK.text)}</textarea><span class="hintx">${t('rkTicketsHint')}</span></label>
     <label class="btn alt sm" style="display:inline-flex;cursor:pointer;justify-self:start">${t('rkFiles')}<input type="file" id="rkFiles" multiple accept=".txt,.json" class="hidden"></label></div>
-  <div class="box"><h2>${t('rkMode')}</h2><div class="row"><label class="check"><input type="radio" name="rkm" value="abs" ${RK.mode==='abs'?'checked':''}> ${t('rkAbs')}</label><label class="check"><input type="radio" name="rkm" value="rel" ${RK.mode==='rel'?'checked':''}> ${t('rkRel')}</label></div>
-    <div class="grid2"><label>${t('rkBonusName')}<input type="text" id="rkName" value="${esc(RK.name)}"></label><label>${t('rkLevels')}<input type="number" id="rkLv" min="1" max="10" value="${RK.levels}"></label></div>
+  <div class="box"><h2>${t('rkMode')}</h2><div class="row"><label class="check"><input type="radio" name="rkm" value="abs" ${RK.mode==='abs'?'checked':''}> ${t('rkAbs')}</label><label class="check"><input type="radio" name="rkm" value="rel" ${RK.mode==='rel'?'checked':''}> ${t('rkRel')}</label><label class="check"><input type="radio" name="rkm" value="none" ${RK.mode==='none'?'checked':''}> ${t('rkNone')}</label></div>
+    <div class="grid2 ${RK.mode==='none'?'hidden':''}" id="rkBonusBox"><label>${t('rkBonusName')}<input type="text" id="rkName" value="${esc(RK.name)}"></label><label>${t('rkLevels')}<input type="number" id="rkLv" min="1" max="10" value="${RK.levels}"></label></div>
     <div id="rkThrBox" class="${RK.mode==='abs'?'':'hidden'}"><p class="note">${t('rkThr')}</p><div class="grid6" style="margin-top:6px">${RK.thr.slice(0,RK.levels).map((p,i)=>`<label>${RK.levels-i}<input type="number" min="0" max="100" data-thr="${i}" value="${p}"></label>`).join('')}</div><p class="note" id="rkThrInfo" style="margin-top:6px"></p></div>
     <div class="row"><button class="btn rec" id="rkGo">${t('rkGo')}</button></div></div>
   <div id="rkRes"></div>`;
@@ -870,7 +883,7 @@ function renderRanking(){
   $('rkText').oninput = e => RK.text = e.target.value;
   $('rkFiles').onchange = async e => { const texts = await Promise.all([...e.target.files].map(async f=>{ const x=await f.text(); try{ const j=JSON.parse(x); if(isPracticeLog(j)){ RK.pracSkipped=(RK.pracSkipped||0)+1; return ''; } const rf=recordFromFile(j); return (rf.record&&rf.record.ticket)||''; }catch(err){ return x; } }));
     RK.text = (RK.text.trim()+'\n\n'+texts.join('\n\n')).trim(); $('rkText').value = RK.text; };
-  document.querySelectorAll('[name=rkm]').forEach(r=>r.onchange=()=>{ RK.mode=r.value; $('rkThrBox').classList.toggle('hidden', RK.mode!=='abs'); recalc(); });
+  document.querySelectorAll('[name=rkm]').forEach(r=>r.onchange=()=>{ RK.mode=r.value; $('rkThrBox').classList.toggle('hidden', RK.mode!=='abs'); $('rkBonusBox').classList.toggle('hidden', RK.mode==='none'); recalc(); });
   $('rkName').oninput = e => { RK.name=e.target.value; recalc(); };
   $('rkLv').onchange = e => { const n=Math.max(1,Math.min(10,+e.target.value||5)); RK.levels=n; RK.thr = Array.from({length:n},(_,i)=>Math.round(75-i*(60/Math.max(1,n-1||1)))); if(n===1) RK.thr=[50]; renderRanking(); if(RKLAST) buildRanking(); };
   document.querySelectorAll('[data-thr]').forEach(el=>el.oninput=()=>{ RK.thr[+el.dataset.thr]=Math.max(0,Math.min(100,+el.value||0)); info(); recalc(); });
@@ -893,21 +906,22 @@ function renderRanking(){
     recalc();
   }
   function recalc(){ if(!RKLAST || RKLAST.sec!==RK.sec) return; const top = RKLAST.rows.length?RKLAST.rows[0].total:0, L=RK.levels;
-    RKLAST.rows.forEach(r=>{ r.bonus = RK.mode==='rel' ? (r.total>0&&top>0 ? Math.max(1,Math.min(L,Math.round(L*r.total/top))) : 0)
+    RKLAST.rows.forEach(r=>{ r.bonus = RK.mode==='none' ? 0 : RK.mode==='rel' ? (r.total>0&&top>0 ? Math.max(1,Math.min(L,Math.round(L*r.total/top))) : 0)
       : ((RK.thr.slice(0,L).map((p,i)=>({k:L-i,p})).find(x=>x.p>0 && r.total>=Math.ceil(RKLAST.mx*x.p/100))||{k:0}).k); });
     paintRanking(); }
 }
 function rankingHTML(R, names){
   const who = r => names ? `${esc(r.name)} <small style="color:#5D6470">${maskId(r.id)}</small>` : maskId(r.id);
-  const step = (r,i) => r ? `<div class="rk-step g${i+1}"><div class="pl">${t('rkPlaces')[i]}</div><div class="nm">${names?esc(r.name)+'<br>':''}<small>${maskId(r.id)}</small></div><div class="pt">${fmt(r.total)}</div><div class="bn">+${r.bonus} ${esc(RK.name)}</div></div>` : '<div></div>';
-  const legend = RK.mode==='rel' ? t('rkLegRel') : `${t('rkLegAbs')} ${RK.thr.slice(0,RK.levels).map((p,i)=>`<b>+${RK.levels-i}</b> ≥ ${p} % (${fmt(Math.ceil(R.mx*p/100))})`).join(', ')}.`;
+  const step = (r,i) => r ? `<div class="rk-step g${i+1}"><div class="pl">${t('rkPlaces')[i]}</div><div class="nm">${names?esc(r.name)+'<br>':''}<small>${maskId(r.id)}</small></div><div class="pt">${fmt(r.total)}</div>${nb?'':`<div class="bn">+${r.bonus} ${esc(RK.name)}</div>`}</div>` : '<div></div>';
+  const nb = RK.mode==='none';
+  const legend = nb ? '' : RK.mode==='rel' ? t('rkLegRel') : `${t('rkLegAbs')} ${RK.thr.slice(0,RK.levels).map((p,i)=>`<b>+${RK.levels-i}</b> ≥ ${p} % (${fmt(Math.ceil(R.mx*p/100))})`).join(', ')}.`;
   const bonus = k => k>0 ? `<span class="rk-bonus">${'<i></i>'.repeat(Math.min(k,10))}&nbsp;+${k}</span>` : `<span class="rk-bonus"><span class="none">${t('rkNoBonus')}</span></span>`;
   return `<div class="rk"><div class="rk-head"><p class="pre">REC · ${esc(P.course.title)}</p><h2>${esc(t('rkGala', R.sec||t('sec')))}</h2><p class="sub">${t('rkSub', R.list.length, fmt(R.mx), esc(R.date))}</p>
     <div class="rk-bars"><i style="background:#fff"></i><i style="background:#F2C200"></i><i style="background:#00A6C8"></i><i style="background:#2BB24C"></i><i style="background:#C2188F"></i><i style="background:#E8322B"></i><i style="background:#2747C9"></i></div></div>
     ${R.rows.length?`<div class="rk-pod">${step(R.rows[1],1)}${step(R.rows[0],0)}${step(R.rows[2],2)}</div>`:''}
-    <div class="rk-tblwrap"><table class="rk-tbl"><thead><tr><th>${t('rkPos')}</th><th>${names?t('rkWho'):t('rkWhoId')}</th><th class="num">${t('rkDone')}</th><th class="num">${t('rkHits')}</th><th class="num">${t('rkPts')}</th><th>${esc(RK.name)}</th></tr></thead><tbody>
-    ${R.rows.map(r=>`<tr><td class="pos">${r.pos}.</td><td>${who(r)}</td><td class="num">${r.n}/${R.list.length}</td><td class="num">${r.hits}</td><td class="num"><b>${fmt(r.total)}</b></td><td>${bonus(r.bonus)}</td></tr>`).join('') || `<tr><td colspan="6">${t('rkEmpty')}</td></tr>`}
-    </tbody></table></div><div class="rk-legend">${legend}</div></div>`;
+    <div class="rk-tblwrap"><table class="rk-tbl"><thead><tr><th>${t('rkPos')}</th><th>${names?t('rkWho'):t('rkWhoId')}</th><th class="num">${t('rkDone')}</th><th class="num">${t('rkHits')}</th><th class="num">${t('rkPts')}</th>${nb?'':`<th>${esc(RK.name)}</th>`}</tr></thead><tbody>
+    ${R.rows.map(r=>`<tr><td class="pos">${r.pos}.</td><td>${who(r)}</td><td class="num">${r.n}/${R.list.length}</td><td class="num">${r.hits}</td><td class="num"><b>${fmt(r.total)}</b></td>${nb?'':`<td>${bonus(r.bonus)}</td>`}</tr>`).join('') || `<tr><td colspan="${nb?5:6}">${t('rkEmpty')}</td></tr>`}
+    </tbody></table></div>${legend?`<div class="rk-legend">${legend}</div>`:''}</div>`;
 }
 function paintRanking(){
   const R = RKLAST;
@@ -917,8 +931,8 @@ function paintRanking(){
   $('rkNames').onchange = e => { RK.names=e.target.checked; paintRanking(); };
   $('rkHtml').onclick = () => download(`ranking-${slug(R.sec||'rec')}.html`, `<!DOCTYPE html><html lang="${LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(t('rkGala',R.sec||''))}</title><link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet"><style>body{margin:0;background:#12161C;padding:22px 14px 40px}.page{max-width:980px;margin:0 auto}${$('rkcss').textContent}.foot{color:#fff;opacity:.8;font:13px "Atkinson Hyperlegible",system-ui,sans-serif;text-align:center}@media print{body{background:#fff}.foot{color:#5D6470}}</style></head><body><div class="page">${rankingHTML(R, RK.names)}<p class="foot">${t('rkFoot')}</p></div></body></html>`, 'text/html');
   $('rkCsv').onclick = () => { const q=s=>`"${String(s??'').replace(/"/g,'""')}"`;
-    const head=[t('rkPos'),'Nombre/Name','ID',...R.list.map(c=>c.name||c.title),t('rkDone'),t('rkHits'),t('rkPts'),'%',RK.name];
-    const lines=R.rows.map(r=>[r.pos,r.name,r.id,...R.list.map(c=>r.per[c.uid]?r.per[c.uid].pts:''),`${r.n}/${R.list.length}`,r.hits,r.total,(Math.floor(r.pct*1000)/10).toFixed(1),r.bonus]);
+    const head=[t('rkPos'),'Nombre/Name','ID',...R.list.map(c=>c.name||c.title),t('rkDone'),t('rkHits'),t('rkPts'),'%',...(RK.mode==='none'?[]:[RK.name])];
+    const lines=R.rows.map(r=>[r.pos,r.name,r.id,...R.list.map(c=>r.per[c.uid]?r.per[c.uid].pts:''),`${r.n}/${R.list.length}`,r.hits,r.total,(Math.floor(r.pct*1000)/10).toFixed(1),...(RK.mode==='none'?[]:[r.bonus])]);
     download(`ranking-${slug(R.sec||'rec')}.csv`, '\ufeff'+[head,...lines].map(l=>l.map(q).join(';')).join('\r\n'), 'text/csv'); };
 }
 
@@ -1235,7 +1249,13 @@ function review(c, qs){
 }
 
 /* arranque */
-(async()=>{ try{ const saved = await DB.get('project'); if(saved && saved.format==='rec-project-1') P = saved; }catch(e){} renderAll(); })();
+(async()=>{ try{
+    const saved = await DB.get(PKEY);
+    if(saved && saved.format==='rec-project-1') P = saved;
+    else { /* proyecto guardado por la v1.0.0, común a todos los sitios: se ofrece, no se carga solo */
+      const old = await DB.get('project');
+      if(old && old.format==='rec-project-1' && localStorage.getItem('rec-studio:legacy-ignored:'+PKEY)!=='1' && (old.questions.length || old.contests.length)) LEGACY = old; }
+  }catch(e){} renderAll(); })();
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !$('modal').classList.contains('hidden')) closeEditor(); });
 </script>
 </body>
