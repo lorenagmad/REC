@@ -1,5 +1,7 @@
 # ● REC
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23670870.svg)]([https://doi.org/10.5281/zenodo.23670870])
+
 **REC** convierte tus cuestionarios en un concurso de televisión en directo. Cada acierto vale más cuanto antes se responde, el alumnado recibe un resguardo con un código de verificación y tú obtienes ranking, bonificaciones y un análisis de lo aprendido. Funciona en cualquier móvil u ordenador, sin servidores ni cuentas para el alumnado, y se publica gratis en GitHub Pages.
 
 **REC** turns your quizzes into a live TV game show. The sooner students answer, the more each correct answer is worth; they get a ticket with a verification code, and you get rankings, bonuses and an analysis of what they learnt. It works on any phone or computer, with no servers or student accounts, and is published for free on GitHub Pages.
@@ -10,6 +12,8 @@ Abre la demostración en <https://lorenagmad.github.io/REC/> y entra en el concu
 Open the demo at <https://lorenagmad.github.io/REC/> and enter the contest with the password `rec demo`.
 
 ## Crea tu propio concurso / Create your own contest
+
+![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
 
 1. Descarga el kit / Download the kit: **[descargas/rec-kit.zip](descargas/rec-kit.zip)** (pulsa *Download raw file* / press *Download raw file*). Viene listo para subir, sin la demostración / It comes ready to upload, without the demo.
 2. Sigue la guía / Follow the guide:
